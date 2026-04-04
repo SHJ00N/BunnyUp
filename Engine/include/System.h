@@ -3,6 +3,7 @@
 #include "Singleton.h"
 #include "WindowClass.h"
 #include "D3DClass.h"
+#include "Input.h"
 
 #include <memory.h>
 
@@ -18,5 +19,6 @@ namespace Engine
 	private:
 		std::unique_ptr<WindowClass> m_pWindowClass;
 		std::unique_ptr<D3DClass> m_pD3DClass;
+		std::unique_ptr<Input> m_pInput;
 	};
 }

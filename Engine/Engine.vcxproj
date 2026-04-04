@@ -27,8 +27,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\D3DClass.cpp" />
+    <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\System.cpp" />
     <ClCompile Include="src\WindowClass.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\external\DirectXTK\DirectXTK_Desktop_2022.vcxproj">
+      <Project>{e0b52ae7-e160-4d32-bf3f-910b785e5a8e}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -85,22 +91,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(projectDir)build\$(Configuration)\</OutDir>
     <IntDir>$(projectDir)bin\$(Configuration)\</IntDir>
-    <IncludePath>C:\Project\BunnyUp\Engine\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(projectDir)build\$(Configuration)\</OutDir>
     <IntDir>$(projectDir)bin\$(Configuration)\</IntDir>
-    <IncludePath>C:\Project\BunnyUp\Engine\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(projectDir)build\$(Configuration)\</OutDir>
     <IntDir>$(projectDir)bin\$(Configuration)\</IntDir>
-    <IncludePath>C:\Project\BunnyUp\Engine\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(projectDir)build\$(Configuration)\</OutDir>
     <IntDir>$(projectDir)bin\$(Configuration)\</IntDir>
-    <IncludePath>C:\Project\BunnyUp\Engine\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -109,6 +115,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -124,6 +131,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -137,6 +145,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -152,6 +161,7 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

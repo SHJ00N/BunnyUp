@@ -20,6 +20,10 @@ namespace Engine
 			DWORD dwError = GetLastError();
 			return HRESULT_FROM_WIN32(dwError);
 		}
+
+		// Initialize input
+		m_pInput = std::make_unique<Input>();
+		m_pInput->Initialize();
 		
 		return S_OK;
 	}
@@ -39,6 +43,14 @@ namespace Engine
 			else
 			{
 				// Update and render the game here
+				m_pInput->Update();
+
+				// K 키가 눌렸을 때
+				if (m_pInput->IsKeyPressed(DirectX::Keyboard::Keys::K))
+				{
+					PostQuitMessage(0); // 메시지 루프 종료
+					return 0;
+				}
 			}
 		}
 
@@ -49,10 +61,20 @@ namespace Engine
 	{
 		switch (message)
 		{
+			case WM_KEYDOWN:
+			case WM_KEYUP:
+			case WM_SYSKEYDOWN:
+			case WM_SYSKEYUP:
+			{
+				DirectX::Keyboard::ProcessMessage(message, wParam, lParam);
+				break;
+			}
 			default:
 			{
 				return DefWindowProc(hWnd, message, wParam, lParam);
 			}
 		}
+
+		return 0;
 	}
 }
