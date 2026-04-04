@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Window.h"
 #include "Singleton.h"
+#include "WindowClass.h"
+#include "D3DClass.h"
 
 #include <memory.h>
 
@@ -15,6 +16,7 @@ namespace Engine
 		LRESULT MessageHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	
 	private:
-		std::unique_ptr<Window> m_window;
+		std::unique_ptr<WindowClass> m_pWindowClass;
+		std::unique_ptr<D3DClass> m_pD3DClass;
 	};
 }

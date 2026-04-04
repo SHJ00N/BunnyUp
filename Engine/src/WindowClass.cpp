@@ -1,23 +1,23 @@
-#include "Window.h"
+#include "WindowClass.h"
 #include "System.h"
 
 namespace Engine
 {
-	Window::Window() : m_hInstance(NULL), m_hWnd(NULL)
+	WindowClass::WindowClass() : m_hInstance(NULL), m_hWnd(NULL), m_windowRect(0)
 	{
 		m_windowClassName = L"BunnyEngine";
 	}
 
-	Window::~Window()
+	WindowClass::~WindowClass()
 	{
 	}
 
-	HWND Window::GetHWND() const
+	HWND WindowClass::GetHWND() const
 	{
 		return m_hWnd;
 	}
 
-	HRESULT Window::Initialize()
+	HRESULT WindowClass::Initialize()
 	{
 		if (m_hInstance == NULL)
 		{
@@ -47,8 +47,10 @@ namespace Engine
 		}
 
 		// Set window size
-		RECT rc = { 0, 0, 640, 480 };
-		AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
+		int defaultWidth = 640;
+		int defaultHeight = 480;
+		SetRect(&m_windowRect, 0, 0, defaultWidth, defaultHeight);
+		AdjustWindowRect(&m_windowRect, WS_OVERLAPPEDWINDOW, FALSE);
 
 		// Create the window
 		m_hWnd = CreateWindow(
@@ -56,7 +58,7 @@ namespace Engine
 			m_windowClassName.c_str(),		// window title
 			WS_OVERLAPPEDWINDOW,		// style
 			CW_USEDEFAULT, CW_USEDEFAULT,		// position
-			(rc.right - rc.left), (rc.bottom - rc.top),		// size
+			(m_windowRect.right - m_windowRect.left), (m_windowRect.bottom - m_windowRect.top),		// size
 			NULL, NULL, m_hInstance, NULL		// parent, menu, instance, param
 		);
 
@@ -72,7 +74,7 @@ namespace Engine
 		return S_OK;
 	}
 
-	LRESULT CALLBACK Window::StaticWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+	LRESULT CALLBACK WindowClass::StaticWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		switch (message)
 		{

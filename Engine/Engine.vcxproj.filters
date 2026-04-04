@@ -18,7 +18,7 @@
     <ClInclude Include="include\System.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="include\D3DManager.h">
+    <ClInclude Include="include\D3DClass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="include\Input.h">
@@ -27,15 +27,15 @@
     <ClInclude Include="include\Singleton.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="include\Window.h">
+    <ClInclude Include="include\WindowClass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\D3DManager.cpp">
+    <ClCompile Include="src\D3DClass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="src\Window.cpp">
+    <ClCompile Include="src\WindowClass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="src\System.cpp">

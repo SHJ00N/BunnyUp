@@ -20,15 +20,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\System.h" />
-    <ClInclude Include="include\D3DManager.h" />
+    <ClInclude Include="include\D3DClass.h" />
     <ClInclude Include="include\Input.h" />
     <ClInclude Include="include\Singleton.h" />
-    <ClInclude Include="include\Window.h" />
+    <ClInclude Include="include\WindowClass.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\D3DManager.cpp" />
+    <ClCompile Include="src\D3DClass.cpp" />
     <ClCompile Include="src\System.cpp" />
-    <ClCompile Include="src\Window.cpp" />
+    <ClCompile Include="src\WindowClass.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -83,23 +83,23 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\</IntDir>
+    <OutDir>$(projectDir)build\$(Configuration)\</OutDir>
+    <IntDir>$(projectDir)bin\$(Configuration)\</IntDir>
     <IncludePath>C:\Project\BunnyUp\Engine\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\</IntDir>
+    <OutDir>$(projectDir)build\$(Configuration)\</OutDir>
+    <IntDir>$(projectDir)bin\$(Configuration)\</IntDir>
     <IncludePath>C:\Project\BunnyUp\Engine\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\</IntDir>
+    <OutDir>$(projectDir)build\$(Configuration)\</OutDir>
+    <IntDir>$(projectDir)bin\$(Configuration)\</IntDir>
     <IncludePath>C:\Project\BunnyUp\Engine\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\</IntDir>
+    <OutDir>$(projectDir)build\$(Configuration)\</OutDir>
+    <IntDir>$(projectDir)bin\$(Configuration)\</IntDir>
     <IncludePath>C:\Project\BunnyUp\Engine\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

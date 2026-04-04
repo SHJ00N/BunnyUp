@@ -4,14 +4,21 @@ namespace Engine
 {
 	HRESULT System::Initialize()
 	{
-		HRESULT hr = S_OK;
-
 		// Initialize the window
-		m_window = std::make_unique<Window>();
-		m_window->Initialize();
-		if (FAILED(hr))
+		m_pWindowClass = std::make_unique<WindowClass>();
+		if (FAILED(m_pWindowClass->Initialize()))
 		{
-			return hr;
+			DWORD dwError = GetLastError();
+			return HRESULT_FROM_WIN32(dwError);
+		}
+
+		// Initialize Direct3D
+		m_pD3DClass = std::make_unique<D3DClass>();
+		if(FAILED(m_pD3DClass->CreateDeviceResources()) && 
+			FAILED(m_pD3DClass->CreateWindowResources(m_pWindowClass->GetHWND())))
+		{
+			DWORD dwError = GetLastError();
+			return HRESULT_FROM_WIN32(dwError);
 		}
 		
 		return S_OK;
