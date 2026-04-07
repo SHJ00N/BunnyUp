@@ -5,7 +5,6 @@
 
 #include <d3d11.h>
 #include <wrl/client.h>
-#include <Windows.h>
 
 namespace Engine
 {
@@ -23,7 +22,8 @@ namespace Engine
 		HRESULT GoFullScreen();
 		HRESULT GoWindowed();
 
-		void Present();
+		void BeginFrame(float r, float g, float b, float a);
+		void EndFrame();
 
 	private:
 		// direct3D device

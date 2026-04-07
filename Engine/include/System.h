@@ -4,8 +4,9 @@
 #include "WindowClass.h"
 #include "D3DClass.h"
 #include "Input.h"
+#include "MathHelper.h"
 
-#include <memory.h>
+#include <memory>
 
 namespace Engine
 {

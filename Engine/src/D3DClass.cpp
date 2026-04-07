@@ -14,14 +14,13 @@ namespace Engine
 
 	HRESULT D3DClass::CreateDeviceResources()
 	{
+		HRESULT hr = S_OK;
+
 		D3D_FEATURE_LEVEL levels[] = {
-		D3D_FEATURE_LEVEL_9_1,
-		D3D_FEATURE_LEVEL_9_2,
-		D3D_FEATURE_LEVEL_9_3,
-		D3D_FEATURE_LEVEL_10_0,
-		D3D_FEATURE_LEVEL_10_1,
+		D3D_FEATURE_LEVEL_11_1,
 		D3D_FEATURE_LEVEL_11_0,
-		D3D_FEATURE_LEVEL_11_1
+		D3D_FEATURE_LEVEL_10_1,
+		D3D_FEATURE_LEVEL_10_0
 		};
 
 		UINT deviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
@@ -33,7 +32,7 @@ namespace Engine
 		Microsoft::WRL::ComPtr<ID3D11Device>        device;
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 
-		if (FAILED(D3D11CreateDevice(
+		hr = D3D11CreateDevice(
 			nullptr,
 			D3D_DRIVER_TYPE_HARDWARE,
 			0,
@@ -43,21 +42,23 @@ namespace Engine
 			D3D11_SDK_VERSION,
 			&device,
 			&m_featureLevel,
-			&context)))
+			&context);
+		if (FAILED(hr))
 		{
-			DWORD dwError = GetLastError();
-			return HRESULT_FROM_WIN32(dwError);
+			return hr;
 		}
 
 		// Store the device and device context
 		device.As(&m_pd3dDevice);
 		context.As(&m_pd3dDeviceContext);
 
-		return S_OK;
+		return hr;
 	}
 
 	HRESULT D3DClass::CreateWindowResources(HWND hWnd)
 	{
+		HRESULT hr = S_OK;
+
 		DXGI_SWAP_CHAIN_DESC desc;
 		ZeroMemory(&desc, sizeof(DXGI_SWAP_CHAIN_DESC));
 		desc.Windowed = TRUE; // Sets the initial state of full-screen mode.
@@ -77,44 +78,44 @@ namespace Engine
 		Microsoft::WRL::ComPtr<IDXGIFactory> factory;
 
 		// Get the adapter and factory from the device
-		if (SUCCEEDED(dxgiDevice->GetAdapter(&adapter)))
+		hr = dxgiDevice->GetAdapter(&adapter);
+		if (SUCCEEDED(hr))
 		{
-			adapter->GetParent(IID_PPV_ARGS(&factory));
+			hr = adapter->GetParent(IID_PPV_ARGS(&factory));
+			if (FAILED(hr)) 
+			{
+				return hr;
+			}
 
-			factory->CreateSwapChain(m_pd3dDevice.Get(), &desc, &m_pDXGISwapChain);
-		}
-		else
-		{
-			DWORD dwError = GetLastError();
-			return HRESULT_FROM_WIN32(dwError);
+			hr = factory->CreateSwapChain(m_pd3dDevice.Get(), &desc, &m_pDXGISwapChain);
+			if (FAILED(hr))
+			{
+				return hr;
+			}
 		}
 
 		// Configure the back buffer
-		if(FAILED(ConfigureBackBuffer()))
-		{
-			DWORD dwError = GetLastError();
-			return HRESULT_FROM_WIN32(dwError);
-		}
+		hr = ConfigureBackBuffer();
 
-		return S_OK;
+		return hr;
 	}
 
 	HRESULT D3DClass::ConfigureBackBuffer()
 	{
+		HRESULT hr = S_OK;
 		// Get the back buffer from the swap chain
-		if (FAILED(m_pDXGISwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&m_pBackBuffer)))
+		hr = m_pDXGISwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&m_pBackBuffer);
+		if (FAILED(hr))
 		{
-			DWORD dwError = GetLastError();
-			return HRESULT_FROM_WIN32(dwError);
+			return hr;
 		}
 
 		// Create a render target view for the back buffer
-		if (FAILED(m_pd3dDevice->CreateRenderTargetView(m_pBackBuffer.Get(), nullptr, m_pRenderTarget.GetAddressOf())))
+		hr = m_pd3dDevice->CreateRenderTargetView(m_pBackBuffer.Get(), nullptr, m_pRenderTarget.GetAddressOf());
+		if (FAILED(hr))
 		{
-			DWORD dwError = GetLastError();
-			return HRESULT_FROM_WIN32(dwError);
+			return hr;
 		}
-
 		m_pBackBuffer->GetDesc(&m_backBufferDesc);
 
 		// Create a depth-stencil view
@@ -127,19 +128,27 @@ namespace Engine
 			D3D11_BIND_DEPTH_STENCIL
 		);
 
-		m_pd3dDevice->CreateTexture2D(
+		hr = m_pd3dDevice->CreateTexture2D(
 			&depthStencilDesc,
 			nullptr,
 			&m_pDepthStencilBuffer
 		);
+		if (FAILED(hr))
+		{
+			return hr;
+		}
 
 		CD3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc(D3D11_DSV_DIMENSION_TEXTURE2D);
 
-		m_pd3dDevice->CreateDepthStencilView(
+		hr = m_pd3dDevice->CreateDepthStencilView(
 			m_pDepthStencilBuffer.Get(),
 			&depthStencilViewDesc,
 			&m_pDepthStencilView
 		);
+		if (FAILED(hr))
+		{
+			return hr;
+		}
 
 		// Set viewport
 		ZeroMemory(&m_viewport, sizeof(D3D11_VIEWPORT));
@@ -148,9 +157,11 @@ namespace Engine
 		m_viewport.MinDepth = 0;
 		m_viewport.MaxDepth = 1;
 
+		m_pd3dDeviceContext->OMSetRenderTargets(1, m_pRenderTarget.GetAddressOf(), m_pDepthStencilView.Get());
+
 		m_pd3dDeviceContext->RSSetViewports(1, &m_viewport);
 
-		return S_OK;
+		return hr;
 	}
 
 	HRESULT D3DClass::ReleaseBackBuffer()
@@ -219,7 +230,17 @@ namespace Engine
 		return hr;
 	}
 
-	void D3DClass::Present()
+	void D3DClass::BeginFrame(float r, float g, float b, float a)
+	{
+		float clearColor[] = { r, g, b, a };
+
+		m_pd3dDeviceContext->ClearRenderTargetView(m_pRenderTarget.Get(), clearColor);
+		m_pd3dDeviceContext->ClearDepthStencilView(m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+		m_pd3dDeviceContext->OMSetRenderTargets(1, m_pRenderTarget.GetAddressOf(), m_pDepthStencilView.Get());
+	}
+
+	void D3DClass::EndFrame()
 	{
 		m_pDXGISwapChain->Present(1, 0);
 	}
