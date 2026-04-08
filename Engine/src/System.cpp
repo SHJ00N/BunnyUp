@@ -1,4 +1,5 @@
 #include "System.h"
+#include "D3DManager.h"
 
 namespace Engine
 {
@@ -14,14 +15,14 @@ namespace Engine
 		}
 
 		// Initialize Direct3D
-		m_pD3DClass = std::make_unique<D3DClass>();
-		hr = m_pD3DClass->CreateDeviceResources();
+		D3DManager::CreateInstance();
+		hr = D3DManager::GetInstance().CreateDeviceResources();
 		if (FAILED(hr))
 		{
 			return hr;
 		}
 
-		hr = m_pD3DClass->CreateWindowResources(m_pWindowClass->GetHWND());
+		hr = D3DManager::GetInstance().CreateWindowResources(m_pWindowClass->GetHWND());
 		if(FAILED(hr))
 		{
 			return hr;
@@ -30,6 +31,10 @@ namespace Engine
 		// Initialize input
 		m_pInput = std::make_unique<Input>();
 		m_pInput->Initialize();
+
+		// Initialize renderer
+		m_pRenderer = std::make_unique<Renderer>();
+		hr = m_pRenderer->Initialize();
 
 		return hr;
 	}
@@ -57,8 +62,14 @@ namespace Engine
 					PostQuitMessage(0);
 				}
 
-				m_pD3DClass->BeginFrame(0.1f, 0.1f, 0.1f, 1.0f);
-				m_pD3DClass->EndFrame();
+				m_pRenderer->Update();
+
+				D3DManager::GetInstance().BeginFrame(0.1f, 0.1f, 0.1f, 1.0f);
+
+				// render the active scene here
+				m_pRenderer->Render();
+
+				D3DManager::GetInstance().EndFrame();
 			}
 		}
 

@@ -1,18 +1,24 @@
-#include "D3DClass.h"
+#include "D3DManager.h"
 
 #include <dxgi1_3.h>
 
 namespace Engine
 {
-	D3DClass::D3DClass() : m_featureLevel(D3D_FEATURE_LEVEL_11_0), m_backBufferDesc(0), m_viewport(0)
+	D3DManager::D3DManager() : m_featureLevel(D3D_FEATURE_LEVEL_11_0), m_backBufferDesc(0), m_viewport(0)
 	{
 	}
 
-	D3DClass::~D3DClass()
+	D3DManager::~D3DManager()
 	{
 	}
 
-	HRESULT D3DClass::CreateDeviceResources()
+	float D3DManager::GetAspectRatio()
+	{
+		return static_cast<float>(m_backBufferDesc.Width) / static_cast<float>(m_backBufferDesc.Height);
+	}
+
+
+	HRESULT D3DManager::CreateDeviceResources()
 	{
 		HRESULT hr = S_OK;
 
@@ -55,7 +61,7 @@ namespace Engine
 		return hr;
 	}
 
-	HRESULT D3DClass::CreateWindowResources(HWND hWnd)
+	HRESULT D3DManager::CreateWindowResources(HWND hWnd)
 	{
 		HRESULT hr = S_OK;
 
@@ -100,7 +106,7 @@ namespace Engine
 		return hr;
 	}
 
-	HRESULT D3DClass::ConfigureBackBuffer()
+	HRESULT D3DManager::ConfigureBackBuffer()
 	{
 		HRESULT hr = S_OK;
 		// Get the back buffer from the swap chain
@@ -164,7 +170,7 @@ namespace Engine
 		return hr;
 	}
 
-	HRESULT D3DClass::ReleaseBackBuffer()
+	HRESULT D3DManager::ReleaseBackBuffer()
 	{
 		// Release the render target view based on the back buffer
 		m_pRenderTarget.Reset();
@@ -182,7 +188,7 @@ namespace Engine
 		return S_OK;
 	}
 
-	HRESULT D3DClass::GoFullScreen()
+	HRESULT D3DManager::GoFullScreen()
 	{
 		HRESULT hr = S_OK;
 
@@ -206,7 +212,7 @@ namespace Engine
 		return hr;
 	}
 
-	HRESULT D3DClass::GoWindowed()
+	HRESULT D3DManager::GoWindowed()
 	{
 		HRESULT hr = S_OK;
 
@@ -230,7 +236,7 @@ namespace Engine
 		return hr;
 	}
 
-	void D3DClass::BeginFrame(float r, float g, float b, float a)
+	void D3DManager::BeginFrame(float r, float g, float b, float a)
 	{
 		float clearColor[] = { r, g, b, a };
 
@@ -240,7 +246,7 @@ namespace Engine
 		m_pd3dDeviceContext->OMSetRenderTargets(1, m_pRenderTarget.GetAddressOf(), m_pDepthStencilView.Get());
 	}
 
-	void D3DClass::EndFrame()
+	void D3DManager::EndFrame()
 	{
 		m_pDXGISwapChain->Present(1, 0);
 	}

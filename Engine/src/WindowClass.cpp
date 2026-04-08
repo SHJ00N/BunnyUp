@@ -12,16 +12,6 @@ namespace Engine
 	{
 	}
 
-	HWND WindowClass::GetHWND() const
-	{
-		return m_hWnd;
-	}
-
-	RECT WindowClass::GetWindowRect() const
-	{
-		return m_windowRect;
-	}
-
 	HRESULT WindowClass::Initialize()
 	{
 		if (m_hInstance == NULL)

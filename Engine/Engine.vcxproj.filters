@@ -18,7 +18,7 @@
     <ClInclude Include="include\System.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="include\D3DClass.h">
+    <ClInclude Include="include\D3DManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="include\Input.h">
@@ -44,7 +44,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\D3DClass.cpp">
+    <ClCompile Include="src\D3DManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="src\WindowClass.cpp">
@@ -62,5 +62,10 @@
     <ClCompile Include="src\Shader.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="BasicShader.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

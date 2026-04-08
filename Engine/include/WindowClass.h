@@ -11,8 +11,8 @@ namespace Engine
 		WindowClass();
 		~WindowClass();
 
-		HWND GetHWND() const;
-		RECT GetWindowRect() const;
+		HWND GetHWND() const { return m_hWnd; }
+		RECT GetWindowRect() const { return m_windowRect; }
 
 		HRESULT Initialize();
 
