@@ -26,6 +26,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	}
 
 	// Destroy system instance
+	System::GetInstance().Shutdown();
 	System::DestroyInstance();
 
 	return hr;

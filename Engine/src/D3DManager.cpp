@@ -250,5 +250,28 @@ namespace Engine
 	{
 		m_pDXGISwapChain->Present(1, 0);
 	}
+
+	void D3DManager::Shutdown()
+	{
+		ReleaseBackBuffer();
+
+		// swapchain
+		if (m_pDXGISwapChain)
+		{
+			m_pDXGISwapChain->SetFullscreenState(FALSE, nullptr);
+			m_pDXGISwapChain.Reset();
+		}
+
+		// context flush
+		if (m_pd3dDeviceContext)
+		{
+			m_pd3dDeviceContext->ClearState();
+			m_pd3dDeviceContext->Flush();
+			m_pd3dDeviceContext.Reset();
+		}
+
+		// reset device
+		m_pd3dDevice.Reset();
+	}
 }
 

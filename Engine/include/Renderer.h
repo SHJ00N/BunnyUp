@@ -5,6 +5,8 @@
 
 #include "ConstantBuffer.h"
 #include "Shader.h"
+#include "Texture2D.h"
+#include "Sampler.h"
 
 namespace Engine
 {
@@ -23,6 +25,12 @@ namespace Engine
 			DirectX::XMFLOAT3 color;
 		} VertexPositionColor;
 
+		typedef struct _vertexPositionUV
+		{
+			DirectX::XMFLOAT3 pos;
+			DirectX::XMFLOAT2 uv;
+		} VertexPositionUV;
+
 	private:
 		ConstantBufferStruct m_constantBufferData;
 		unsigned int  m_indexCount;
@@ -31,5 +39,7 @@ namespace Engine
 		Microsoft::WRL::ComPtr<ID3D11Buffer>            m_pIndexBuffer;
 		Microsoft::WRL::ComPtr<ID3D11Buffer>            m_pConstantBuffer;
 		Shader m_shader;
+		Texture2D m_texture;
+		Sampler m_sampler;
 	};
 }

@@ -1,6 +1,11 @@
 #include "WindowClass.h"
 #include "System.h"
 
+#include "imgui_impl_win32.h"
+
+// Forward declare message handler from imgui_impl_win32.cpp
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 namespace Engine
 {
 	WindowClass::WindowClass() : m_hInstance(NULL), m_hWnd(NULL), m_windowRect(0)
@@ -42,8 +47,8 @@ namespace Engine
 		}
 
 		// Set window size
-		int defaultWidth = 640;
-		int defaultHeight = 480;
+		int defaultWidth = 1920;
+		int defaultHeight = 1080;
 		SetRect(&m_windowRect, 0, 0, defaultWidth, defaultHeight);
 		AdjustWindowRect(&m_windowRect, WS_OVERLAPPEDWINDOW, FALSE);
 
@@ -69,8 +74,25 @@ namespace Engine
 		return S_OK;
 	}
 
+	void WindowClass::Shutdown()
+	{
+		if (m_hWnd)
+		{
+			DestroyWindow(m_hWnd);
+			m_hWnd = nullptr;
+		}
+
+		if (!m_windowClassName.empty())
+		{
+			UnregisterClass(m_windowClassName.c_str(), m_hInstance);
+		}
+	}
+
 	LRESULT CALLBACK WindowClass::StaticWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
+		if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+			return true;
+
 		switch (message)
 		{
 			case WM_CLOSE:

@@ -23,6 +23,13 @@ namespace Engine
 		static const std::array<D3D11_INPUT_ELEMENT_DESC, 2> layout;
 	};
 
+	struct VertexPT : public VertexP
+	{
+		Vector2 texCoord;
+		void SetUV(Vector2 uv) { texCoord = uv; }
+		static const std::array<D3D11_INPUT_ELEMENT_DESC, 2> layout;
+	};
+
 	class Shader
 	{
 	public:

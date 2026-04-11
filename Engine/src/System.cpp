@@ -36,6 +36,10 @@ namespace Engine
 		m_pRenderer = std::make_unique<Renderer>();
 		hr = m_pRenderer->Initialize();
 
+		// Initialize imgui
+		m_pImGuiClass = std::make_unique<ImGuiClass>();
+		m_pImGuiClass->Initialize(m_pWindowClass->GetHWND(), D3DManager::GetInstance().GetDevice(), D3DManager::GetInstance().GetDeviceContext());
+
 		return hr;
 	}
 
@@ -66,14 +70,27 @@ namespace Engine
 
 				D3DManager::GetInstance().BeginFrame(0.1f, 0.1f, 0.1f, 1.0f);
 
+				m_pImGuiClass->BeginFrame();
+
 				// render the active scene here
 				m_pRenderer->Render();
+
+				m_pImGuiClass->RenderUI();
+
+				m_pImGuiClass->EndFrame();
 
 				D3DManager::GetInstance().EndFrame();
 			}
 		}
 
 		return S_OK;
+	}
+
+	void System::Shutdown()
+	{
+		m_pImGuiClass->Shutdown();
+		D3DManager::GetInstance().Shutdown();
+		m_pWindowClass->Shutdown();
 	}
 
 	LRESULT System::MessageHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

@@ -15,6 +15,7 @@ namespace Engine
 		RECT GetWindowRect() const { return m_windowRect; }
 
 		HRESULT Initialize();
+		void Shutdown();
 
 		static LRESULT CALLBACK StaticWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 

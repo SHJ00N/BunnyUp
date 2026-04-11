@@ -14,16 +14,10 @@ namespace Engine
 	{
 	}
 
-	HRESULT Renderer::Initialize()
-	{
-		// create cube
+    HRESULT Renderer::Initialize()
+    {
+        // create cube
         HRESULT hr = S_OK;
-
-		hr = m_shader.CompileFromFile<VertexPC>(L"C:\\Project\\BunnyUp\\Engine\\BasicShader.hlsl");
-        if(FAILED(hr))
-        {
-            return hr;
-		}
 
         // Use the Direct3D device to load resources into graphics memory.
         ID3D11Device* device = D3DManager::GetInstance().GetDevice();
@@ -40,21 +34,60 @@ namespace Engine
         );
 
         // Create cube geometry.
-        VertexPositionColor CubeVertices[] =
-        {
-            {DirectX::XMFLOAT3(-0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(0,   0,   0),},
-            {DirectX::XMFLOAT3(-0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(0,   0,   1),},
-            {DirectX::XMFLOAT3(-0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(0,   1,   0),},
-            {DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(0,   1,   1),},
+        //VertexPositionColor CubeVertices[] =
+        //{
+        //    {DirectX::XMFLOAT3(-0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(0,   0,   0),},
+        //    {DirectX::XMFLOAT3(-0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(0,   0,   1),},
+        //    {DirectX::XMFLOAT3(-0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(0,   1,   0),},
+        //    {DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(0,   1,   1),},
 
-            {DirectX::XMFLOAT3(0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(1,   0,   0),},
-            {DirectX::XMFLOAT3(0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(1,   0,   1),},
-            {DirectX::XMFLOAT3(0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(1,   1,   0),},
-            {DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(1,   1,   1),},
+        //    {DirectX::XMFLOAT3(0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(1,   0,   0),},
+        //    {DirectX::XMFLOAT3(0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(1,   0,   1),},
+        //    {DirectX::XMFLOAT3(0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(1,   1,   0),},
+        //    {DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(1,   1,   1),},
+        //};
+
+        VertexPositionUV CubeVertices[] =
+        {
+            // -X
+            {DirectX::XMFLOAT3{-0.5f,-0.5f,-0.5f}, DirectX::XMFLOAT2{0,1}},
+            {DirectX::XMFLOAT3{-0.5f,-0.5f, 0.5f}, DirectX::XMFLOAT2{1,1}},
+            {DirectX::XMFLOAT3{-0.5f, 0.5f,-0.5f}, DirectX::XMFLOAT2{0,0}},
+            {DirectX::XMFLOAT3{-0.5f, 0.5f, 0.5f}, DirectX::XMFLOAT2{1,0}},
+
+            // +X
+            {DirectX::XMFLOAT3{0.5f,-0.5f,-0.5f}, DirectX::XMFLOAT2{1,1}},
+            {DirectX::XMFLOAT3{0.5f,-0.5f, 0.5f}, DirectX::XMFLOAT2{0,1}},
+            {DirectX::XMFLOAT3{0.5f, 0.5f,-0.5f}, DirectX::XMFLOAT2{1,0}},
+            {DirectX::XMFLOAT3{0.5f, 0.5f, 0.5f}, DirectX::XMFLOAT2{0,0}},
+
+            // -Y
+            {DirectX::XMFLOAT3{-0.5f,-0.5f,-0.5f}, DirectX::XMFLOAT2{0,1}},
+            {DirectX::XMFLOAT3{-0.5f,-0.5f, 0.5f}, DirectX::XMFLOAT2{0,0}},
+            {DirectX::XMFLOAT3{ 0.5f,-0.5f,-0.5f}, DirectX::XMFLOAT2{1,1}},
+            {DirectX::XMFLOAT3{ 0.5f,-0.5f, 0.5f}, DirectX::XMFLOAT2{1,0}},
+
+            // +Y
+            {DirectX::XMFLOAT3{-0.5f,0.5f,-0.5f}, DirectX::XMFLOAT2{0,0}},
+            {DirectX::XMFLOAT3{-0.5f,0.5f, 0.5f}, DirectX::XMFLOAT2{0,1}},
+            {DirectX::XMFLOAT3{ 0.5f,0.5f,-0.5f}, DirectX::XMFLOAT2{1,0}},
+            {DirectX::XMFLOAT3{ 0.5f,0.5f, 0.5f}, DirectX::XMFLOAT2{1,1}},
+
+            // -Z
+            {DirectX::XMFLOAT3{-0.5f,-0.5f,-0.5f}, DirectX::XMFLOAT2{1,1}},
+            {DirectX::XMFLOAT3{-0.5f, 0.5f,-0.5f}, DirectX::XMFLOAT2{1,0}},
+            {DirectX::XMFLOAT3{ 0.5f,-0.5f,-0.5f}, DirectX::XMFLOAT2{0,1}},
+            {DirectX::XMFLOAT3{ 0.5f, 0.5f,-0.5f}, DirectX::XMFLOAT2{0,0}},
+
+            // +Z
+            {DirectX::XMFLOAT3{-0.5f,-0.5f,0.5f}, DirectX::XMFLOAT2{0,1}},
+            {DirectX::XMFLOAT3{-0.5f, 0.5f,0.5f}, DirectX::XMFLOAT2{0,0}},
+            {DirectX::XMFLOAT3{ 0.5f,-0.5f,0.5f}, DirectX::XMFLOAT2{1,1}},
+            {DirectX::XMFLOAT3{ 0.5f, 0.5f,0.5f}, DirectX::XMFLOAT2{1,0}},
         };
 
-        // Create vertex buffer:
 
+        // Create vertex buffer:
         CD3D11_BUFFER_DESC vDesc(
             sizeof(CubeVertices),
             D3D11_BIND_VERTEX_BUFFER
@@ -76,23 +109,29 @@ namespace Engine
         // Create index buffer:
         unsigned short CubeIndices[] =
         {
-            0,2,1, // -x
-            1,2,3,
+            //0,2,1, // -x
+            //1,2,3,
 
-            4,5,6, // +x
-            5,7,6,
+            //4,5,6, // +x
+            //5,7,6,
 
-            0,1,5, // -y
-            0,5,4,
+            //0,1,5, // -y
+            //0,5,4,
 
-            2,6,7, // +y
-            2,7,3,
+            //2,6,7, // +y
+            //2,7,3,
 
-            0,4,6, // -z
-            0,6,2,
+            //0,4,6, // -z
+            //0,6,2,
 
-            1,3,7, // +z
-            1,7,5,
+            //1,3,7, // +z
+            //1,7,5,
+            0,2,1, 1,2,3,       // -X
+            4,5,6, 5,7,6,       // +X
+            8,10,9, 9,10,11,    // -Y
+            12,13,14, 13,15,14, // +Y
+            16,17,18, 17,19,18, // -Z
+            20,22,21, 21,22,23  // +Z
         };
 
         m_indexCount = ARRAYSIZE(CubeIndices);
@@ -125,6 +164,20 @@ namespace Engine
 		Matrix4x4 projection = PerspectiveFovLH(2.0f * std::atan(std::tan(Radians(70.0f) * 0.5f) / aspectRatioY), aspectRatioX, 0.01f, 100.0f);
 		m_constantBufferData.projection = Transpose(projection);
 
+        hr = m_shader.CompileFromFile<VertexPT>(L"C:\\Project\\BunnyUp\\Engine\\TextureShader.hlsl");
+        if (FAILED(hr))
+        {
+            return hr;
+        }
+
+        hr = m_texture.CreateFromFile(L"C:\\Project\\BunnyUp\\Engine\\container.jpg");
+        if (FAILED(hr))
+        {
+            return hr;
+        }
+
+        hr = m_sampler.CreateSampler(SamplerType::LinearClamp);
+
 		return hr;
 	}
 
@@ -154,7 +207,7 @@ namespace Engine
             0
         );
 
-        UINT stride = sizeof(VertexPositionColor);
+        UINT stride = sizeof(VertexPositionUV);
         UINT offset = 0;
 
         context->IASetVertexBuffers(
@@ -176,6 +229,9 @@ namespace Engine
         );
 
         m_shader.Bind();
+
+        m_texture.Bind(0);
+        m_sampler.Bind(0);
 
         context->VSSetConstantBuffers(
             0,

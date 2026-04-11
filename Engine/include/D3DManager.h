@@ -28,6 +28,8 @@ namespace Engine
 		void BeginFrame(float r, float g, float b, float a);
 		void EndFrame();
 
+		void Shutdown();
+
 		float GetAspectRatio();
 
 		ID3D11Device* GetDevice() { return m_pd3dDevice.Get(); };
