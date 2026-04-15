@@ -37,7 +37,7 @@ namespace Engine
 		~Shader();
 
 		template<typename VertexType>
-		HRESULT CompileFromFile(const std::wstring& filePath) { return compile(filePath, VertexType::layout.data(), VertexType::layout.size()); }
+		HRESULT CompileFromFile(const std::string& filePath) { return compile(filePath, VertexType::layout.data(), VertexType::layout.size()); }
 
 		void Bind();
 
@@ -46,6 +46,6 @@ namespace Engine
 		Microsoft::WRL::ComPtr<ID3D11PixelShader> m_pPixelShader;
 		Microsoft::WRL::ComPtr<ID3D11InputLayout> m_pInputLayout;
 
-		HRESULT compile(const std::wstring& filePath, const D3D11_INPUT_ELEMENT_DESC* layout, size_t layoutSize);
+		HRESULT compile(const std::string& filePath, const D3D11_INPUT_ELEMENT_DESC* layout, size_t layoutSize);
 	};
 }

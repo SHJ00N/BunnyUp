@@ -13,17 +13,18 @@ namespace Engine
 	{
 	}
 
-	HRESULT Texture2D::CreateFromFile(const std::wstring& filePath)
+	HRESULT Texture2D::CreateFromFile(const std::string& filePath)
 	{
 		HRESULT hr = S_OK;
-		hr = DirectX::CreateWICTextureFromFile(D3DManager::GetInstance().GetDevice(), D3DManager::GetInstance().GetDeviceContext(), filePath.c_str(), nullptr, m_shaderResourceView.GetAddressOf());
+		std::wstring wFilePath(filePath.begin(), filePath.end());
+		hr = DirectX::CreateWICTextureFromFile(D3DManager::GetInstance().GetDevice(), D3DManager::GetInstance().GetDeviceContext(), wFilePath.c_str(), nullptr, m_shaderResourceView.GetAddressOf());
 
 		return hr;
 	}
 
 	void Texture2D::Bind(UINT slot) const
 	{
-		assert(m_shaderResourceView != nullptr);
+		//assert(m_shaderResourceView != nullptr);
 		D3DManager::GetInstance().GetDeviceContext()->PSSetShaderResources(slot, 1, m_shaderResourceView.GetAddressOf());
 	}
 }

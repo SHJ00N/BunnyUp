@@ -41,6 +41,8 @@ SamplerState sampler0 : register(s0);
 
 float4 PSMain(PS_INPUT input) : SV_TARGET
 {
-    // Just pass through the color data
-    return texture0.Sample(sampler0, input.UV);
+    float4 color = texture0.Sample(sampler0, input.UV);
+    if (color.a < 0.1f)
+        discard;
+    return color;
 }

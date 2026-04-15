@@ -21,9 +21,17 @@
   <ItemGroup>
     <ClInclude Include="include\ConstantBuffer.h" />
     <ClInclude Include="include\ImGuiClass.h" />
+    <ClInclude Include="include\Log.h" />
+    <ClInclude Include="include\LogManager.h" />
+    <ClInclude Include="include\Material.h" />
     <ClInclude Include="include\MathHelper.h" />
+    <ClInclude Include="include\Mesh.h" />
+    <ClInclude Include="include\Model.h" />
     <ClInclude Include="include\Renderer.h" />
+    <ClInclude Include="include\RenderStateManager.h" />
+    <ClInclude Include="include\ResourceManager.h" />
     <ClInclude Include="include\Sampler.h" />
+    <ClInclude Include="include\SamplerStateManager.h" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\System.h" />
     <ClInclude Include="include\D3DManager.h" />
@@ -43,8 +51,14 @@
     <ClCompile Include="src\D3DManager.cpp" />
     <ClCompile Include="src\ImGuiClass.cpp" />
     <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\Material.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\RenderStateManager.cpp" />
+    <ClCompile Include="src\ResourceManager.cpp" />
     <ClCompile Include="src\Sampler.cpp" />
+    <ClCompile Include="src\SamplerStateManager.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\System.cpp" />
     <ClCompile Include="src\Texture2D.cpp" />
@@ -79,6 +93,11 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="container.jpg" />
+    <Image Include="T_Chibi_Emo_01.png" />
+    <Image Include="T_Chibi_Rabbit_00.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chibi_Rabbit.fbx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -159,12 +178,17 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\Assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -175,12 +199,17 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\Assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -189,12 +218,17 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\Assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -205,12 +239,17 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\Assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,5 +20,8 @@ namespace Engine
 		void RenderUI();
 
 		void Shutdown();
+	private:
+		void renderLogWindow();
+		void renderTransformWindow(class Renderer *renderer);
 	};
 }

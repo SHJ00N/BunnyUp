@@ -30,7 +30,7 @@ namespace Engine
 	{
 	}
 
-	HRESULT Shader::compile(const std::wstring& filePath, const D3D11_INPUT_ELEMENT_DESC* layout, size_t layoutSize)
+	HRESULT Shader::compile(const std::string& filePath, const D3D11_INPUT_ELEMENT_DESC* layout, size_t layoutSize)
 	{
 		HRESULT hr = S_OK;
 
@@ -47,7 +47,8 @@ namespace Engine
 #endif
 
 		// compile vertex shader
-		hr = D3DCompileFromFile(filePath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VSMain", "vs_5_0", flags, 0, &vertexShaderBlob, &errorBlob);
+		std::wstring wFilePath(filePath.begin(), filePath.end());
+		hr = D3DCompileFromFile(wFilePath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VSMain", "vs_5_0", flags, 0, &vertexShaderBlob, &errorBlob);
 		if(FAILED(hr))
 		{
 			if (errorBlob)
@@ -59,7 +60,7 @@ namespace Engine
 
 		// compile pixel shader
 		errorBlob.Reset();
-		hr = D3DCompileFromFile(filePath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "PSMain", "ps_5_0", flags, 0, &pixelShaderBlob, &errorBlob);
+		hr = D3DCompileFromFile(wFilePath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "PSMain", "ps_5_0", flags, 0, &pixelShaderBlob, &errorBlob);
 		if (FAILED(hr))
 		{
 			if (errorBlob)

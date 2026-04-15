@@ -12,7 +12,7 @@ namespace Engine
 		Texture2D();
 		~Texture2D();
 
-		HRESULT CreateFromFile(const std::wstring& filePath);
+		HRESULT CreateFromFile(const std::string& filePath);
 
 		void Bind(UINT slot = 0) const;
 		

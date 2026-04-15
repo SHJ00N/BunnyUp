@@ -1,4 +1,8 @@
 #include "ImGuiClass.h"
+#include "Log.h"
+
+#include "Renderer.h"
+#include "System.h"
 
 namespace Engine
 {
@@ -49,8 +53,54 @@ namespace Engine
 
 	void ImGuiClass::RenderUI()
 	{
-		ImGui::Begin("Debug");
-		ImGui::Text("Hello");
+		renderLogWindow();
+		renderTransformWindow(System::GetInstance().GetRenderer());
+	}
+
+	void ImGuiClass::renderLogWindow()
+	{
+		ImGui::Begin("Log");
+
+		if (ImGui::Button("Clear"))
+		{
+			LogManager::GetInstance().Clear();
+		}
+
+		ImGui::Separator();
+
+		const auto& logs = LogManager::GetInstance().GetEntries();
+
+		for (const auto& entry : logs)
+		{
+			ImVec4 color;
+
+			switch (entry.level)
+			{
+			case LogLevel::Info:    color = ImVec4(1, 1, 1, 1); break;
+			case LogLevel::Warning: color = ImVec4(1, 1, 0, 1); break;
+			case LogLevel::Error:   color = ImVec4(1, 0, 0, 1); break;
+			}
+
+			ImGui::TextColored(color, "%s", entry.message.c_str());
+		}
+
+		// scroll
+		if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+			ImGui::SetScrollHereY(1.0f);
+
+		ImGui::End();
+	}
+
+	void ImGuiClass::renderTransformWindow(Renderer* renderer)
+	{
+		ImGui::Begin("Transform");
+
+		ImGui::SliderFloat("Rotation Y", &renderer->Rotation, 0.0f, 360.0f);
+		ImGui::SliderFloat("Scale", &renderer->Scale, 0.01f, 1.0f);
+
+		ImGui::Checkbox("Auto Rotate", &renderer->AutoRotate);
+		ImGui::SliderFloat("Speed", &renderer->RotationSpeed, 0.1f, 10.0f);
+
 		ImGui::End();
 	}
 }

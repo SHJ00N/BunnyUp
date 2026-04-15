@@ -1,11 +1,19 @@
 #include "System.h"
 #include "D3DManager.h"
+#include "RenderStateManager.h"
+#include "SamplerStateManager.h"
+#include "ResourceManager.h"
+#include "LogManager.h"
 
 namespace Engine
 {
 	HRESULT System::Initialize()
 	{
 		HRESULT hr = S_OK;
+		// Create singleton instances
+		LogManager::CreateInstance();
+		ResourceManager::CreateInstance();
+
 		// Initialize the window
 		m_pWindowClass = std::make_unique<WindowClass>();
 		hr = m_pWindowClass->Initialize();
@@ -24,6 +32,21 @@ namespace Engine
 
 		hr = D3DManager::GetInstance().CreateWindowResources(m_pWindowClass->GetHWND());
 		if(FAILED(hr))
+		{
+			return hr;
+		}
+
+		// initialize DirectX StateManager
+		RenderStateManager::CreateInstance();
+		hr = RenderStateManager::GetInstance().Initialize();
+		if (FAILED(hr))
+		{
+			return hr;
+		}
+
+		SamplerStateManager::CreateInstance();
+		hr = SamplerStateManager::GetInstance().Initialize();
+		if (FAILED(hr))
 		{
 			return hr;
 		}
@@ -88,6 +111,9 @@ namespace Engine
 
 	void System::Shutdown()
 	{
+		ResourceManager::GetInstance().Clear();
+		LogManager::GetInstance().Clear();
+
 		m_pImGuiClass->Shutdown();
 		D3DManager::GetInstance().Shutdown();
 		m_pWindowClass->Shutdown();
