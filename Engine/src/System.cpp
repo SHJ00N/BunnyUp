@@ -4,15 +4,16 @@
 #include "SamplerStateManager.h"
 #include "ResourceManager.h"
 #include "LogManager.h"
+#include "SceneManager.h"
 
 namespace Engine
 {
 	HRESULT System::Initialize()
 	{
 		HRESULT hr = S_OK;
+		
 		// Create singleton instances
 		LogManager::CreateInstance();
-		ResourceManager::CreateInstance();
 
 		// Initialize the window
 		m_pWindowClass = std::make_unique<WindowClass>();
@@ -51,6 +52,10 @@ namespace Engine
 			return hr;
 		}
 
+		// Initialize resource manager and load default resources
+		ResourceManager::CreateInstance();
+		ResourceManager::GetInstance().LoadDefaultResources();
+
 		// Initialize input
 		m_pInput = std::make_unique<Input>();
 		m_pInput->Initialize();
@@ -62,6 +67,10 @@ namespace Engine
 		// Initialize imgui
 		m_pImGuiClass = std::make_unique<ImGuiClass>();
 		m_pImGuiClass->Initialize(m_pWindowClass->GetHWND(), D3DManager::GetInstance().GetDevice(), D3DManager::GetInstance().GetDeviceContext());
+
+		// Initalize scene manager
+		SceneManager::CreateInstance();
+		SceneManager::GetInstance().Initialize();
 
 		return hr;
 	}
@@ -91,12 +100,13 @@ namespace Engine
 
 				m_pRenderer->Update();
 
+				SceneManager::GetInstance().ActiveSceneUpdate(0.0f);
+
 				D3DManager::GetInstance().BeginFrame(0.1f, 0.1f, 0.1f, 1.0f);
 
 				m_pImGuiClass->BeginFrame();
 
-				// render the active scene here
-				m_pRenderer->Render();
+				SceneManager::GetInstance().ActiveSceneRender(*m_pRenderer);
 
 				m_pImGuiClass->RenderUI();
 
@@ -111,11 +121,24 @@ namespace Engine
 
 	void System::Shutdown()
 	{
+		// Clean up resources and singleton instances
+		SceneManager::GetInstance().Clear();
 		ResourceManager::GetInstance().Clear();
 		LogManager::GetInstance().Clear();
+		
+		// Destroy singleton instances
+		SceneManager::DestroyInstance();
+		ResourceManager::DestroyInstance();
+		LogManager::DestroyInstance();
+		RenderStateManager::DestroyInstance();
+		SamplerStateManager::DestroyInstance();
 
+		// Shutdown direct3D and related resources
 		m_pImGuiClass->Shutdown();
 		D3DManager::GetInstance().Shutdown();
+		D3DManager::DestroyInstance();
+		
+		// Shutdown window
 		m_pWindowClass->Shutdown();
 	}
 

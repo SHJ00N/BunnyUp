@@ -10,11 +10,20 @@ namespace Engine
 	{
 	}
 
+	void ResourceManager::LoadDefaultResources()
+	{
+		// Load default shader
+		LoadShader<VertexPT>("Default", "C:\\Project\\BunnyUp\\Engine\\TextureShader.hlsl");
+
+		// Load default model
+		ResourceManager::GetInstance().LoadModel("Chibi_Rabbit", "C:\\Project\\BunnyUp\\Engine\\resources\\models\\Chibi_Rabbit.fbx");
+	}
+
 	void ResourceManager::Clear()
 	{
-		m_shaders.clear();
-		m_textures.clear();
 		m_models.clear();
+		m_textures.clear();
+		m_shaders.clear();
 	}
 
 	std::shared_ptr<Shader> ResourceManager::GetShader(const std::string& name) const

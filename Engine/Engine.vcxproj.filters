@@ -81,6 +81,27 @@
     <ClInclude Include="include\SamplerStateManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="include\Transform.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SceneManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ModelRenderer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RendererComponent.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\D3DManager.cpp">
@@ -144,6 +165,27 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="src\SamplerStateManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Transform.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModelRenderer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RendererComponent.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

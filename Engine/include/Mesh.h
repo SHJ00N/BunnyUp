@@ -67,8 +67,8 @@ namespace Engine
 			return true;
 		}
 
-		void Render() const;
-		void Render(std::span<const std::shared_ptr<Material>> materials) const;
+		void Render();
+		void Render(const std::vector<std::shared_ptr<Material>>& materials) const;
 	private:
 		// gpu vertex data
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pVertexBuffer;

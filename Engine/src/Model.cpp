@@ -35,14 +35,6 @@ namespace Engine
 		return true;
 	}
 
-	void Model::Render()
-	{
-		for (auto& mesh : m_meshes)
-		{
-			mesh.Render(m_materials);
-		}
-	}
-
 	void Model::processNode(aiNode* node, const aiScene* scene) 
 	{
 		for (unsigned int i = 0; i < node->mNumMeshes; i++) {
@@ -116,7 +108,7 @@ namespace Engine
 		for (unsigned int i = 0; i < scene->mNumMaterials; ++i)
 		{
 			aiMaterial* aiMat = scene->mMaterials[i];
-			auto mat = std::make_shared<Material>();
+			auto mat = std::make_unique<Material>();
 
 			// set material name
 			aiString name;
@@ -147,7 +139,7 @@ namespace Engine
 			// set render state
 			mat->SetRenderState(RenderStateManager::GetInstance().GetState("Opaque"));
 
-			m_materials[i] = mat;
+			m_materials[i] = std::move(mat);
 		}
 	}
 }

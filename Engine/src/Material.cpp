@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	Material::Material()
+	Material::Material() : m_pShader(nullptr)
 	{
 	}
 

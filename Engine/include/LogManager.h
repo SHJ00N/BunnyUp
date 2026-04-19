@@ -39,7 +39,7 @@ namespace Engine
             }
         }
 
-        const std::vector<LogEntry> GetEntries() const
+        const std::vector<LogEntry>& GetEntries() const
         {
             return m_entries;
         }

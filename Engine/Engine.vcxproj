@@ -19,25 +19,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\ConstantBuffer.h" />
+    <ClInclude Include="include\GameObject.h" />
     <ClInclude Include="include\ImGuiClass.h" />
     <ClInclude Include="include\Log.h" />
     <ClInclude Include="include\LogManager.h" />
     <ClInclude Include="include\Material.h" />
     <ClInclude Include="include\MathHelper.h" />
     <ClInclude Include="include\Mesh.h" />
+    <ClInclude Include="include\ModelRenderer.h" />
     <ClInclude Include="include\Model.h" />
     <ClInclude Include="include\Renderer.h" />
+    <ClInclude Include="include\RendererComponent.h" />
     <ClInclude Include="include\RenderStateManager.h" />
     <ClInclude Include="include\ResourceManager.h" />
     <ClInclude Include="include\Sampler.h" />
     <ClInclude Include="include\SamplerStateManager.h" />
+    <ClInclude Include="include\Scene.h" />
+    <ClInclude Include="include\SceneManager.h" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\System.h" />
     <ClInclude Include="include\D3DManager.h" />
     <ClInclude Include="include\Input.h" />
     <ClInclude Include="include\Singleton.h" />
     <ClInclude Include="include\Texture2D.h" />
+    <ClInclude Include="include\Transform.h" />
     <ClInclude Include="include\WindowClass.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
@@ -48,20 +55,27 @@
     <ClCompile Include="..\external\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\external\ImGui\imgui_tables.cpp" />
     <ClCompile Include="..\external\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="src\Component.cpp" />
     <ClCompile Include="src\D3DManager.cpp" />
+    <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\ImGuiClass.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\ModelRenderer.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\RendererComponent.cpp" />
     <ClCompile Include="src\RenderStateManager.cpp" />
     <ClCompile Include="src\ResourceManager.cpp" />
     <ClCompile Include="src\Sampler.cpp" />
     <ClCompile Include="src\SamplerStateManager.cpp" />
+    <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\System.cpp" />
     <ClCompile Include="src\Texture2D.cpp" />
+    <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\WindowClass.cpp" />
   </ItemGroup>
   <ItemGroup>

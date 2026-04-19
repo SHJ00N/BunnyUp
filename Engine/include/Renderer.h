@@ -5,9 +5,7 @@
 #include <memory>
 
 #include "ConstantBuffer.h"
-#include "Shader.h"
-#include "Texture2D.h"
-#include "Sampler.h"
+#include "Transform.h"
 
 namespace Engine
 {
@@ -18,7 +16,9 @@ namespace Engine
 		~Renderer();
 		HRESULT Initialize();
 		void Update();
-		void Render();
+
+		void SetWorldMatrix(const Matrix4x4& world) { m_constantBufferData.world = world; }
+		void UpdateConstantBuffer();
 
 
 		// Temporary code for debugging
@@ -26,6 +26,7 @@ namespace Engine
 		float Rotation = 0.0f;
 		bool AutoRotate = false;
 		float RotationSpeed = 1.0f;
+		Transform transform;
 	private:
 		ConstantBufferStruct m_constantBufferData;
 		Microsoft::WRL::ComPtr<ID3D11Buffer>            m_pConstantBuffer;

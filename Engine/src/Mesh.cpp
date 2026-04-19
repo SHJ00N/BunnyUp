@@ -10,7 +10,7 @@ namespace Engine
 	{
 	}
 
-	void Mesh::Render() const
+	void Mesh::Render()
 	{
 		assert(m_pVertexBuffer && m_pIndexBuffer);
 
@@ -37,7 +37,7 @@ namespace Engine
 		}
 	}
 
-	void Mesh::Render(std::span<const std::shared_ptr<Material>> materials) const
+	void Mesh::Render(const std::vector<std::shared_ptr<Material>>& materials) const
 	{
 		assert(m_pVertexBuffer && m_pIndexBuffer);
 

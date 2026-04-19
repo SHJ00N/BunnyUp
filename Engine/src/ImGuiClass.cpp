@@ -2,11 +2,11 @@
 #include "Log.h"
 
 #include "Renderer.h"
-#include "System.h"
+#include "SceneManager.h"
 
 namespace Engine
 {
-	ImGuiClass::ImGuiClass()
+	ImGuiClass::ImGuiClass() : m_selectedGameObject(nullptr)
 	{
 	}
 
@@ -54,7 +54,8 @@ namespace Engine
 	void ImGuiClass::RenderUI()
 	{
 		renderLogWindow();
-		renderTransformWindow(System::GetInstance().GetRenderer());
+		renderSceneHierarchyWindow();
+		renderInspectorWindow();
 	}
 
 	void ImGuiClass::renderLogWindow()
@@ -91,16 +92,78 @@ namespace Engine
 		ImGui::End();
 	}
 
-	void ImGuiClass::renderTransformWindow(Renderer* renderer)
+	void ImGuiClass::renderSceneHierarchyWindow()
 	{
-		ImGui::Begin("Transform");
+		ImGui::Begin("Hierarchy");
 
-		ImGui::SliderFloat("Rotation Y", &renderer->Rotation, 0.0f, 360.0f);
-		ImGui::SliderFloat("Scale", &renderer->Scale, 0.01f, 1.0f);
+		auto scene = SceneManager::GetInstance().GetActiveScene();
+		if (scene)
+		{
+			renderGameObjectNode(scene->GetRoot());
+		}
+		
+		ImGui::End();
+	}
 
-		ImGui::Checkbox("Auto Rotate", &renderer->AutoRotate);
-		ImGui::SliderFloat("Speed", &renderer->RotationSpeed, 0.1f, 10.0f);
+	void ImGuiClass::renderGameObjectNode(GameObject* gameObject)
+	{
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+		if (gameObject->GetChildren().empty())
+			flags |= ImGuiTreeNodeFlags_Leaf;
 
+		bool nodeOpen = ImGui::TreeNodeEx(gameObject->GetName().c_str(), flags);
+		if (ImGui::IsItemClicked())
+		{
+			m_selectedGameObject = gameObject; // Set selected game object
+		}
+
+		if (nodeOpen)
+		{
+			for (const auto& child : gameObject->GetChildren())
+			{
+				renderGameObjectNode(child.get());
+			}
+			ImGui::TreePop();
+		}
+	}
+
+	void ImGuiClass::renderInspectorWindow()
+	{
+		ImGui::Begin("Inspector");
+
+		if (m_selectedGameObject)
+		{
+			ImGui::Text("Name: %s", m_selectedGameObject->GetName().c_str());
+
+			// Transform information
+			ImGui::Separator();
+			ImGui::Text("Transform");
+
+			// Set up local variables to hold transform data for ImGui editing
+			Vector3 position = m_selectedGameObject->transform.GetLocalPosition();
+			Vector3 rotation = m_selectedGameObject->transform.GetLocalRotation();
+			Vector3 scale = m_selectedGameObject->transform.GetLocalScale();
+
+			ImGui::DragFloat3("Position", &position.x, 0.1f);
+			ImGui::DragFloat3("Rotation", &rotation.x, 0.1f);
+			ImGui::DragFloat3("Scale", &scale.x, 0.01f);
+
+			m_selectedGameObject->transform.SetLocalPosition(position);
+			m_selectedGameObject->transform.SetLocalRotation(rotation);
+			m_selectedGameObject->transform.SetLocalScale(scale);
+			
+			// Display components
+			ImGui::Separator();
+			ImGui::Text("Components:");
+			for (const auto& component : m_selectedGameObject->GetComponents())
+			{
+				if (ImGui::TreeNode(typeid(*component).name()))
+				{
+					component->OnImGui();
+					ImGui::TreePop();
+				}
+			}
+		}
 		ImGui::End();
 	}
 }

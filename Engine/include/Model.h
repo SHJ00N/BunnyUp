@@ -16,7 +16,10 @@ namespace Engine
 		~Model();
 
 		bool LoadModel(const std::string& path);
-		void Render();
+
+		const std::vector<Mesh>& GetMeshes() const { return m_meshes; }
+		const std::vector<std::shared_ptr<Material>>& GetMaterials() const { return m_materials; }
+
 	private:
 		std::vector<Mesh> m_meshes;
 		std::vector<std::shared_ptr<Material>> m_materials;

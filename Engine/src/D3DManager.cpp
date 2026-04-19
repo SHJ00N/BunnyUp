@@ -172,6 +172,8 @@ namespace Engine
 
 	HRESULT D3DManager::ReleaseBackBuffer()
 	{
+		m_pd3dDeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
+
 		// Release the render target view based on the back buffer
 		m_pRenderTarget.Reset();
 
@@ -244,10 +246,17 @@ namespace Engine
 		m_pd3dDeviceContext->ClearDepthStencilView(m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 		m_pd3dDeviceContext->OMSetRenderTargets(1, m_pRenderTarget.GetAddressOf(), m_pDepthStencilView.Get());
+
+		m_pd3dDeviceContext->RSSetViewports(1, &m_viewport);
 	}
 
 	void D3DManager::EndFrame()
 	{
+		// 1. GPU pipeline cleanup
+		m_pd3dDeviceContext->ClearState();
+		m_pd3dDeviceContext->Flush();
+
+		// 2. Present
 		m_pDXGISwapChain->Present(1, 0);
 	}
 

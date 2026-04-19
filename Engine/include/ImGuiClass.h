@@ -20,8 +20,15 @@ namespace Engine
 		void RenderUI();
 
 		void Shutdown();
+
 	private:
-		void renderLogWindow();
-		void renderTransformWindow(class Renderer *renderer);
+		void renderLogWindow();		// Log window to display engine logs
+
+		// Editor windows
+		class GameObject* m_selectedGameObject;
+		void renderSceneHierarchyWindow();
+		void renderGameObjectNode(class GameObject* gameObject);
+
+		void renderInspectorWindow();
 	};
 }

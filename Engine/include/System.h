@@ -18,8 +18,6 @@ namespace Engine
 		HRESULT Run();
 		LRESULT MessageHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-		Renderer* GetRenderer() const { return m_pRenderer.get(); }
-
 		void Shutdown();
 	
 	private:

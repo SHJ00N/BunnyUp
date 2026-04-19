@@ -18,6 +18,8 @@ namespace Engine
 		ResourceManager();
 		~ResourceManager();
 
+		void LoadDefaultResources();
+
 		template<typename VertexType>
 		std::shared_ptr<Shader> LoadShader(const std::string& name, const std::string& filePath)
 		{

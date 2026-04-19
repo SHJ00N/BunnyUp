@@ -1,10 +1,6 @@
 #include "Renderer.h"
 #include "MathHelper.h"
 #include "D3DManager.h"
-#include "Mesh.h"
-#include "Material.h"
-#include "RenderStateManager.h"
-#include "Model.h"
 #include "ResourceManager.h"
 
 #include <cmath>
@@ -24,9 +20,6 @@ namespace Engine
         // create cube
         HRESULT hr = S_OK;
 
-		ResourceManager::GetInstance().LoadShader<VertexPT>("Default", "C:\\Project\\BunnyUp\\Engine\\TextureShader.hlsl");
-		ResourceManager::GetInstance().LoadModel("Chibi_Rabbit", "C:\\Project\\BunnyUp\\Engine\\resources\\models\\Chibi_Rabbit.fbx");
-
         // Use the Direct3D device to load resources into graphics memory.
         ID3D11Device* device = D3DManager::GetInstance().GetDevice();
 
@@ -40,8 +33,6 @@ namespace Engine
             nullptr,
             m_pConstantBuffer.GetAddressOf()
         );
-
-        // model.LoadModel("C:\\Project\\BunnyUp\\Engine\\Chibi_Rabbit.fbx");
 
         // Create cube geometry.
         std::vector<VertexPT> CubeVertices =
@@ -128,33 +119,30 @@ namespace Engine
                 Rotation = 0.0f;
 			}
         }
-		Quaternion q = AngleAxis(Rotation, Vector3(0, 1.0f, 0));
-        Matrix4x4 transform = TransformMatrix(Vector3(0, 0, 0), q, Vector3(Scale, Scale, Scale));
-        m_constantBufferData.world = Transpose(transform);
+		transform.SetLocalRotation(Vector3(0, Rotation, 0));
+        transform.SetLocalScale(Vector3(Scale, Scale, Scale));
+        m_constantBufferData.world = Transpose(transform.GetWorldMatrix());
 	}
 
-	void Renderer::Render()
-	{
-        ID3D11DeviceContext* context = D3DManager::GetInstance().GetDeviceContext();
+    void Renderer::UpdateConstantBuffer()
+    {
+        {
+            ID3D11DeviceContext* context = D3DManager::GetInstance().GetDeviceContext();
 
-        ID3D11RenderTargetView* renderTarget = D3DManager::GetInstance().GetRenderTarget();
-        ID3D11DepthStencilView* depthStencil = D3DManager::GetInstance().GetDepthStencil();
+            context->UpdateSubresource(
+                m_pConstantBuffer.Get(),
+                0,
+                nullptr,
+                &m_constantBufferData,
+                0,
+                0
+            );
 
-        context->UpdateSubresource(
-            m_pConstantBuffer.Get(),
-            0,
-            nullptr,
-            &m_constantBufferData,
-            0,
-            0
-        );
-
-        context->VSSetConstantBuffers(
-            0,
-            1,
-            m_pConstantBuffer.GetAddressOf()
-        );
-
-		ResourceManager::GetInstance().GetModel("Chibi_Rabbit")->Render();
+            context->VSSetConstantBuffers(
+                0,
+                1,
+                m_pConstantBuffer.GetAddressOf()
+            );
+        }
 	}
 }

@@ -281,9 +281,9 @@ namespace Engine
 	inline Matrix4x4 TransformMatrix(const Vector3& position, const Quaternion& rotation, const Vector3& scale) noexcept
 	{
 		return Matrix4x4::FromSIMD(
-			DirectX::XMMatrixScaling(scale.x, scale.y, scale.z) *
+			DirectX::XMMatrixTranslation(position.x, position.y, position.z) *
 			DirectX::XMMatrixRotationQuaternion(rotation.ToSIMD()) *
-			DirectX::XMMatrixTranslation(position.x, position.y, position.z)
+			DirectX::XMMatrixScaling(scale.x, scale.y, scale.z)
 		);
 	}
 
