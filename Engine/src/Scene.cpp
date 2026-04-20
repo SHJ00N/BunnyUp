@@ -29,6 +29,11 @@ namespace Engine
 		traverseUpdate(m_root.get(), dt);
 	}
 
+	void Scene::SceneFixedUpdate(float fdt)
+	{
+		traverseFixedUpdate(m_root.get(), fdt);
+	}
+
 	void Scene::traverseAwake(GameObject* node)
 	{
 		node->Awake();
@@ -53,6 +58,15 @@ namespace Engine
 		for (auto& child : node->GetChildren())
 		{
 			traverseUpdate(child.get(), dt);
+		}
+	}
+
+	void Scene::traverseFixedUpdate(GameObject* node, float fdt)
+	{
+		node->FixedUpdate(fdt);
+		for (auto& child : node->GetChildren())
+		{
+			traverseFixedUpdate(child.get(), fdt);
 		}
 	}
 

@@ -12,6 +12,7 @@ namespace Engine
 	public:
 		void SetActiveScene(std::unique_ptr<Scene> scene);
 		void ActiveSceneUpdate(float dt);
+		void ActiveSceneFixedUpdate(float fdt);
 		void ActiveSceneRender(class Renderer& renderer);
 
 		void Initialize();

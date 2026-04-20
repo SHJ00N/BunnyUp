@@ -111,17 +111,7 @@ namespace Engine
 
 	void Renderer::Update()
 	{
-        if (AutoRotate)
-        {
-            Rotation += RotationSpeed;
-            if(Rotation >= 360.0f)
-            {
-                Rotation = 0.0f;
-			}
-        }
-		transform.SetLocalRotation(Vector3(0, Rotation, 0));
-        transform.SetLocalScale(Vector3(Scale, Scale, Scale));
-        m_constantBufferData.world = Transpose(transform.GetWorldMatrix());
+
 	}
 
     void Renderer::UpdateConstantBuffer()

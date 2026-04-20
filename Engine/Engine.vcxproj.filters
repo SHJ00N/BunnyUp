@@ -102,6 +102,9 @@
     <ClInclude Include="include\RendererComponent.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="include\TimeClass.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\D3DManager.cpp">
@@ -185,7 +188,7 @@
     <ClCompile Include="src\ModelRenderer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="src\RendererComponent.cpp">
+    <ClCompile Include="src\TimeClass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

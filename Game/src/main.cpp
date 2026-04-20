@@ -1,8 +1,7 @@
-#include <framework.h>
-#include <windows.h>
-#include <System.h>
+#include "framework.h"
+#include "main.h"
 
-using namespace Engine;
+#include <System.h>
 
 INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
@@ -14,20 +13,20 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 #endif
 
 	// Create system instance
-	System::CreateInstance();
+	Engine::System::CreateInstance();
 	
 	// Initialize system
-	hr = System::GetInstance().Initialize();
+	hr = Engine::System::GetInstance().Initialize();
 
 	// Run the system
 	if(SUCCEEDED(hr))
 	{
-		hr = System::GetInstance().Run();
+		hr = Engine::System::GetInstance().Run();
 	}
 
 	// Destroy system instance
-	System::GetInstance().Shutdown();
-	System::DestroyInstance();
+	Engine::System::GetInstance().Shutdown();
+	Engine::System::DestroyInstance();
 
 	return hr;
 }

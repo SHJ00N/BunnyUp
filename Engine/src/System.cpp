@@ -1,13 +1,18 @@
 #include "System.h"
-#include "D3DManager.h"
-#include "RenderStateManager.h"
-#include "SamplerStateManager.h"
-#include "ResourceManager.h"
-#include "LogManager.h"
-#include "SceneManager.h"
 
+#include "D3DManager.h"
+#include "LogManager.h"
+#include "RenderStateManager.h"
+#include "ResourceManager.h"
+#include "SamplerStateManager.h"
+#include "SceneManager.h"
+#include "TimeClass.h"
 namespace Engine
 {
+	System::~System()
+	{
+	}
+
 	HRESULT System::Initialize()
 	{
 		HRESULT hr = S_OK;
@@ -80,6 +85,8 @@ namespace Engine
 		MSG msg;
 		msg.message = WM_NULL;
 
+		TimeClass::Start();
+
 		while (msg.message != WM_QUIT)
 		{
 			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -89,34 +96,47 @@ namespace Engine
 			}
 			else
 			{
-				// Update and render the game here
-				m_pInput->Update();
+				// Update time
+				TimeClass::Update();
 
+				// Update Input
+				m_pInput->Update();
 				// press ESC to quit
 				if (m_pInput->IsKeyPressed(DirectX::Keyboard::Keys::Escape))
 				{
 					PostQuitMessage(0);
 				}
 
-				m_pRenderer->Update();
+				// Update scene
+				// Fixed Update
+				while (TimeClass::ShouldPerformFixedUpdate())
+				{
+					SceneManager::GetInstance().ActiveSceneFixedUpdate(TimeClass::GetFixedDeltaTime());
+					TimeClass::ConsumeFixedUpdateTime();
+				}
+				// Scaled delta time update
+				SceneManager::GetInstance().ActiveSceneUpdate(TimeClass::GetDeltaTime());
 
-				SceneManager::GetInstance().ActiveSceneUpdate(0.0f);
-
-				D3DManager::GetInstance().BeginFrame(0.1f, 0.1f, 0.1f, 1.0f);
-
-				m_pImGuiClass->BeginFrame();
-
-				SceneManager::GetInstance().ActiveSceneRender(*m_pRenderer);
-
-				m_pImGuiClass->RenderUI();
-
-				m_pImGuiClass->EndFrame();
-
-				D3DManager::GetInstance().EndFrame();
+				// Render
+				render();
 			}
 		}
 
 		return S_OK;
+	}
+
+	void System::render()
+	{
+		// Clear the back buffer and depth stencil
+		D3DManager::GetInstance().BeginFrame(0.1f, 0.1f, 0.1f, 1.0f);
+		m_pImGuiClass->BeginFrame();
+		// Render the active scene
+		SceneManager::GetInstance().ActiveSceneRender(*m_pRenderer);
+		// Render the UI
+		m_pImGuiClass->RenderUI();
+		m_pImGuiClass->EndFrame();
+		// Present the back buffer to the screen
+		D3DManager::GetInstance().EndFrame();
 	}
 
 	void System::Shutdown()

@@ -60,6 +60,15 @@ namespace Engine
 		}
 	}
 
+	void GameObject::FixedUpdate(float fdt)
+	{
+		// Call FixedUpdate on all components
+		for (const auto& component : m_components)
+		{
+			component->FixedUpdate(fdt);
+		}
+	}
+
 	void GameObject::PropagateTransformDirtyFlag()
 	{
 		transform.SetDirty();

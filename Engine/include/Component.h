@@ -16,6 +16,7 @@ namespace Engine
 		void Awake();
 		void Start();
 		virtual void Update(float dt) { }
+		virtual void FixedUpdate(float fdt) { }
 
 		virtual void OnImGui() { }
 	protected:

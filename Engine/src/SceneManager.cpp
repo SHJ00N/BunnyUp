@@ -32,6 +32,15 @@ namespace Engine
 		}
 	}
 
+	void SceneManager::ActiveSceneFixedUpdate(float fdt)
+	{
+		if (m_activeScene)
+		{
+			m_activeScene->SceneStart();
+			m_activeScene->SceneFixedUpdate(fdt);
+		}
+	}
+
 	void SceneManager::ActiveSceneRender(Renderer& renderer)
 	{
 		if (m_activeScene)

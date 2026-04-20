@@ -1,6 +1,5 @@
 #include "WindowClass.h"
 #include "System.h"
-
 #include "imgui_impl_win32.h"
 
 // Forward declare message handler from imgui_impl_win32.cpp

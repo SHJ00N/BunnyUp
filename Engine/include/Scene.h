@@ -15,6 +15,7 @@ namespace Engine
 		void SceneAwake();
 		void SceneStart();
 		void SceneUpdate(float dt);
+		void SceneFixedUpdate(float fdt);
 
 		void Render(class Renderer& renderer);
 
@@ -45,6 +46,7 @@ namespace Engine
 		void traverseAwake(GameObject* node);
 		void traverseStart(GameObject* node);
 		void traverseUpdate(GameObject* node, float dt);
+		void traverseFixedUpdate(GameObject* node, float fdt);
 		void traverseRender(GameObject* node, Renderer& renderer);
 	};
 }

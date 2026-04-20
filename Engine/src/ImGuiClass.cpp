@@ -1,6 +1,5 @@
 #include "ImGuiClass.h"
 #include "Log.h"
-
 #include "Renderer.h"
 #include "SceneManager.h"
 

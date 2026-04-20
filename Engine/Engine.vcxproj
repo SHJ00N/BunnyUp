@@ -44,6 +44,7 @@
     <ClInclude Include="include\Input.h" />
     <ClInclude Include="include\Singleton.h" />
     <ClInclude Include="include\Texture2D.h" />
+    <ClInclude Include="include\TimeClass.h" />
     <ClInclude Include="include\Transform.h" />
     <ClInclude Include="include\WindowClass.h" />
     <ClInclude Include="resource.h" />
@@ -65,7 +66,6 @@
     <ClCompile Include="src\ModelRenderer.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
-    <ClCompile Include="src\RendererComponent.cpp" />
     <ClCompile Include="src\RenderStateManager.cpp" />
     <ClCompile Include="src\ResourceManager.cpp" />
     <ClCompile Include="src\Sampler.cpp" />
@@ -75,6 +75,7 @@
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\System.cpp" />
     <ClCompile Include="src\Texture2D.cpp" />
+    <ClCompile Include="src\TimeClass.cpp" />
     <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\WindowClass.cpp" />
   </ItemGroup>

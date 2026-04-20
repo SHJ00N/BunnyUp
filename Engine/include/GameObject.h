@@ -76,6 +76,7 @@ namespace Engine
 		void Awake();
 		void Start();
 		void Update(float dt);
+		void FixedUpdate(float fdt);
 
 		const std::string& GetName() const { return m_name; }
 

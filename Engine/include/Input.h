@@ -3,10 +3,8 @@
 #include <Keyboard.h>
 #include <memory>
 
-
 namespace Engine
 {
-
 	using namespace DirectX;
 	
 	class Input
