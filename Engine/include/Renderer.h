@@ -4,6 +4,7 @@
 #include <wrl/client.h>
 
 #include "ConstantBuffer.h"
+#include "D3DManager.h"
 
 namespace Engine
 {
@@ -13,13 +14,26 @@ namespace Engine
 		Renderer();
 		~Renderer();
 		HRESULT Initialize();
+
+		template <typename T>
+		void UpdateConstantBuffer(ID3D11Buffer* buffer, UINT slot, const T& data)
+		{
+			ID3D11DeviceContext* context = D3DManager::GetInstance().GetDeviceContext();
+			// Update constant buffer
+			context->UpdateSubresource(buffer, 0, nullptr, &data, 0, 0);
+			context->VSSetConstantBuffers(slot, 1, &buffer);
+		}
+		void UpdatePerCamera(const ConstantBufferPerCamera& data);
+		void UpdatePerObject(const ConstantBufferPerObject& data);
+		void UpdateSkinPerObject(const ConstantBufferSkinPerObject& data);
+		
 		void Update();
-
-		void SetWorldMatrix(const Matrix4x4& world) { m_constantBufferData.world = world; }
-		void UpdateConstantBuffer();
-
 	private:
-		ConstantBufferStruct m_constantBufferData;
-		Microsoft::WRL::ComPtr<ID3D11Buffer>            m_pConstantBuffer;
+		ConstantBufferPerCamera m_cbPerCamera;
+		
+		// constant buffers
+		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferPerCamera;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferPerObject;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferSkinPerObject;
 	};
 }

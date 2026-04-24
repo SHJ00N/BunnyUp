@@ -106,7 +106,7 @@ namespace Engine
 
 	void ImGuiClass::renderGameObjectNode(GameObject* gameObject)
 	{
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_DefaultOpen;
 		if (gameObject->GetChildren().empty())
 			flags |= ImGuiTreeNodeFlags_Leaf;
 
@@ -156,7 +156,7 @@ namespace Engine
 			ImGui::Text("Components:");
 			for (const auto& component : m_selectedGameObject->GetComponents())
 			{
-				if (ImGui::TreeNode(typeid(*component).name()))
+				if (ImGui::TreeNodeEx(typeid(*component).name(), ImGuiTreeNodeFlags_DefaultOpen))
 				{
 					component->OnImGui();
 					ImGui::TreePop();

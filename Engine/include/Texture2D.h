@@ -13,11 +13,13 @@ namespace Engine
 		~Texture2D();
 
 		HRESULT CreateFromFile(const std::string& filePath);
+		const std::string& GetName() const { return m_name; }
 
 		void Bind(UINT slot = 0) const;
 		
 		ID3D11ShaderResourceView* GetShaderResourceView() const { return m_shaderResourceView.Get(); }
 	private:
 		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_shaderResourceView;
+		std::string m_name;
 	};
 }

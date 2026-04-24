@@ -67,12 +67,17 @@ namespace Engine
 			return true;
 		}
 
+		void SetSkinned(bool isSkinned) { m_isSkinned = isSkinned; }
+		bool GetSkinned() const { return m_isSkinned; }
+
 		void Render();
 		void Render(const std::vector<std::shared_ptr<Material>>& materials) const;
 	private:
 		// gpu vertex data
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pVertexBuffer;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pIndexBuffer;
+		// Is skinned 
+		bool m_isSkinned = false;
 
 		UINT m_stride;
 		UINT m_indexCount;

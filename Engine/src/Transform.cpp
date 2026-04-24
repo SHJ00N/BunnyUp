@@ -41,7 +41,7 @@ namespace Engine
 		Matrix4x4 scaling = Scaling(m_scale);
 
 		// combine transformations
-		return translation * rotation * scaling; // Note: TRS order (Translation * Rotation * Scaling)
+		return  scaling * rotation * translation; // Note: SRT order (Scaling * Rotation * Tranlsation)
 	}
 
 	void Transform::SetLocalPosition(const Vector3& position)

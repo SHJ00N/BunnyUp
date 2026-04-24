@@ -2,6 +2,7 @@
 #include "D3DManager.h"
 
 #include <WICTextureLoader.h>
+#include <filesystem>
 
 namespace Engine
 {
@@ -18,6 +19,9 @@ namespace Engine
 		HRESULT hr = S_OK;
 		std::wstring wFilePath(filePath.begin(), filePath.end());
 		hr = DirectX::CreateWICTextureFromFile(D3DManager::GetInstance().GetDevice(), D3DManager::GetInstance().GetDeviceContext(), wFilePath.c_str(), nullptr, m_shaderResourceView.GetAddressOf());
+
+		std::filesystem::path path(filePath);
+		m_name = path.filename().string(); // ex) "diffuse.png"
 
 		return hr;
 	}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "ConstantBuffer.h"
 #include "Material.h"
 
 #include <d3d11.h>
@@ -8,13 +9,22 @@
 
 namespace Engine
 {
+	class Renderer;
 	class RendererComponent : public Component
 	{
 	public:
-		void AddMaterial(std::shared_ptr<Material> material) { materials.push_back(material); }
-		virtual void Render(class Renderer& renderer) { }
+		void AddMaterial(std::shared_ptr<Material> material) { m_materials.push_back(material); }
+		void Render(Renderer& renderer) 
+		{
+			BindConstantBuffer(renderer);
+			OnRender();
+		}
 
 	protected:
-		std::vector<std::weak_ptr<Material>>  materials;
+		std::vector<std::shared_ptr<Material>>  m_materials;
+		ConstantBufferPerObject m_cbPerObject;
+
+		virtual void BindConstantBuffer(Renderer& renderer) { }
+		virtual void OnRender() {};
 	};
 }

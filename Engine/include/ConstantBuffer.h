@@ -4,10 +4,28 @@
 
 namespace Engine
 {
-	typedef struct ConstantBuffer
+	constexpr int SkinMeshBoneMax = 256;
+
+	enum CbSlot
 	{
-		Matrix4x4 world;
+		PerCamera = 0,
+		PerObject = 1,
+		SkinPerObject
+	};
+
+	struct ConstantBufferPerCamera
+	{
 		Matrix4x4 view;
 		Matrix4x4 projection;
-	} ConstantBufferStruct;
+	};
+
+	struct ConstantBufferPerObject
+	{
+		Matrix4x4 world;
+	};
+
+	struct ConstantBufferSkinPerObject
+	{
+		Matrix4x4 bones[SkinMeshBoneMax];
+	};
 }

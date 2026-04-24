@@ -116,7 +116,7 @@ namespace Engine
 				}
 				// Scaled delta time update
 				SceneManager::GetInstance().ActiveSceneUpdate(TimeClass::GetDeltaTime());
-
+				m_pRenderer->Update();
 				// Render
 				render();
 			}

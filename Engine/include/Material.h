@@ -23,6 +23,8 @@ namespace Engine
 		void SetRenderState(const RenderState& renderState) { m_renderState = renderState; }
 
 		const std::string& GetName() const { return m_name; }
+		std::shared_ptr<Texture2D> GetTexture(UINT slot) const;
+		const std::vector<std::shared_ptr<Texture2D>>& GetTextures() const { return m_textures; }
 		
 		std::shared_ptr<Material> CreateClone() const;
 		void SetTexture(UINT slot, std::shared_ptr<Texture2D> texture);

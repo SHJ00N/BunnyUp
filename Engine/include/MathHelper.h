@@ -108,10 +108,10 @@ namespace Engine
 		};
 
 		constexpr Matrix4x4() noexcept
-			: m00(1), m01(0), m02(0), m03(0),
-			  m10(0), m11(1), m12(0), m13(0),
-			  m20(0), m21(0), m22(1), m23(0),
-			  m30(0), m31(0), m32(0), m33(1) {
+			: m00(0), m01(0), m02(0), m03(0),
+			  m10(0), m11(0), m12(0), m13(0),
+			  m20(0), m21(0), m22(0), m23(0),
+			  m30(0), m31(0), m32(0), m33(0) {
 		}
 
 		constexpr Matrix4x4(float n) noexcept
@@ -281,9 +281,9 @@ namespace Engine
 	inline Matrix4x4 TransformMatrix(const Vector3& position, const Quaternion& rotation, const Vector3& scale) noexcept
 	{
 		return Matrix4x4::FromSIMD(
-			DirectX::XMMatrixTranslation(position.x, position.y, position.z) *
+			DirectX::XMMatrixScaling(scale.x, scale.y, scale.z) *
 			DirectX::XMMatrixRotationQuaternion(rotation.ToSIMD()) *
-			DirectX::XMMatrixScaling(scale.x, scale.y, scale.z)
+			DirectX::XMMatrixTranslation(position.x, position.y, position.z)
 		);
 	}
 

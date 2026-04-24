@@ -7,7 +7,7 @@
 
 namespace Engine
 {
-	Renderer::Renderer() : m_pConstantBuffer(nullptr)
+	Renderer::Renderer()
 	{
 	}
   
@@ -23,19 +23,22 @@ namespace Engine
         // Use the Direct3D device to load resources into graphics memory.
         ID3D11Device* device = D3DManager::GetInstance().GetDevice();
 
-        CD3D11_BUFFER_DESC cbDesc(
-            sizeof(ConstantBufferStruct),
-            D3D11_BIND_CONSTANT_BUFFER
-        );
+        // Create Constant buffers
+        CD3D11_BUFFER_DESC cbPerCameraDesc(sizeof(ConstantBufferPerCamera), D3D11_BIND_CONSTANT_BUFFER);
+        hr = device->CreateBuffer(&cbPerCameraDesc, nullptr, m_pConstantBufferPerCamera.GetAddressOf());
+        if (FAILED(hr)) return hr;
 
-        hr = device->CreateBuffer(
-            &cbDesc,
-            nullptr,
-            m_pConstantBuffer.GetAddressOf()
-        );
+        CD3D11_BUFFER_DESC cbPerObjectDesc(sizeof(ConstantBufferPerObject), D3D11_BIND_CONSTANT_BUFFER);
+        hr = device->CreateBuffer(&cbPerObjectDesc, nullptr, m_pConstantBufferPerObject.GetAddressOf());
+        if (FAILED(hr)) return hr;
+
+        CD3D11_BUFFER_DESC cbSkinPerObjectDesc(sizeof(ConstantBufferSkinPerObject), D3D11_BIND_CONSTANT_BUFFER);
+        hr = device->CreateBuffer(&cbSkinPerObjectDesc, nullptr, m_pConstantBufferSkinPerObject.GetAddressOf());
+        if (FAILED(hr)) return hr;
+
 
         // Create cube geometry.
-        std::vector<VertexPT> CubeVertices =
+        std::vector<VertexPU> CubeVertices =
         {
             // -X
             {Vector3{-0.5f, 0.5f, 0.5f}, Vector2{1,0}},
@@ -98,41 +101,34 @@ namespace Engine
 
         // view and projection
 		Matrix4x4 view = LookAtLH(Vector3(0, 10.0f, 20.5f), Vector3(0, 10.0f, 0), Vector3(0, 1.0f, 0));
-		m_constantBufferData.view = Transpose(view);
+        m_cbPerCamera.view = view;
 
         float aspectRatioX = D3DManager::GetInstance().GetAspectRatio();
         float aspectRatioY = aspectRatioX < (16.0f / 9.0f) ? aspectRatioX / (16.0f / 9.0f) : 1.0f;
 
 		Matrix4x4 projection = PerspectiveFovLH(2.0f * std::atan(std::tan(Radians(70.0f) * 0.5f) / aspectRatioY), aspectRatioX, 0.01f, 100.0f);
-		m_constantBufferData.projection = Transpose(projection);
+        m_cbPerCamera.projection = projection;
 
 		return hr;
 	}
 
-	void Renderer::Update()
-	{
-
-	}
-
-    void Renderer::UpdateConstantBuffer()
+    void Renderer::UpdatePerCamera(const ConstantBufferPerCamera& data)
     {
-        {
-            ID3D11DeviceContext* context = D3DManager::GetInstance().GetDeviceContext();
+        UpdateConstantBuffer(m_pConstantBufferPerCamera.Get(), CbSlot::PerCamera, data);
+    }
 
-            context->UpdateSubresource(
-                m_pConstantBuffer.Get(),
-                0,
-                nullptr,
-                &m_constantBufferData,
-                0,
-                0
-            );
+    void Renderer::UpdatePerObject(const ConstantBufferPerObject& data)
+    {
+        UpdateConstantBuffer(m_pConstantBufferPerObject.Get(), CbSlot::PerObject, data);
+    }
 
-            context->VSSetConstantBuffers(
-                0,
-                1,
-                m_pConstantBuffer.GetAddressOf()
-            );
-        }
-	}
+    void Renderer::UpdateSkinPerObject(const ConstantBufferSkinPerObject& data)
+    {
+        UpdateConstantBuffer(m_pConstantBufferSkinPerObject.Get(), CbSlot::SkinPerObject, data);
+    }
+
+    void Renderer::Update()
+    {
+        UpdatePerCamera(m_cbPerCamera);
+    }
 }

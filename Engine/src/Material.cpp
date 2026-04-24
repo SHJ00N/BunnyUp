@@ -16,9 +16,12 @@ namespace Engine
 	{
 		auto mat = std::make_shared<Material>();
 
-		mat->m_pShader = m_pShader;		// share Shader
-		mat->m_textures = m_textures;		// share Texture 
-		mat->m_renderState = m_renderState;		// copy RenderState
+        // Copy member values
+		mat->m_pShader = m_pShader;
+		mat->m_textures = m_textures;
+		mat->m_renderState = m_renderState;
+        mat->m_samplers = m_samplers;
+        mat->m_name = m_name;
 
 		return mat;
 	}
@@ -33,6 +36,12 @@ namespace Engine
 
         m_textures[idx] = texture;
 	}
+
+    std::shared_ptr<Texture2D> Material::GetTexture(UINT slot) const
+    {
+        if (slot >= m_textures.size()) return nullptr;
+        return m_textures[slot];
+    }
 
     void Material::SetSampler(UINT slot, std::shared_ptr<Sampler> sampler)
     {

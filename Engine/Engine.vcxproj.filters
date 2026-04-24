@@ -96,13 +96,31 @@
     <ClInclude Include="include\Component.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="include\ModelRenderer.h">
+    <ClInclude Include="include\MeshRenderer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="include\RendererComponent.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="include\TimeClass.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Animation.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Animator.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Bone.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Animdata.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SkinnedRenderer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Assimp_DX_helpers.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -185,10 +203,22 @@
     <ClCompile Include="src\Component.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="src\ModelRenderer.cpp">
+    <ClCompile Include="src\MeshRenderer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="src\TimeClass.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Animation.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Animator.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Bone.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SkinnedRenderer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -197,6 +227,9 @@
       <Filter>리소스 파일</Filter>
     </FxCompile>
     <FxCompile Include="TextureShader.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="SkinningShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
   </ItemGroup>
@@ -210,9 +243,69 @@
     <Image Include="T_Chibi_Emo_01.png">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="resources\models\Textures\T_Chibi_Emo_03.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\models\Textures\T_Chibi_Emo_06.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\models\Textures\T_Chibi_Emo_10.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\models\Textures\T_Chibi_Emo_11.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\models\Textures\T_Chibi_Emo_12.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\models\Textures\T_Chibi_Emo_13.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\models\Textures\T_Chibi_Emo_16.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\models\Textures\T_Chibi_Emo_19.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\models\Textures\T_Chibi_Emo_21.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\models\Textures\T_Chibi_Emo_25.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\models\Textures\T_Chibi_Rabbit_03.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\models\Textures\T_Chibi_Rabbit_04.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\models\Textures\T_Chibi_Rabbit_06.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Chibi_Rabbit.fbx">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="resources\animations\Anim_Chibi%40IdleA.fbx">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="resources\animations\Anim_Chibi%40IdleB.fbx">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="resources\animations\Anim_Chibi%40IdleC.fbx">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="resources\animations\Anim_Chibi%40Jump.fbx">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="resources\animations\Anim_Chibi%40Move.fbx">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="resources\animations\Anim_Chibi%40Run.fbx">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="resources\animations\Anim_Chibi%40Walk.fbx">
       <Filter>리소스 파일</Filter>
     </None>
   </ItemGroup>
