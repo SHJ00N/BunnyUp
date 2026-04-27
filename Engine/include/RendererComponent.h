@@ -14,6 +14,7 @@ namespace Engine
 	{
 	public:
 		void AddMaterial(std::shared_ptr<Material> material) { m_materials.push_back(material); }
+		std::vector<std::shared_ptr<Material>>& GetMaterials() { return m_materials; }
 		void Render(Renderer& renderer) 
 		{
 			BindConstantBuffer(renderer);

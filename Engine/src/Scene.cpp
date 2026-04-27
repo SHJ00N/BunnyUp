@@ -16,6 +16,7 @@ namespace Engine
 
 	void Scene::SceneAwake()
 	{
+		SceneEnter();
 		traverseAwake(m_root.get());
 	}
 

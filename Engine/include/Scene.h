@@ -16,12 +16,14 @@ namespace Engine
 		void SceneStart();
 		void SceneUpdate(float dt);
 		void SceneFixedUpdate(float fdt);
+		virtual void SceneExit() { }
 
 		void Render(class Renderer& renderer);
 
 		GameObject* GetRoot() { return m_root.get(); }
 		// Read-only version for external access
 		const GameObject* GetRoot() const { return m_root.get(); }
+		void SetSceneRootName(const std::string& name) { m_root->SetName(name); }
 
 		// Add GameObject to the root of the scene
 		template<typename T, typename... Args>
@@ -38,7 +40,8 @@ namespace Engine
 			m_root->AddChild(std::move(object));
 			return ptr;
 		}
-
+	protected:
+		virtual void SceneEnter() { }
 	private:
 		std::unique_ptr<GameObject> m_root;
 

@@ -10,17 +10,20 @@ namespace Engine
 	class SceneManager : public Singleton<SceneManager>
 	{
 	public:
-		void SetActiveScene(std::unique_ptr<Scene> scene);
-		void ActiveSceneUpdate(float dt);
-		void ActiveSceneFixedUpdate(float fdt);
-		void ActiveSceneRender(class Renderer& renderer);
+		void LoadScene(const std::string& name);
+		void CurrentSceneUpdate(float dt);
+		void CurrentSceneFixedUpdate(float fdt);
+		void CurrentSceneRender(class Renderer& renderer);
 
 		void Initialize();
-		void Clear() { m_activeScene.reset(); }
+		void Clear();
 		
-		Scene* GetActiveScene() { return m_activeScene.get(); }
-		const Scene* GetActiveScene() const { return m_activeScene.get(); }
+		Scene* GetCurrentScene() { return m_currentScene.get(); }
+		const Scene* GetCurrentScene() const { return m_currentScene.get(); }
 	private:
-		std::unique_ptr<Scene> m_activeScene;
+		std::unique_ptr<Scene> m_currentScene;
+		std::unique_ptr<Scene> m_nextScene;
+		
+		void setCurrentScene(std::unique_ptr<Scene> scene);
 	};
 }

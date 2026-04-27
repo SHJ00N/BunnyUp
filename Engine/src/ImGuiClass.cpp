@@ -13,6 +13,11 @@ namespace Engine
 	{
 	}
 
+	void ImGuiClass::InitState()
+	{
+		m_selectedGameObject = nullptr;
+	}
+
 	void ImGuiClass::Initialize(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* context)
 	{
 		IMGUI_CHECKVERSION();
@@ -95,7 +100,7 @@ namespace Engine
 	{
 		ImGui::Begin("Hierarchy");
 
-		auto scene = SceneManager::GetInstance().GetActiveScene();
+		auto scene = SceneManager::GetInstance().GetCurrentScene();
 		if (scene)
 		{
 			renderGameObjectNode(scene->GetRoot());

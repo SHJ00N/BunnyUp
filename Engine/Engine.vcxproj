@@ -42,6 +42,7 @@
     <ClInclude Include="include\Sampler.h" />
     <ClInclude Include="include\SamplerStateManager.h" />
     <ClInclude Include="include\Scene.h" />
+    <ClInclude Include="include\SceneFactory.h" />
     <ClInclude Include="include\SceneManager.h" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\SkinnedRenderer.h" />

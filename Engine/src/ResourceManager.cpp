@@ -18,13 +18,6 @@ namespace Engine
 		// Load default shader
 		LoadShader<VertexPNUT>("Default", "C:\\Project\\BunnyUp\\Engine\\TextureShader.hlsl");
 		LoadShader<VertexSkin>("Skinning", "C:\\Project\\BunnyUp\\Engine\\SkinningShader.hlsl");
-
-		// Load default model
-		ResourceManager::GetInstance().LoadModel("Chibi_Rabbit", "C:\\Project\\BunnyUp\\Engine\\resources\\models\\Chibi_Rabbit.fbx");
-		ResourceManager::GetInstance().LoadTexture("T_Chibi_Rabbit_03", "C:\\Project\\BunnyUp\\Engine\\resources\\models\\Textures\\T_Chibi_Rabbit_03.png");
-		ResourceManager::GetInstance().LoadTexture("T_Chibi_Rabbit_06", "C:\\Project\\BunnyUp\\Engine\\resources\\models\\Textures\\T_Chibi_Rabbit_06.png");
-		ResourceManager::GetInstance().LoadTexture("T_Chibi_Emo_25", "C:\\Project\\BunnyUp\\Engine\\resources\\models\\Textures\\T_Chibi_Emo_25.png");
-		ResourceManager::GetInstance().LoadTexture("T_Chibi_Emo_21", "C:\\Project\\BunnyUp\\Engine\\resources\\models\\Textures\\T_Chibi_Emo_21.png");
 	}
 
 	void ResourceManager::Clear()

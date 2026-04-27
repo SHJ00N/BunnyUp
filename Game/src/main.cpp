@@ -14,7 +14,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
 	// Create system instance
 	Engine::System::CreateInstance();
-	
+
 	// Initialize system
 	hr = Engine::System::GetInstance().Initialize();
 

@@ -20,6 +20,8 @@ namespace Engine
 
 		void Shutdown();
 
+		void InitState();
+
 	private:
 		void renderLogWindow();		// Log window to display engine logs
 

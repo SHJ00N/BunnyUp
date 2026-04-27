@@ -123,6 +123,9 @@
     <ClInclude Include="include\Assimp_DX_helpers.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="include\SceneFactory.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\D3DManager.cpp">

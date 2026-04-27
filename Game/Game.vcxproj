@@ -24,10 +24,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DemoScene2.cpp" />
+    <ClCompile Include="src\LoadGameResources.cpp" />
+    <ClCompile Include="src\RegistractionGameScenes.cpp" />
+    <ClCompile Include="src\DemoScene1.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="include\DemoScene1.h" />
+    <ClInclude Include="include\DemoScene2.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="targetver.h" />
@@ -115,7 +121,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -133,7 +139,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -149,7 +155,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -167,7 +173,7 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

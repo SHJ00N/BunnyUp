@@ -1,67 +1,82 @@
 #include "SceneManager.h"
 #include "SkinnedRenderer.h"
 #include "ResourceManager.h"
+#include "SceneFactory.h"
 #include "Animator.h"
+#include "Log.h"
 
 namespace Engine
 {
 	void SceneManager::Initialize()
 	{
-		auto scene = std::make_unique<Scene>();
-		auto bunny = scene->CreateGameObject<GameObject>("Bunny");
-		bunny->transform.SetLocalScale(Vector3(0.085f, 0.085f, 0.085f));
-		bunny->AddComponent<SkinnedRenderer>()->SetModel(ResourceManager::GetInstance().GetModel("Chibi_Rabbit"));
-
-		auto model = ResourceManager::GetInstance().GetModel("Chibi_Rabbit");
-		ResourceManager::GetInstance().LoadAnimation("Chibi_Rabbit_IdleA", "C:\\Project\\BunnyUp\\Engine\\resources\\animations\\Anim_Chibi@IdleA.fbx", model.get(), true);
-		ResourceManager::GetInstance().LoadAnimation("Chibi_Rabbit_IdleC", "C:\\Project\\BunnyUp\\Engine\\resources\\animations\\Anim_Chibi@IdleC.fbx", model.get(), true);
-		ResourceManager::GetInstance().LoadAnimation("Chibi_Rabbit_Walk", "C:\\Project\\BunnyUp\\Engine\\resources\\animations\\Anim_Chibi@Walk.fbx", model.get(), true);
-		ResourceManager::GetInstance().LoadAnimation("Chibi_Rabbit_Run", "C:\\Project\\BunnyUp\\Engine\\resources\\animations\\Anim_Chibi@Run.fbx", model.get(), true);
-
-		auto animator = bunny->AddComponent<Animator>();
-		animator->Awake();
-
-		animator->RegistAnimation("IdleA", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_IdleA").get());
-		animator->RegistAnimation("IdleC", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_IdleC").get());
-		animator->RegistAnimation("Walk", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Walk").get());
-		animator->RegistAnimation("Run", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Run").get());
-		animator->PlayAnimation("IdleA");
-
-		m_activeScene = std::move(scene);
+		LoadScene("DemoScene1");
 	}
 
-	void SceneManager::SetActiveScene(std::unique_ptr<Scene> scene)
+	void SceneManager::LoadScene(const std::string& name)
 	{
-		m_activeScene = std::move(scene);
-		if (m_activeScene)
+		auto scene = SceneFactory::GetInstance().CreateScene(name);
+		if (!scene)
 		{
-			m_activeScene->SceneAwake();
+			LOG_ERROR("Failed to load scene : %s", name);
+			return;
+		}
+
+		scene->SetSceneRootName(name);
+		m_nextScene = std::move(scene);
+	}
+
+	void SceneManager::setCurrentScene(std::unique_ptr<Scene> scene)
+	{
+		if (m_currentScene)
+		{
+			m_currentScene->SceneExit(); // scene clear
+		}
+
+		m_currentScene = std::move(scene);
+
+		if (m_currentScene)
+		{
+			m_currentScene->SceneAwake(); // scene initialize
 		}
 	}
 
-	void SceneManager::ActiveSceneUpdate(float dt)
+	void SceneManager::CurrentSceneUpdate(float dt)
 	{
-		if (m_activeScene)
+		if (m_nextScene)
 		{
-			m_activeScene->SceneStart();
-			m_activeScene->SceneUpdate(dt);
+			setCurrentScene(std::move(m_nextScene));
+		}
+
+		if (m_currentScene)
+		{
+			m_currentScene->SceneStart();
+			m_currentScene->SceneUpdate(dt);
 		}
 	}
 
-	void SceneManager::ActiveSceneFixedUpdate(float fdt)
+	void SceneManager::CurrentSceneFixedUpdate(float fdt)
 	{
-		if (m_activeScene)
+		if (m_currentScene)
 		{
-			m_activeScene->SceneStart();
-			m_activeScene->SceneFixedUpdate(fdt);
+			m_currentScene->SceneStart();
+			m_currentScene->SceneFixedUpdate(fdt);
 		}
 	}
 
-	void SceneManager::ActiveSceneRender(Renderer& renderer)
+	void SceneManager::CurrentSceneRender(Renderer& renderer)
 	{
-		if (m_activeScene)
+		if (m_currentScene)
 		{
-			m_activeScene->Render(renderer);
+			m_currentScene->Render(renderer);
 		}
+	}
+
+	void SceneManager::Clear()
+	{
+		if (m_currentScene)
+		{
+			m_currentScene->SceneExit();
+		}
+		m_currentScene.reset();
 	}
 }

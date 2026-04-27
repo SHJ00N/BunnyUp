@@ -6,7 +6,12 @@
 #include "ResourceManager.h"
 #include "SamplerStateManager.h"
 #include "SceneManager.h"
+#include "SceneFactory.h"
 #include "TimeClass.h"
+
+extern void LoadGameResources();
+extern void RegistractionGameScenes();
+
 namespace Engine
 {
 	System::~System()
@@ -60,6 +65,7 @@ namespace Engine
 		// Initialize resource manager and load default resources
 		ResourceManager::CreateInstance();
 		ResourceManager::GetInstance().LoadDefaultResources();
+		LoadGameResources();
 
 		// Initialize input
 		m_pInput = std::make_unique<Input>();
@@ -73,7 +79,10 @@ namespace Engine
 		m_pImGuiClass = std::make_unique<ImGuiClass>();
 		m_pImGuiClass->Initialize(m_pWindowClass->GetHWND(), D3DManager::GetInstance().GetDevice(), D3DManager::GetInstance().GetDeviceContext());
 
-		// Initalize scene manager
+		// Initalize scene management
+		SceneFactory::CreateInstance();	// Create SceneFactory instance
+		RegistractionGameScenes();
+
 		SceneManager::CreateInstance();
 		SceneManager::GetInstance().Initialize();
 
@@ -106,16 +115,23 @@ namespace Engine
 				{
 					PostQuitMessage(0);
 				}
+				if (m_pInput->IsKeyPressed(DirectX::Keyboard::Keys::Enter))
+				{
+					static int sceneState = 0;
+					sceneState++;
+					SceneManager::GetInstance().LoadScene(sceneState % 2 ? "DemoScene2" : "DemoScene1");
+					m_pImGuiClass->InitState();
+				}
 
 				// Update scene
 				// Fixed Update
 				while (TimeClass::ShouldPerformFixedUpdate())
 				{
-					SceneManager::GetInstance().ActiveSceneFixedUpdate(TimeClass::GetFixedDeltaTime());
+					SceneManager::GetInstance().CurrentSceneFixedUpdate(TimeClass::GetFixedDeltaTime());
 					TimeClass::ConsumeFixedUpdateTime();
 				}
 				// Scaled delta time update
-				SceneManager::GetInstance().ActiveSceneUpdate(TimeClass::GetDeltaTime());
+				SceneManager::GetInstance().CurrentSceneUpdate(TimeClass::GetDeltaTime());
 				m_pRenderer->Update();
 				// Render
 				render();
@@ -131,7 +147,7 @@ namespace Engine
 		D3DManager::GetInstance().BeginFrame(0.1f, 0.1f, 0.1f, 1.0f);
 		m_pImGuiClass->BeginFrame();
 		// Render the active scene
-		SceneManager::GetInstance().ActiveSceneRender(*m_pRenderer);
+		SceneManager::GetInstance().CurrentSceneRender(*m_pRenderer);
 		// Render the UI
 		m_pImGuiClass->RenderUI();
 		m_pImGuiClass->EndFrame();
@@ -147,6 +163,7 @@ namespace Engine
 		LogManager::GetInstance().Clear();
 		
 		// Destroy singleton instances
+		SceneFactory::DestroyInstance();
 		SceneManager::DestroyInstance();
 		ResourceManager::DestroyInstance();
 		LogManager::DestroyInstance();
