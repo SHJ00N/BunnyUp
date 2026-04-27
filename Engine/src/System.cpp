@@ -8,6 +8,7 @@
 #include "SceneManager.h"
 #include "SceneFactory.h"
 #include "TimeClass.h"
+#include "EventBus.h"
 
 extern void LoadGameResources();
 extern void RegistractionGameScenes();
@@ -22,8 +23,9 @@ namespace Engine
 	{
 		HRESULT hr = S_OK;
 		
-		// Create singleton instances
+		// Create system instances
 		LogManager::CreateInstance();
+		EventBus::CreateInstance();
 
 		// Initialize the window
 		m_pWindowClass = std::make_unique<WindowClass>();
@@ -120,7 +122,6 @@ namespace Engine
 					static int sceneState = 0;
 					sceneState++;
 					SceneManager::GetInstance().LoadScene(sceneState % 2 ? "DemoScene2" : "DemoScene1");
-					m_pImGuiClass->InitState();
 				}
 
 				// Update scene

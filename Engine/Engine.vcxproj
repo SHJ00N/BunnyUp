@@ -26,6 +26,7 @@
     <ClInclude Include="include\Bone.h" />
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\ConstantBuffer.h" />
+    <ClInclude Include="include\EventBus.h" />
     <ClInclude Include="include\GameObject.h" />
     <ClInclude Include="include\ImGuiClass.h" />
     <ClInclude Include="include\Log.h" />
@@ -68,6 +69,7 @@
     <ClCompile Include="src\Bone.cpp" />
     <ClCompile Include="src\Component.cpp" />
     <ClCompile Include="src\D3DManager.cpp" />
+    <ClCompile Include="src\EventBus.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\ImGuiClass.cpp" />
     <ClCompile Include="src\Input.cpp" />

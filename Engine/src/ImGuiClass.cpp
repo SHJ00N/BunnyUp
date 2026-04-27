@@ -2,6 +2,7 @@
 #include "Log.h"
 #include "Renderer.h"
 #include "SceneManager.h"
+#include "EventBus.h"
 
 namespace Engine
 {
@@ -33,6 +34,8 @@ namespace Engine
 		// Setup Platform/Renderer backends
 		ImGui_ImplWin32_Init(hwnd);
 		ImGui_ImplDX11_Init(device, context);
+
+		EventBus::GetInstance().Subscribe(EventType::SceneChange, [this]() { InitState(); });
 	}
 
 	void ImGuiClass::BeginFrame()

@@ -4,6 +4,7 @@
 #include "SceneFactory.h"
 #include "Animator.h"
 #include "Log.h"
+#include "EventBus.h"
 
 namespace Engine
 {
@@ -37,6 +38,7 @@ namespace Engine
 		if (m_currentScene)
 		{
 			m_currentScene->SceneAwake(); // scene initialize
+			EventBus::GetInstance().Publish(EventType::SceneChange);
 		}
 	}
 

@@ -16,22 +16,22 @@
     <Filter Include="소스 파일\Scenes">
       <UniqueIdentifier>{4548f2dd-803b-4853-95e9-ec3a06087471}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Default">
-      <UniqueIdentifier>{15237dc3-7659-4682-9ae6-2bb1b083bbfa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="헤더 파일\Default">
       <UniqueIdentifier>{6cf7d8ed-bb01-4bcc-9510-7cd6b6b10e2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Main">
+      <UniqueIdentifier>{15237dc3-7659-4682-9ae6-2bb1b083bbfa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
-      <Filter>소스 파일\Default</Filter>
+      <Filter>소스 파일\Main</Filter>
     </ClCompile>
     <ClCompile Include="src\LoadGameResources.cpp">
-      <Filter>소스 파일\Default</Filter>
+      <Filter>소스 파일\Main</Filter>
     </ClCompile>
     <ClCompile Include="src\RegistractionGameScenes.cpp">
-      <Filter>소스 파일\Default</Filter>
+      <Filter>소스 파일\Main</Filter>
     </ClCompile>
     <ClCompile Include="src\DemoScene1.cpp">
       <Filter>소스 파일\Scenes</Filter>
