@@ -19,4 +19,13 @@ namespace Engine
 			OnStart();
 		}
 	}
+
+	void Component::Destroy()
+	{
+		if (m_isAwake && !m_isDestroyed)
+		{
+			OnDestroy();
+			m_isDestroyed = true;
+		}
+	}
 }

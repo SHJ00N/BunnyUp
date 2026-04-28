@@ -9,6 +9,7 @@
 #include "SceneFactory.h"
 #include "TimeClass.h"
 #include "EventBus.h"
+#include "InputManager.h"
 
 extern void LoadGameResources();
 extern void RegistractionGameScenes();
@@ -70,8 +71,8 @@ namespace Engine
 		LoadGameResources();
 
 		// Initialize input
-		m_pInput = std::make_unique<Input>();
-		m_pInput->Initialize();
+		InputManager::CreateInstance();
+		InputManager::GetInstance().Initialize(m_pWindowClass->GetHWND());
 
 		// Initialize renderer
 		m_pRenderer = std::make_unique<Renderer>();
@@ -111,13 +112,13 @@ namespace Engine
 				TimeClass::Update();
 
 				// Update Input
-				m_pInput->Update();
+				InputManager::GetInstance().Update();
 				// press ESC to quit
-				if (m_pInput->IsKeyPressed(DirectX::Keyboard::Keys::Escape))
+				if (InputManager::GetInstance().IsKeyPressed(DirectX::Keyboard::Keys::Escape))
 				{
 					PostQuitMessage(0);
 				}
-				if (m_pInput->IsKeyPressed(DirectX::Keyboard::Keys::Enter))
+				if (InputManager::GetInstance().IsKeyPressed(DirectX::Keyboard::Keys::Enter))
 				{
 					static int sceneState = 0;
 					sceneState++;
@@ -133,7 +134,7 @@ namespace Engine
 				}
 				// Scaled delta time update
 				SceneManager::GetInstance().CurrentSceneUpdate(TimeClass::GetDeltaTime());
-				m_pRenderer->Update();
+
 				// Render
 				render();
 			}
@@ -170,6 +171,7 @@ namespace Engine
 		LogManager::DestroyInstance();
 		RenderStateManager::DestroyInstance();
 		SamplerStateManager::DestroyInstance();
+		InputManager::DestroyInstance();
 
 		// Shutdown direct3D and related resources
 		m_pImGuiClass->Shutdown();
@@ -190,6 +192,20 @@ namespace Engine
 			case WM_SYSKEYUP:
 			{
 				DirectX::Keyboard::ProcessMessage(message, wParam, lParam);
+				break;
+			}
+			case WM_MOUSEMOVE:
+			case WM_LBUTTONDOWN:
+			case WM_LBUTTONUP:
+			case WM_RBUTTONDOWN:
+			case WM_RBUTTONUP:
+			case WM_MBUTTONDOWN:
+			case WM_MBUTTONUP:
+			case WM_MOUSEWHEEL:
+			case WM_XBUTTONDOWN:
+			case WM_XBUTTONUP:
+			{
+				Mouse::ProcessMessage(message, wParam, lParam);
 				break;
 			}
 			default:

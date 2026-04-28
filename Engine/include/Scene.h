@@ -6,6 +6,7 @@
 
 namespace Engine
 {
+	class Camera;
 	class Scene
 	{
 	public:
@@ -40,10 +41,22 @@ namespace Engine
 			m_root->AddChild(std::move(object));
 			return ptr;
 		}
+
+		// camera management
+		void RegisterCamera(Camera* camera);
+		void UnregisterCamera(Camera* camera);
+		const std::vector<Camera*>& GetCameras() const { return m_cameras; }
+		Camera* GetMainCamera() const { return m_mainCamera; }
+		void SetMainCamera(Camera* camera) { m_mainCamera = camera; }
+
 	protected:
 		virtual void SceneEnter() { }
+
 	private:
 		std::unique_ptr<GameObject> m_root;
+
+		std::vector<Camera*> m_cameras;
+		Camera* m_mainCamera = nullptr;
 
 		// Helper functions for traversing the scene graph
 		void traverseAwake(GameObject* node);

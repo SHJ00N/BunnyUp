@@ -11,7 +11,7 @@ namespace Engine
 		MeshRenderer::SetMesh(model);
 	}
 
-	void SkinnedRenderer::BindConstantBuffer(Renderer& renderer)
+	void SkinnedRenderer::UpdateConstantBuffer(Renderer& renderer)
 	{
 		// set object world matrix
 		m_cbPerObject.world = ownerGameObject->transform.GetWorldMatrix();

@@ -1,12 +1,15 @@
 #include "Scene.h"
 #include "Renderer.h"
 #include "RendererComponent.h"
+#include "Log.h"
+#include "Camera.h"
 
 namespace Engine
 {
 	Scene::Scene()
 	{
 		m_root = std::make_unique<GameObject>("Root");
+		m_root->scene = this;
 	}
 
 	Scene::~Scene()
@@ -73,6 +76,13 @@ namespace Engine
 
 	void Scene::Render(Renderer& renderer)
 	{
+		if (!m_mainCamera)
+		{
+			LOG_WARNING("Main camera does not exist");
+			return;
+		}
+
+		m_mainCamera->UpdateConstantBuffer(renderer);
 		traverseRender(m_root.get(), renderer);
 	}
 
@@ -89,6 +99,29 @@ namespace Engine
 		for (auto& child : node->GetChildren())
 		{
 			traverseRender(child.get(), renderer);
+		}
+	}
+
+	void Scene::RegisterCamera(Camera* camera)
+	{
+		m_cameras.push_back(camera);
+
+		if (!m_mainCamera)
+		{
+			m_mainCamera = camera;
+		}
+	}
+
+	void Scene::UnregisterCamera(Camera* camera)
+	{
+		m_cameras.erase(
+			std::remove(m_cameras.begin(), m_cameras.end(), camera),
+			m_cameras.end()
+		);
+
+		if (m_mainCamera == camera)
+		{
+			m_mainCamera = m_cameras.empty() ? nullptr : m_cameras[0];
 		}
 	}
 }

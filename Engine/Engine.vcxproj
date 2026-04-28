@@ -24,6 +24,7 @@
     <ClInclude Include="include\Animdata.h" />
     <ClInclude Include="include\Assimp_DX_helpers.h" />
     <ClInclude Include="include\Bone.h" />
+    <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\ConstantBuffer.h" />
     <ClInclude Include="include\EventBus.h" />
@@ -49,7 +50,7 @@
     <ClInclude Include="include\SkinnedRenderer.h" />
     <ClInclude Include="include\System.h" />
     <ClInclude Include="include\D3DManager.h" />
-    <ClInclude Include="include\Input.h" />
+    <ClInclude Include="include\InputManager.h" />
     <ClInclude Include="include\Singleton.h" />
     <ClInclude Include="include\Texture2D.h" />
     <ClInclude Include="include\TimeClass.h" />
@@ -67,12 +68,13 @@
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Animator.cpp" />
     <ClCompile Include="src\Bone.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Component.cpp" />
     <ClCompile Include="src\D3DManager.cpp" />
     <ClCompile Include="src\EventBus.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\ImGuiClass.cpp" />
-    <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\InputManager.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\MeshRenderer.cpp" />

@@ -2,7 +2,7 @@
 #include "Log.h"
 #include "Renderer.h"
 #include "SceneManager.h"
-#include "EventBus.h"
+#include "Camera.h"
 
 namespace Engine
 {
@@ -35,7 +35,8 @@ namespace Engine
 		ImGui_ImplWin32_Init(hwnd);
 		ImGui_ImplDX11_Init(device, context);
 
-		EventBus::GetInstance().Subscribe(EventType::SceneChange, [this]() { InitState(); });
+		// subscribe event
+		m_listenerID = EventBus::GetInstance().Subscribe(EventType::SceneChange, [this]() { InitState(); });
 	}
 
 	void ImGuiClass::BeginFrame()
@@ -56,6 +57,9 @@ namespace Engine
 		ImGui_ImplDX11_Shutdown();
 		ImGui_ImplWin32_Shutdown();
 		ImGui::DestroyContext();
+
+		// unsubscribe event
+		EventBus::GetInstance().Unsubscribe(EventType::SceneChange, m_listenerID);
 	}
 
 	void ImGuiClass::RenderUI()
@@ -63,6 +67,7 @@ namespace Engine
 		renderLogWindow();
 		renderSceneHierarchyWindow();
 		renderInspectorWindow();
+		renderTopBar();
 	}
 
 	void ImGuiClass::renderLogWindow()
@@ -171,6 +176,49 @@ namespace Engine
 				}
 			}
 		}
+		ImGui::End();
+	}
+
+	void ImGuiClass::renderTopBar()
+	{
+		auto scene = SceneManager::GetInstance().GetCurrentScene();
+		if (!scene) return;
+
+		const auto& cameras = scene->GetCameras();
+		Camera* current = scene->GetMainCamera();
+
+		ImGui::Begin("TopBar", nullptr,
+			ImGuiWindowFlags_NoTitleBar |
+			ImGuiWindowFlags_NoScrollbar);
+
+		// ÄÞº¸ ¹Ú½º
+		const char* preview = current ?
+			current->ownerGameObject->GetName().c_str() : "None";
+
+		if (ImGui::BeginCombo("Camera", preview))
+		{
+			for (Camera* cam : cameras)
+			{
+				bool selected = (cam == current);
+
+				const char* name = nullptr;
+				if (cam && cam->ownerGameObject)
+				{
+					name = cam->ownerGameObject->GetName().c_str();
+				}
+
+				if (ImGui::Selectable(name, selected))
+				{
+					scene->SetMainCamera(cam);
+				}
+
+				if (selected)
+					ImGui::SetItemDefaultFocus();
+			}
+
+			ImGui::EndCombo();
+		}
+
 		ImGui::End();
 	}
 }

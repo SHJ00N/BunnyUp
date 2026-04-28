@@ -5,6 +5,8 @@
 #include <imgui_impl_dx11.h>
 #include <d3d11.h>
 
+#include "EventBus.h"
+
 namespace Engine
 {
 	class ImGuiClass
@@ -29,7 +31,9 @@ namespace Engine
 		class GameObject* m_selectedGameObject;
 		void renderSceneHierarchyWindow();
 		void renderGameObjectNode(class GameObject* gameObject);
-
 		void renderInspectorWindow();
+		void renderTopBar();
+
+		ListenerID m_listenerID;
 	};
 }

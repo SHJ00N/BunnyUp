@@ -98,17 +98,6 @@ namespace Engine
             // +Z
             20,21,22, 22,23,20
         };
-
-        // view and projection
-		Matrix4x4 view = LookAtLH(Vector3(0, 10.0f, 20.5f), Vector3(0, 10.0f, 0), Vector3(0, 1.0f, 0));
-        m_cbPerCamera.view = view;
-
-        float aspectRatioX = D3DManager::GetInstance().GetAspectRatio();
-        float aspectRatioY = aspectRatioX < (16.0f / 9.0f) ? aspectRatioX / (16.0f / 9.0f) : 1.0f;
-
-		Matrix4x4 projection = PerspectiveFovLH(2.0f * std::atan(std::tan(Radians(70.0f) * 0.5f) / aspectRatioY), aspectRatioX, 0.01f, 100.0f);
-        m_cbPerCamera.projection = projection;
-
 		return hr;
 	}
 
@@ -125,10 +114,5 @@ namespace Engine
     void Renderer::UpdateSkinPerObject(const ConstantBufferSkinPerObject& data)
     {
         UpdateConstantBuffer(m_pConstantBufferSkinPerObject.Get(), CbSlot::SkinPerObject, data);
-    }
-
-    void Renderer::Update()
-    {
-        UpdatePerCamera(m_cbPerCamera);
     }
 }

@@ -14,6 +14,8 @@ namespace Engine
 		~Transform() = default;
 
 		const Matrix4x4& GetWorldMatrix() const;
+		const Vector3 GetForward() const;
+		const Vector3 GetRight() const;
 
 		void SetLocalPosition(const Vector3& position);
 		void SetLocalRotation(const Vector3& rotation);

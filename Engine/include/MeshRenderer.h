@@ -14,7 +14,7 @@ namespace Engine
 
 		virtual void OnImGui() override;
 	protected:
-		void BindConstantBuffer(class Renderer& renderer) override;
+		void UpdateConstantBuffer(class Renderer& renderer) override;
 		void OnRender() override;
 
 	private:

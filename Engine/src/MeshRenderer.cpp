@@ -25,7 +25,7 @@ namespace Engine
 		}
 	}
 
-	void MeshRenderer::BindConstantBuffer(Renderer& renderer)
+	void MeshRenderer::UpdateConstantBuffer(Renderer& renderer)
 	{
 		m_cbPerObject.world = ownerGameObject->transform.GetWorldMatrix();
 		renderer.UpdatePerObject(m_cbPerObject);

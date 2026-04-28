@@ -9,14 +9,18 @@
 
 namespace Engine
 {
+	class Scene;
 	class GameObject
 	{
 	public:
 		GameObject(const std::string& name = "GameObject");
-		~GameObject() = default;
+		~GameObject();
 
 		// Space information
 		Transform transform;
+
+		// owner scene
+		Scene* scene;
 
 		// Propagate dirty flag to children when this node's transform is modified
 		void PropagateTransformDirtyFlag();
@@ -27,6 +31,8 @@ namespace Engine
 			// Set parent-child relationship
 			child->parent = this;
 			child->transform.parentTransform = &this->transform;
+
+			child->scene = this->scene;
 
 			children.emplace_back(std::move(child));
 		}

@@ -24,6 +24,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\CameraController.cpp" />
     <ClCompile Include="src\DemoScene2.cpp" />
     <ClCompile Include="src\LoadGameResources.cpp" />
     <ClCompile Include="src\RegistractionGameScenes.cpp" />
@@ -32,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="include\CameraController.h" />
     <ClInclude Include="include\DemoScene1.h" />
     <ClInclude Include="include\DemoScene2.h" />
     <ClInclude Include="main.h" />

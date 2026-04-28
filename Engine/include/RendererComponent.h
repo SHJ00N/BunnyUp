@@ -17,7 +17,7 @@ namespace Engine
 		std::vector<std::shared_ptr<Material>>& GetMaterials() { return m_materials; }
 		void Render(Renderer& renderer) 
 		{
-			BindConstantBuffer(renderer);
+			UpdateConstantBuffer(renderer);
 			OnRender();
 		}
 
@@ -25,7 +25,7 @@ namespace Engine
 		std::vector<std::shared_ptr<Material>>  m_materials;
 		ConstantBufferPerObject m_cbPerObject;
 
-		virtual void BindConstantBuffer(Renderer& renderer) { }
+		virtual void UpdateConstantBuffer(Renderer& renderer) { }
 		virtual void OnRender() {};
 	};
 }

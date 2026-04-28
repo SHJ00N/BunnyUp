@@ -4,14 +4,12 @@
 
 #include "Singleton.h"
 #include "WindowClass.h"
-#include "Input.h"
 #include "Renderer.h"
 #include "ImGuiClass.h"
 
 namespace Engine
 {
 	class WindowClass;
-	class Input;
 	class Renderer;
 	class ImGuiClass;
 
@@ -28,7 +26,6 @@ namespace Engine
 	
 	private:
 		std::unique_ptr<WindowClass> m_pWindowClass;
-		std::unique_ptr<Input> m_pInput;
 		std::unique_ptr<Renderer> m_pRenderer;
 		std::unique_ptr<ImGuiClass> m_pImGuiClass;
 

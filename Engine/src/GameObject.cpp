@@ -2,9 +2,17 @@
 
 namespace Engine
 {
-	GameObject::GameObject(const std::string& name) : m_name(name), parent(nullptr), transform()
+	GameObject::GameObject(const std::string& name) : m_name(name), parent(nullptr), transform(), scene(nullptr)
 	{
 		transform.owner = this;
+	}
+
+	GameObject::~GameObject()
+	{
+		for (auto& component : m_components)
+		{
+			component->Destroy();
+		}
 	}
 
 	std::unique_ptr<GameObject> GameObject::RemoveChild(GameObject* node)

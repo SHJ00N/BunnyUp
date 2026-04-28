@@ -27,10 +27,7 @@ namespace Engine
 		void UpdatePerObject(const ConstantBufferPerObject& data);
 		void UpdateSkinPerObject(const ConstantBufferSkinPerObject& data);
 		
-		void Update();
 	private:
-		ConstantBufferPerCamera m_cbPerCamera;
-		
 		// constant buffers
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferPerCamera;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferPerObject;

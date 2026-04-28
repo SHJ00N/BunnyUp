@@ -16,6 +16,18 @@ namespace Engine
 		return m_worldMatrix;
 	}
 
+	const Vector3 Transform::GetForward() const
+	{
+		auto& worldMatrix = GetWorldMatrix();
+		return Normalize(Vector3(worldMatrix.m20, worldMatrix.m21, worldMatrix.m22));
+	}
+
+	const Vector3 Transform::GetRight() const
+	{
+		auto& worldMatrix = GetWorldMatrix();
+		return Normalize(Vector3(worldMatrix.m00, worldMatrix.m01, worldMatrix.m02));
+	}
+
 	void Transform::updateWorldMatrix() const
 	{
 		if (parentTransform)
