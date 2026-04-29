@@ -3,6 +3,7 @@
 #include "RendererComponent.h"
 #include "Log.h"
 #include "Camera.h"
+#include "EditorCameraController.h"
 
 namespace Engine
 {
@@ -10,6 +11,11 @@ namespace Engine
 	{
 		m_root = std::make_unique<GameObject>("Root");
 		m_root->scene = this;
+
+		// Create Editor camera
+		auto editorCamera = CreateGameObject<GameObject>("EditorCamera");
+		editorCamera->AddComponent<Camera>();
+		editorCamera->AddComponent<EditorCameraController>();
 	}
 
 	Scene::~Scene()

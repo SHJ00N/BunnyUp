@@ -4,13 +4,38 @@
 #include <algorithm>
 #include <MathHelper.h>
 #include <ImGuiClass.h>
+#include <Camera.h>
+#include <Scene.h>
 
 void CameraController::Update(float dt)
 {
 	auto& input = Engine::InputManager::GetInstance();
 	auto& transform = ownerGameObject->transform;
 
-	if (input.IsMouseDown(Engine::MouseButton::Right))
+    if (input.IsEditorMode())
+    {
+        if (m_isActive)
+        {
+            m_isActive = false;
+        }
+        return;
+    }
+
+	if (!m_isActive && input.IsKeyPressed(DirectX::Keyboard::Keys::F2))
+	{
+		m_isActive = true;
+        input.OnFPSMode();
+
+        // set main camera
+        auto scene = ownerGameObject->scene;
+        auto camera = ownerGameObject->GetComponent<Engine::Camera>();
+        if (scene->GetMainCamera() != camera)
+        {
+            ownerGameObject->scene->SetMainCamera(camera);
+        }
+	}
+
+	if (m_isActive)
 	{
 		float dx = (float)input.GetMouseDeltaX();
 		float dy = (float)input.GetMouseDeltaY();
@@ -48,11 +73,17 @@ void CameraController::Update(float dt)
 			pos.y -= moveSpeed * dt;
 
 		transform.SetLocalPosition(pos);
+
+        // set fov from mouse scrolling
+        auto camera = ownerGameObject->GetComponent<Engine::Camera>();
+        camera->fov -= input.GetScrollDelta() * scrollSpeed;
+        camera->fov = std::clamp(camera->fov, 45.0f, 90.0f);
 	}
 }
 
 void CameraController::OnImGui()
 {
 	ImGui::DragFloat("Move Speed", &moveSpeed, 0.1f, 1.0f, 50.0f);
-	ImGui::DragFloat("Sensitivity", &sensitivity, 0.01f, 0.1f, 1.0f);
+	ImGui::DragFloat("Sensitivity", &sensitivity, 0.01f, 0.01f, 0.1f);
+    ImGui::DragFloat("Scroll Speed", &scrollSpeed, 0.01f, 0.1f, 0.01f);
 }

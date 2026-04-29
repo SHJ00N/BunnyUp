@@ -30,11 +30,13 @@ namespace Engine
 		void Update();
 
 		// keyboard
+		Keyboard* GetKeyboard() { return m_keyboard.get(); }
 		bool IsKeyDown(Keyboard::Keys key) const;		// current key state
 		bool IsKeyPressed(Keyboard::Keys key) const;		// key down event
 		bool IsKeyReleased(Keyboard::Keys key) const;	// key up event
 
 		// mouse
+		Mouse* GetMouse() { return m_mouse.get(); }
 		bool IsMouseDown(MouseButton button) const;
 		bool IsMousePressed(MouseButton button) const;
 		bool IsMouseReleased(MouseButton button) const;
@@ -44,6 +46,17 @@ namespace Engine
 
 		int GetMouseDeltaX() const { return m_deltaX; }
 		int GetMouseDeltaY() const { return m_deltaY; }
+		int GetScrollDelta() const { return m_deltaScroll; }
+		
+		void ResetMouseState();
+
+		// mode manager
+		void OnFPSMode();
+		void OffFPSMode();
+		void OnEditorMode();
+		void OffEditorMode();
+		const bool isFPSMode() const { return m_isFPSMode; }
+		const bool IsEditorMode() const { return m_isEditorMode; }
 
 	private:
 		// keyboard
@@ -58,7 +71,12 @@ namespace Engine
 
 		int m_prevMouseX;
 		int m_prevMouseY;
+		int m_prevScroll;
 		int m_deltaX;
 		int m_deltaY;
+		int m_deltaScroll;
+
+		bool m_isFPSMode = false;
+		bool m_isEditorMode = false;
 	};
 }

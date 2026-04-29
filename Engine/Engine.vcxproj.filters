@@ -138,6 +138,9 @@
     <ClInclude Include="include\Camera.h">
       <Filter>헤더 파일\Components</Filter>
     </ClInclude>
+    <ClInclude Include="include\EditorCameraController.h">
+      <Filter>헤더 파일\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\D3DManager.cpp">
@@ -240,6 +243,9 @@
       <Filter>소스 파일\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\Component.cpp">
+      <Filter>소스 파일\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EditorCameraController.cpp">
       <Filter>소스 파일\Components</Filter>
     </ClCompile>
   </ItemGroup>

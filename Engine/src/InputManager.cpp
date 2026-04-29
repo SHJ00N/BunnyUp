@@ -33,11 +33,24 @@ namespace Engine
 		m_mouseState = m_mouse->GetState();
 		m_mouseTracker.Update(m_mouseState);
 
-		m_deltaX = m_mouseState.x - m_prevMouseX;
-		m_deltaY = m_mouseState.y - m_prevMouseY;
+		// movement
+		if (m_mouseState.positionMode == Mouse::MODE_RELATIVE)
+		{
+			m_deltaX = m_mouseState.x;
+			m_deltaY = m_mouseState.y;
+		}
+		else
+		{
+			m_deltaX = m_mouseState.x - m_prevMouseX;
+			m_deltaY = m_mouseState.y - m_prevMouseY;
 
-		m_prevMouseX = m_mouseState.x;
-		m_prevMouseY = m_mouseState.y;
+			m_prevMouseX = m_mouseState.x;
+			m_prevMouseY = m_mouseState.y;
+		}
+
+		// wheel scroll
+		m_deltaScroll = m_mouseState.scrollWheelValue - m_prevScroll;
+		m_prevScroll = m_mouseState.scrollWheelValue;
 	}
 
 #pragma region keyboad
@@ -119,5 +132,38 @@ namespace Engine
 		return false;
 	}
 
+	void InputManager::ResetMouseState()
+	{
+		m_prevMouseX = m_mouseState.x;
+		m_prevMouseY = m_mouseState.y;
+		m_deltaX = 0;
+		m_deltaY = 0;
+	}
+
 #pragma endregion
+
+	void InputManager::OnFPSMode() 
+	{ 
+		m_isFPSMode = true; 
+		m_mouse->SetMode(Mouse::MODE_RELATIVE); 
+		ResetMouseState();
+	}
+	void InputManager::OffFPSMode() 
+	{ 
+		m_isFPSMode = false; 
+		m_mouse->SetMode(Mouse::MODE_ABSOLUTE); 
+		ResetMouseState();
+	}
+
+	void InputManager::OnEditorMode()
+	{
+		m_isEditorMode = true;
+		OffFPSMode();
+	}
+
+	void InputManager::OffEditorMode()
+	{
+		m_isEditorMode = false;
+		OffFPSMode();
+	}
 }

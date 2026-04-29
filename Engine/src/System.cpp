@@ -124,6 +124,18 @@ namespace Engine
 					sceneState++;
 					SceneManager::GetInstance().LoadScene(sceneState % 2 ? "DemoScene2" : "DemoScene1");
 				}
+				if (InputManager::GetInstance().IsKeyPressed(DirectX::Keyboard::Keys::F3))
+				{
+					if (InputManager::GetInstance().IsEditorMode())
+					{
+						InputManager::GetInstance().OffEditorMode();
+					} 
+					else
+					{
+						InputManager::GetInstance().OnEditorMode();
+					}
+				}
+
 
 				// Update scene
 				// Fixed Update
@@ -147,12 +159,19 @@ namespace Engine
 	{
 		// Clear the back buffer and depth stencil
 		D3DManager::GetInstance().BeginFrame(0.1f, 0.1f, 0.1f, 1.0f);
-		m_pImGuiClass->BeginFrame();
+
+		if (InputManager::GetInstance().IsEditorMode())
+		{
+			m_pImGuiClass->BeginFrame();
+		}
 		// Render the active scene
 		SceneManager::GetInstance().CurrentSceneRender(*m_pRenderer);
 		// Render the UI
-		m_pImGuiClass->RenderUI();
-		m_pImGuiClass->EndFrame();
+		if (InputManager::GetInstance().IsEditorMode())
+		{
+			m_pImGuiClass->RenderUI();
+			m_pImGuiClass->EndFrame();
+		}
 		// Present the back buffer to the screen
 		D3DManager::GetInstance().EndFrame();
 	}
@@ -204,6 +223,7 @@ namespace Engine
 			case WM_MOUSEWHEEL:
 			case WM_XBUTTONDOWN:
 			case WM_XBUTTONUP:
+			case WM_INPUT:
 			{
 				Mouse::ProcessMessage(message, wParam, lParam);
 				break;
