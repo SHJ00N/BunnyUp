@@ -99,57 +99,60 @@ namespace Engine
 
 		TimeClass::Start();
 
-		while (msg.message != WM_QUIT)
+		while (true)
 		{
-			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+			while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 			{
+				if (msg.message == WM_QUIT)
+					return S_OK;
+				
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			}
-			else
+			
+			// Update time
+			TimeClass::Update();
+			// Update Input
+			InputManager::GetInstance().Update();
+			// press ESC to quit
+			if (InputManager::GetInstance().IsKeyPressed(DirectX::Keyboard::Keys::Escape))
 			{
-				// Update time
-				TimeClass::Update();
-
-				// Update Input
-				InputManager::GetInstance().Update();
-				// press ESC to quit
-				if (InputManager::GetInstance().IsKeyPressed(DirectX::Keyboard::Keys::Escape))
-				{
-					PostQuitMessage(0);
-				}
-				if (InputManager::GetInstance().IsKeyPressed(DirectX::Keyboard::Keys::Enter))
-				{
-					static int sceneState = 0;
-					sceneState++;
-					SceneManager::GetInstance().LoadScene(sceneState % 2 ? "DemoScene2" : "DemoScene1");
-				}
-				if (InputManager::GetInstance().IsKeyPressed(DirectX::Keyboard::Keys::F3))
-				{
-					if (InputManager::GetInstance().IsEditorMode())
-					{
-						InputManager::GetInstance().OffEditorMode();
-					} 
-					else
-					{
-						InputManager::GetInstance().OnEditorMode();
-					}
-				}
-
-
-				// Update scene
-				// Fixed Update
-				while (TimeClass::ShouldPerformFixedUpdate())
-				{
-					SceneManager::GetInstance().CurrentSceneFixedUpdate(TimeClass::GetFixedDeltaTime());
-					TimeClass::ConsumeFixedUpdateTime();
-				}
-				// Scaled delta time update
-				SceneManager::GetInstance().CurrentSceneUpdate(TimeClass::GetDeltaTime());
-
-				// Render
-				render();
+				PostQuitMessage(0);
 			}
+			if (InputManager::GetInstance().IsKeyPressed(DirectX::Keyboard::Keys::Enter))
+			{
+				static int sceneState = 0;
+				sceneState++;
+				SceneManager::GetInstance().LoadScene(sceneState % 2 ? "DemoScene2" : "DemoScene1");
+			}
+			if (InputManager::GetInstance().IsKeyPressed(DirectX::Keyboard::Keys::F3))
+			{
+				if (InputManager::GetInstance().IsEditorMode())
+				{
+					InputManager::GetInstance().OffEditorMode();
+				} 
+				else
+				{
+					InputManager::GetInstance().OnEditorMode();
+				}
+			}
+
+
+			// Update scene
+			// Fixed Update
+			int fixedcount = 0;
+			while (TimeClass::ShouldPerformFixedUpdate())
+			{
+				SceneManager::GetInstance().CurrentSceneFixedUpdate(TimeClass::GetFixedDeltaTime());
+				TimeClass::ConsumeFixedUpdateTime();
+				fixedcount++;
+			}
+			 LOG_INFO("Fixed count : %f", TimeClass::GetDeltaTime());
+			// Scaled delta time update
+			SceneManager::GetInstance().CurrentSceneUpdate(TimeClass::GetDeltaTime());
+
+			// Render
+			render();
 		}
 
 		return S_OK;
@@ -206,24 +209,28 @@ namespace Engine
 		switch (message)
 		{
 			case WM_KEYDOWN:
-			case WM_KEYUP:
 			case WM_SYSKEYDOWN:
+			{
+				if ((lParam & 0x40000000) == 0)
+					DirectX::Keyboard::ProcessMessage(message, wParam, lParam);
+				break;
+			}
+			case WM_KEYUP:
 			case WM_SYSKEYUP:
 			{
 				DirectX::Keyboard::ProcessMessage(message, wParam, lParam);
 				break;
 			}
-			case WM_MOUSEMOVE:
+			case WM_INPUT:
+			case WM_MOUSEWHEEL:
 			case WM_LBUTTONDOWN:
 			case WM_LBUTTONUP:
 			case WM_RBUTTONDOWN:
 			case WM_RBUTTONUP:
 			case WM_MBUTTONDOWN:
 			case WM_MBUTTONUP:
-			case WM_MOUSEWHEEL:
 			case WM_XBUTTONDOWN:
 			case WM_XBUTTONUP:
-			case WM_INPUT:
 			{
 				Mouse::ProcessMessage(message, wParam, lParam);
 				break;

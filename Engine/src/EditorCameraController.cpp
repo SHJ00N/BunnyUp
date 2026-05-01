@@ -15,14 +15,20 @@ namespace Engine
 
 		if (input.IsEditorMode())
 		{
-			if (input.IsMouseDown(MouseButton::Wheel))
+			// set mouse position releative mode
+			if (input.IsMousePressed(MouseButton::Wheel))
 			{
-				// set mouse position releative mode
-				if (!input.isFPSMode())
-				{
-					input.OnFPSMode();
-				}
+				input.OnFPSMode();
+			}
 
+			// set mouse position absolute mode
+			if (input.IsMouseReleased(MouseButton::Wheel))
+			{
+				input.OffFPSMode();
+			}
+
+			if (input.isFPSMode())
+			{
 				// set rotation from mouse movement
 				float dx = (float)input.GetMouseDeltaX();
 				float dy = (float)input.GetMouseDeltaY();
@@ -34,14 +40,6 @@ namespace Engine
 				pitch = std::clamp(pitch, -89.0f, 89.0f);
 
 				transform.SetLocalRotation(Engine::Vector3(pitch, yaw, 0.0f));
-			}
-			else
-			{
-				// set mouse position absolute mode
-				if (input.isFPSMode())
-				{
-					input.OffFPSMode();
-				}
 			}
 
 			// set position from keyboard input

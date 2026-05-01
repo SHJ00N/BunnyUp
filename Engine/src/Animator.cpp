@@ -212,10 +212,10 @@ namespace Engine
     }
 
     void Animator::CalculateBoneTransform(const AssimpNodeData* node, Matrix4x4 parentTransform) {
-        std::string nodeName = node->name;
+        const std::string& nodeName = node->name;
         Matrix4x4 nodeTransform = node->transformation;
 
-        Bone* Bone = m_CurrentAnimation->FindBone(nodeName);
+        Bone* Bone = node->bone;
 
         if (Bone) {
             Bone->Update(m_CurrentTime);
@@ -224,7 +224,7 @@ namespace Engine
 
         Matrix4x4 globalTransformation = nodeTransform * parentTransform;
 
-        auto boneInfoMap = m_model->GetBoneInfoMap();
+        auto& boneInfoMap = m_model->GetBoneInfoMap();
         if (boneInfoMap.find(nodeName) != boneInfoMap.end()) 
         {
             int index = boneInfoMap[nodeName].id;
@@ -241,10 +241,10 @@ namespace Engine
 
     void Animator::CalculateBoneTransformBlended(const AssimpNodeData* node, Matrix4x4 parentTransform, float weight)
     {
-        std::string nodeName = node->name;
+        const std::string& nodeName = node->name;
         Matrix4x4 nodeTransform = node->transformation;
         // bone data
-        Bone* curBone = m_CurrentAnimation->FindBone(nodeName);
+        Bone* curBone = node->bone;
         Bone* nextBone = m_nextAnimation->FindBone(nodeName);
         if (curBone) curBone->Update(m_CurrentTime);
         if (nextBone) nextBone->Update(m_nextTime);
@@ -269,7 +269,7 @@ namespace Engine
 
         Matrix4x4 globalBlendedTransformation = nodeTransform * parentTransform;
 
-        auto boneInfoMap = m_CurrentAnimation->GetBoneIDMap();
+        auto& boneInfoMap = m_model->GetBoneInfoMap();
         if (boneInfoMap.find(nodeName) != boneInfoMap.end()) {
             int index = boneInfoMap[nodeName].id;
             auto offset = boneInfoMap[nodeName].offset;

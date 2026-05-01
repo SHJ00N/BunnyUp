@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <assimp/scene.h>
 #include <functional>
 
@@ -16,6 +16,7 @@ namespace Engine
     {
         Matrix4x4 transformation;
         std::string name;
+        Bone* bone = nullptr;
         int childrenCount = 0;
         std::vector<AssimpNodeData> children;
     };
@@ -33,7 +34,6 @@ namespace Engine
         inline float GetDuration() { return m_Duration; }
         inline const AssimpNodeData& GetRootNode() { return m_RootNode; }
         inline bool IsLooping() { return m_isLooping; }
-        inline const std::map<std::string, BoneInfo>& GetBoneIDMap() { return m_BoneInfoMap; }
         inline const Matrix4x4& GetGlobalInverseMatrix() const { return m_GlobalInverseMatrix; }
 
     private:
@@ -41,8 +41,8 @@ namespace Engine
         float m_TicksPerSecond;
         bool m_isLooping;
         std::vector<Bone> m_Bones;
+        std::unordered_map<std::string, Bone*> m_BoneMap;
         AssimpNodeData m_RootNode;
-        std::map<std::string, BoneInfo> m_BoneInfoMap;
         Matrix4x4 m_GlobalInverseMatrix;
 
         void BuildBoneMapping(const aiAnimation* animation, Model* model);

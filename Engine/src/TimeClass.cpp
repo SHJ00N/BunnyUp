@@ -37,9 +37,9 @@ namespace Engine
 
 		s_totalTime += scaledDeltaTime;
 		s_accumulatedTime += scaledDeltaTime;
-		if(s_accumulatedTime > 0.2f)	// Clamp accumulated time to prevent spiral of death
+		if(s_accumulatedTime > 0.05f)	// Clamp accumulated time to prevent spiral of death
 		{
-			s_accumulatedTime = 0.2f;
+			s_accumulatedTime = 0.05f;
 		}
 		
 		// frame management

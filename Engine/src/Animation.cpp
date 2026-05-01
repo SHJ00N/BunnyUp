@@ -30,8 +30,8 @@ namespace Engine
         globalTransformation = globalTransformation.Inverse();
         m_GlobalInverseMatrix = AssimpDXHelpers::ConvertMatrixToDXFormat(globalTransformation);
 
-        ReadHierarchyData(m_RootNode, scene->mRootNode);
         BuildBoneMapping(animation, model);
+        ReadHierarchyData(m_RootNode, scene->mRootNode);
 
         m_isLooping = isLooping;
 
@@ -39,17 +39,18 @@ namespace Engine
     }
 
     Bone* Animation::FindBone(const std::string& name) {
-        auto iter = std::find_if(m_Bones.begin(), m_Bones.end(),
-            [&](const Bone& Bone) { return Bone.GetBoneName() == name; });
-        if (iter == m_Bones.end()) return nullptr;
-        else return &(*iter);
+        auto it = m_BoneMap.find(name);
+        if (it != m_BoneMap.end())
+        {
+            return it->second;
+        }
+        return nullptr;
     }
 
     void Animation::BuildBoneMapping(const aiAnimation* animation, Model* model) {
         int size = animation->mNumChannels;
-
         auto& boneInfoMap = model->GetBoneInfoMap();
-        int& boneCount = model->GetBoneCount();
+        m_Bones.reserve(size);
 
         for (int i = 0; i < size; i++)
         {
@@ -62,16 +63,22 @@ namespace Engine
                 id = boneInfoMap[boneName].id;
             }
 
-            m_Bones.push_back(Bone(channel->mNodeName.data, id, channel));
+            // add new bone
+            m_Bones.emplace_back(boneName, id, channel);
+            m_BoneMap[boneName] = &m_Bones.back();  // set bone pointer map
         }
-
-        m_BoneInfoMap = boneInfoMap;
     }
 
     void Animation::ReadHierarchyData(AssimpNodeData& dest, const aiNode* src) {
         assert(src);
 
-        dest.name = src->mName.data;
+        std::string name = src->mName.data;
+        dest.name = name;
+        // set node's bone pointer
+        if (m_BoneMap.find(name) != m_BoneMap.end())
+        {
+            dest.bone = m_BoneMap[name];
+        }
         dest.transformation = AssimpDXHelpers::ConvertMatrixToDXFormat(src->mTransformation);
         dest.childrenCount = src->mNumChildren;
 
