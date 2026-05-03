@@ -36,68 +36,10 @@ namespace Engine
         hr = device->CreateBuffer(&cbSkinPerObjectDesc, nullptr, m_pConstantBufferSkinPerObject.GetAddressOf());
         if (FAILED(hr)) return hr;
 
-
-        // Create cube geometry.
-        std::vector<VertexPU> CubeVertices =
-        {
-            // -X
-            {Vector3{-0.5f, 0.5f, 0.5f}, Vector2{1,0}},
-            {Vector3{-0.5f, 0.5f,-0.5f}, Vector2{0,0}},
-            {Vector3{-0.5f,-0.5f,-0.5f}, Vector2{0,1}},
-            {Vector3{-0.5f,-0.5f, 0.5f}, Vector2{1,1}},
-
-            // +X
-            {Vector3{0.5f, 0.5f, 0.5f}, Vector2{0,0}},
-            {Vector3{0.5f,-0.5f,-0.5f}, Vector2{1,1}},
-            {Vector3{0.5f, 0.5f,-0.5f}, Vector2{1,0}},
-            {Vector3{0.5f,-0.5f, 0.5f}, Vector2{0,1}},
-
-            // -Y
-            {Vector3{-0.5f,-0.5f,-0.5f}, Vector2{0,1}},
-            {Vector3{ 0.5f,-0.5f,-0.5f}, Vector2{1,1}},
-            {Vector3{ 0.5f,-0.5f, 0.5f}, Vector2{1,0}},
-            {Vector3{-0.5f,-0.5f, 0.5f}, Vector2{0,0}},
-
-            // +Y
-            {Vector3{-0.5f,0.5f,-0.5f}, Vector2{0,0}},
-            {Vector3{ 0.5f,0.5f, 0.5f}, Vector2{1,1}},
-            {Vector3{ 0.5f,0.5f,-0.5f}, Vector2{1,0}},
-            {Vector3{-0.5f,0.5f, 0.5f}, Vector2{0,1}},
-
-            // -Z
-            {Vector3{-0.5f,-0.5f,-0.5f}, Vector2{1,1}},
-            {Vector3{ 0.5f, 0.5f,-0.5f}, Vector2{0,0}},
-            {Vector3{ 0.5f,-0.5f,-0.5f}, Vector2{0,1}},
-            {Vector3{-0.5f, 0.5f,-0.5f}, Vector2{1,0}},
-
-            // +Z
-            {Vector3{-0.5f,-0.5f,0.5f}, Vector2{0,1}},
-            {Vector3{ 0.5f,-0.5f,0.5f}, Vector2{1,1}},
-            {Vector3{ 0.5f, 0.5f,0.5f}, Vector2{1,0}},
-            {Vector3{-0.5f, 0.5f,0.5f}, Vector2{0,0}},
-        };
-
-        // Create index buffer:
-        std::vector<uint32_t> CubeIndices =
-        {
-            // -X
-            0,1,2, 2,3,0,
-
-            // +X
-            4,5,6, 5,4,7,
-
-            // -Y
-            8,9,10, 10,11,8,
-
-            // +Y
-            12,13,14, 13,12,15,
-
-            // -Z
-            16,17,18, 17,16,19,
-
-            // +Z
-            20,21,22, 22,23,20
-        };
+        CD3D11_BUFFER_DESC cbPerMaterialDesc(sizeof(ConstantBufferPerMaterial), D3D11_BIND_CONSTANT_BUFFER);
+        hr = device->CreateBuffer(&cbPerMaterialDesc, nullptr, m_pConstantBufferPerMaterial.GetAddressOf());
+        if (FAILED(hr)) return hr;
+        
 		return hr;
 	}
 
@@ -114,5 +56,10 @@ namespace Engine
     void Renderer::UpdateSkinPerObject(const ConstantBufferSkinPerObject& data)
     {
         UpdateConstantBuffer(m_pConstantBufferSkinPerObject.Get(), CbSlot::SkinPerObject, data);
+    }
+
+    void Renderer::UpdatePerMaterial(const ConstantBufferPerMaterial& data)
+    {
+        UpdateConstantBuffer(m_pConstantBufferPerMaterial.Get(), CbSlot::PerMaterial, data);
     }
 }

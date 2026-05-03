@@ -1,17 +1,14 @@
+#pragma pack_matrix(row_major)
+
 cbuffer ViewProjectionConstantBuffer : register(b0)
 {
-    row_major float4x4 View; // view matrix
-    row_major float4x4 Projection; // projection matrix
+    matrix View; // view matrix
+    matrix Projection; // projection matrix
 };
 
 cbuffer ModelConstantBuffer : register(b1)
 {
-    row_major float4x4 mWorld;
-}
-
-cbuffer SkinnedModelConstantBuffer : register(b2)
-{
-    row_major float4x4 mBones[256];
+    matrix mWorld;
 }
 
 struct VS_INPUT
@@ -19,7 +16,7 @@ struct VS_INPUT
     float3 vPos : POSITION;
     float3 vNormal : NORMAL;
     float2 vUV : TEXCOORD0;
-    float4 vTanget : TANGENT;
+    float4 vTangent : TANGENT;
 };
 
 struct PS_INPUT

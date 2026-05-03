@@ -1,6 +1,7 @@
 #include "Material.h"
 #include "D3DManager.h"
 #include "ResourceManager.h"
+#include "Renderer.h"
 
 namespace Engine
 {
@@ -22,6 +23,8 @@ namespace Engine
 		mat->m_renderState = m_renderState;
         mat->m_samplers = m_samplers;
         mat->m_name = m_name;
+
+        mat->SetColor(m_cbPerMaterial.color);
 
 		return mat;
 	}
@@ -54,9 +57,12 @@ namespace Engine
         m_samplers[idx] = sampler;
 	}
 
-	void Material::Bind()
+	void Material::Bind(Renderer& renderer)
 	{
         auto context = D3DManager::GetInstance().GetDeviceContext();
+
+        // Update constant buffer
+        renderer.UpdatePerMaterial(m_cbPerMaterial);
 
         // Bind shader
         if (m_pShader)

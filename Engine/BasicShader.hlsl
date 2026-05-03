@@ -1,14 +1,27 @@
-cbuffer ModelViewProjectionConstantBuffer : register(b0)
+#pragma pack_matrix(row_major)
+
+cbuffer ViewProjectionConstantBuffer : register(b0)
 {
-    matrix mWorld; // world matrix for object
     matrix View; // view matrix
     matrix Projection; // projection matrix
 };
 
+cbuffer ModelConstantBuffer : register(b1)
+{
+    matrix mWorld;
+}
+
+cbuffer MaterialConstantBuffer : register(b3)
+{
+    float4 mColor;
+}
+
 struct VS_INPUT
 {
     float3 vPos : POSITION;
-    float3 vColor : COLOR0;
+    float3 vNormal : NORMAL;
+    float2 vUV : TEXCOORD0;
+    float4 vTangent : TANGENT;
 };
 
 struct PS_INPUT
@@ -31,7 +44,7 @@ PS_INPUT VSMain(VS_INPUT input) // main is the default function name
     Output.Position = pos;
 
     // Just pass through the color data
-    Output.Color = float4(input.vColor, 1.0f);
+    Output.Color = mColor;
 
     return Output;
 }

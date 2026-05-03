@@ -1,0 +1,94 @@
+#pragma once
+
+#include "MathHelper.h"
+
+#include <d3d11.h>
+#include <array>
+
+namespace Engine
+{
+	constexpr int  MaxWeight = 4;
+
+	struct VertexP
+	{
+		Vector3 position;
+		void SetPosition(Vector3 v) { position = v; }
+		inline static const std::array<D3D11_INPUT_ELEMENT_DESC, 1> layout =
+		{
+			D3D11_INPUT_ELEMENT_DESC{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		};
+	};
+
+	struct VertexPC : public VertexP
+	{
+		Vector4 color;
+		void SetColor(Vector4 v) { color = v; }
+		inline static const std::array<D3D11_INPUT_ELEMENT_DESC, 2> layout =
+		{
+			D3D11_INPUT_ELEMENT_DESC{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			D3D11_INPUT_ELEMENT_DESC{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		};
+	};
+
+	struct VertexPU : public VertexP
+	{
+		Vector2 uv;
+		void SetUV(Vector2 v) { uv = v; }
+		inline static const std::array<D3D11_INPUT_ELEMENT_DESC, 2> layout =
+		{
+			D3D11_INPUT_ELEMENT_DESC{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			D3D11_INPUT_ELEMENT_DESC{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		};
+	};
+
+	struct VertexPN : public VertexP
+	{
+		Vector3 normal;
+		void SetNormal(Vector3 v) { normal = v; }
+		inline static const std::array<D3D11_INPUT_ELEMENT_DESC, 2> layout =
+		{
+			D3D11_INPUT_ELEMENT_DESC{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			D3D11_INPUT_ELEMENT_DESC{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		};
+	};
+
+	struct VertexPNU : public VertexPN
+	{
+		Vector2 uv;
+		void SetUV(Vector2 v) { uv = v; }
+		inline static const std::array<D3D11_INPUT_ELEMENT_DESC, 3> layout =
+		{
+			D3D11_INPUT_ELEMENT_DESC{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			D3D11_INPUT_ELEMENT_DESC{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			D3D11_INPUT_ELEMENT_DESC{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		};
+	};
+
+	struct VertexPNUT : public VertexPNU
+	{
+		Vector4 tangent;
+		void SetTangent(Vector4 v) { tangent = v; }
+		inline static const std::array<D3D11_INPUT_ELEMENT_DESC, 4> layout =
+		{
+			D3D11_INPUT_ELEMENT_DESC{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			D3D11_INPUT_ELEMENT_DESC{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			D3D11_INPUT_ELEMENT_DESC{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			D3D11_INPUT_ELEMENT_DESC{ "TANGENT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		};
+	};
+
+	struct VertexSkin : public VertexPNUT
+	{
+		std::array<int32_t, MaxWeight> boneIDs;
+		std::array<float, MaxWeight> weights = { 0.0f };
+		inline static const std::array<D3D11_INPUT_ELEMENT_DESC, 6> layout =
+		{
+			D3D11_INPUT_ELEMENT_DESC{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			D3D11_INPUT_ELEMENT_DESC{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			D3D11_INPUT_ELEMENT_DESC{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			D3D11_INPUT_ELEMENT_DESC{ "TANGENT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			D3D11_INPUT_ELEMENT_DESC{ "BLENDINDICES", 0, DXGI_FORMAT_R32G32B32A32_SINT, 0, 48, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			D3D11_INPUT_ELEMENT_DESC{ "BLENDWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 64, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		};
+	};
+}

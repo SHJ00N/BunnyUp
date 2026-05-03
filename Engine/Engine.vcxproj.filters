@@ -141,6 +141,12 @@
     <ClInclude Include="include\EditorCameraController.h">
       <Filter>헤더 파일\Components</Filter>
     </ClInclude>
+    <ClInclude Include="include\PrimitiveMeshFactory.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VertexType.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\D3DManager.cpp">
@@ -248,6 +254,9 @@
     <ClCompile Include="src\EditorCameraController.cpp">
       <Filter>소스 파일\Components</Filter>
     </ClCompile>
+    <ClCompile Include="src\PrimitiveMeshFactory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="BasicShader.hlsl">
@@ -307,6 +316,9 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="resources\models\Textures\T_Chibi_Rabbit_06.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\snow_ground.jpg">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

@@ -38,7 +38,7 @@ namespace Engine
 		D3D11_RASTERIZER_DESC opaqueRasterDesc{};
 		opaqueRasterDesc.CullMode = D3D11_CULL_BACK;
 		opaqueRasterDesc.FillMode = D3D11_FILL_SOLID;
-		opaqueRasterDesc.FrontCounterClockwise = FALSE;
+		opaqueRasterDesc.FrontCounterClockwise = TRUE;
 		hr = device->CreateRasterizerState(&opaqueRasterDesc, &opaque.raster);
 		if (FAILED(hr)) return hr;
 
@@ -72,7 +72,7 @@ namespace Engine
 		D3D11_RASTERIZER_DESC transparentRasterDesc{};
 		transparentRasterDesc.CullMode = D3D11_CULL_BACK;
 		transparentRasterDesc.FillMode = D3D11_FILL_SOLID;
-		opaqueRasterDesc.FrontCounterClockwise = FALSE;
+		transparentRasterDesc.FrontCounterClockwise = TRUE;
 		hr = device->CreateRasterizerState(&transparentRasterDesc, &transparent.raster);
 		if (FAILED(hr)) return hr;
 

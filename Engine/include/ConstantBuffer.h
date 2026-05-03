@@ -10,7 +10,8 @@ namespace Engine
 	{
 		PerCamera = 0,
 		PerObject = 1,
-		SkinPerObject
+		SkinPerObject = 2,
+		PerMaterial = 3
 	};
 
 	struct ConstantBufferPerCamera
@@ -27,5 +28,10 @@ namespace Engine
 	struct ConstantBufferSkinPerObject
 	{
 		Matrix4x4 bones[SkinMeshBoneMax];
+	};
+
+	struct ConstantBufferPerMaterial
+	{
+		Vector4 color;
 	};
 }

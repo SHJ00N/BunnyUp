@@ -7,12 +7,12 @@
 #include "Singleton.h"
 #include "Shader.h"
 #include "Log.h"
+#include "Model.h"
 
 namespace Engine
 {
 	class Shader;
 	class Texture2D;
-	class Model;
 	class Animation;
 
 	class ResourceManager : public Singleton<ResourceManager>
@@ -57,6 +57,47 @@ namespace Engine
 		std::shared_ptr<Animation> GetAnimation(const std::string& name);
 		const std::unordered_map<std::string, std::shared_ptr<Animation>>& GetAnimations() const { return m_animations; }
 
+		// Mesh for caching (e.g. primitive)
+		template<typename VertexType>
+		std::shared_ptr<Mesh> CreateMesh(const std::string& name, const std::vector<VertexType>& vertices, const std::vector<uint32_t>& indices)
+		{
+			if (m_meshes.contains(name))
+			{
+				return m_meshes[name];
+			}
+
+			// Create new mesh
+			auto mesh = std::make_shared<Mesh>();
+			mesh->CreateMesh<VertexType>(vertices, indices);
+
+			// add sub mesh
+			SubMesh sub;
+			sub.indexStart = 0;
+			sub.indexCount = static_cast<uint32_t>(indices.size());
+			sub.materialIndex = 0;
+			mesh->subMeshes.push_back(sub);
+
+			m_meshes[name] = mesh;
+			return mesh;
+		}
+		// Non-cached meshes(e.g. model meshes)
+		template<typename VertexType>
+		std::shared_ptr<Mesh> CreateMesh(const std::vector<VertexType>& vertices, const std::vector<uint32_t>& indices)
+		{
+			auto mesh = std::make_shared<Mesh>();
+
+			if (!mesh->CreateMesh(vertices, indices))
+				return nullptr;
+
+			return mesh;
+		}
+		std::shared_ptr<Mesh> GetMesh(const std::string& name);
+		const std::unordered_map<std::string, std::shared_ptr<Mesh>>& GetMeshes() const { return m_meshes; }
+
+		std::shared_ptr<Material> CreateMaterial(const std::string& name);
+		std::shared_ptr<Material> GetMaterial(const std::string& name);
+		const std::unordered_map<std::string, std::shared_ptr<Material>>& GetMaterials() const { return m_materials; }
+
 		void Clear();
 	private:
 		// resource storage
@@ -64,5 +105,7 @@ namespace Engine
 		std::unordered_map<std::string, std::shared_ptr<Texture2D>> m_textures;
 		std::unordered_map<std::string, std::shared_ptr<Model>> m_models;
 		std::unordered_map<std::string, std::shared_ptr<Animation>> m_animations;
+		std::unordered_map<std::string, std::shared_ptr<Mesh>> m_meshes;	// primitive meshes
+		std::unordered_map<std::string, std::shared_ptr<Material>> m_materials;
 	};
 }

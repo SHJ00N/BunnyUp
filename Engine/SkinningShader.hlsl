@@ -21,7 +21,7 @@ struct VS_INPUT
     float3 vPos : POSITION;
     float3 vNormal : NORMAL;
     float2 vUV : TEXCOORD0;
-    float4 vTanget : TANGENT;
+    float4 vTangent : TANGENT;
     int4 vBoneIDs : BLENDINDICES;
     float4 vWeights : BLENDWEIGHT;
 };

@@ -21,7 +21,7 @@ namespace Engine
 		Assimp::Importer importer;
 
 		const aiScene* scene = importer.ReadFile(path,
-			aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace | aiProcess_FlipUVs);
+			aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace | aiProcess_FlipWindingOrder |aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
 		if (!scene || !scene->mRootNode)
 		{
 			return false;
@@ -138,7 +138,8 @@ namespace Engine
 		}
 
 		// Create mesh(gpu buffers)
-		auto newMesh = std::make_shared<Mesh>();
+		auto& resourceManager = ResourceManager::GetInstance();
+		std::shared_ptr<Mesh> newMesh;
 		if (mesh->HasBones())
 		{
 			// Create skinned vertices
@@ -157,13 +158,13 @@ namespace Engine
 			normalizeWeights(skinnedVertices);
 
 			// Create skinned mesh
-			newMesh->CreateMesh<VertexSkin>(skinnedVertices, indices);
+			newMesh = resourceManager.CreateMesh<VertexSkin>(skinnedVertices, indices);
 			newMesh->SetSkinned(true);
 		}
 		else
 		{
 			// Create static mesh
-			newMesh->CreateMesh<VertexPNUT>(vertices, indices);
+			newMesh = resourceManager.CreateMesh<VertexPNUT>(vertices, indices);
 		}
 
 		// add sub mesh
@@ -211,7 +212,7 @@ namespace Engine
 			}
 
 			// set shader
-			mat->SetShader(m_boneCounter ? ResourceManager::GetInstance().GetShader("Skinning") : ResourceManager::GetInstance().GetShader("Default"));
+			mat->SetShader(m_boneCounter ? ResourceManager::GetInstance().GetShader("Skinning_shader") : ResourceManager::GetInstance().GetShader("Default_shader"));
 			// set render state
 			mat->SetRenderState(RenderStateManager::GetInstance().GetState("Opaque"));
 

@@ -7,6 +7,7 @@ void LoadGameResources()
 	auto bunnyModel = resourceManager.LoadModel("Chibi_Rabbit", "C:\\Project\\BunnyUp\\Engine\\resources\\models\\Chibi_Rabbit.fbx");
 
 	// Load textures
+    resourceManager.LoadTexture("T_Snow_Ground", "C:\\Project\\BunnyUp\\Engine\\resources\\snow_ground.jpg");
 	resourceManager.LoadTexture("T_Chibi_Rabbit_03", "C:\\Project\\BunnyUp\\Engine\\resources\\models\\Textures\\T_Chibi_Rabbit_03.png");
 	resourceManager.LoadTexture("T_Chibi_Rabbit_06", "C:\\Project\\BunnyUp\\Engine\\resources\\models\\Textures\\T_Chibi_Rabbit_06.png");
 	resourceManager.LoadTexture("T_Chibi_Emo_25", "C:\\Project\\BunnyUp\\Engine\\resources\\models\\Textures\\T_Chibi_Emo_25.png");

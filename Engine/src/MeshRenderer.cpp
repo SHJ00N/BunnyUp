@@ -6,6 +6,21 @@
 
 namespace Engine
 {
+	void MeshRenderer::SetMesh(std::shared_ptr<Mesh> mesh) 
+	{ 
+		m_meshes.push_back(mesh); 
+
+		// add material to default
+		m_materials.resize(mesh->subMeshes.size());
+		for (auto& material : m_materials)
+		{
+			if (!material)
+			{
+				material = ResourceManager::GetInstance().GetMaterial("Default_material")->CreateClone();
+			}
+		}
+	}
+
 	void MeshRenderer::SetMesh(std::shared_ptr<Model> model)
 	{
 		m_meshes = model->GetMeshes();
@@ -17,11 +32,11 @@ namespace Engine
 		}
 	}
 
-	void MeshRenderer::OnRender()
+	void MeshRenderer::OnRender(Renderer& renderer)
 	{
 		for (const auto& mesh : m_meshes)
 		{
-			mesh->Render(m_materials);
+			mesh->Render(m_materials, renderer);
 		}
 	}
 
@@ -36,6 +51,10 @@ namespace Engine
 		for (int m = 0; m < m_materials.size(); ++m)
 		{
 			auto& mat = m_materials[m];
+
+			auto color = mat->GetColor();
+			ImGui::DragFloat4("Color", &color.x, 0.01f);
+			mat->SetColor(Vector4(color.x, color.y, color.z, color.w));
 
 			std::string matLabel = mat->GetName() + "##" + std::to_string(m);
 

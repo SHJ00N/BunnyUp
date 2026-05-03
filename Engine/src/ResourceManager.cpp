@@ -2,6 +2,7 @@
 #include "Texture2D.h"
 #include "Model.h"
 #include "Animation.h"
+#include "PrimitiveMeshFactory.h"
 
 namespace Engine
 {
@@ -16,8 +17,25 @@ namespace Engine
 	void ResourceManager::LoadDefaultResources()
 	{
 		// Load default shader
-		LoadShader<VertexPNUT>("Default", "C:\\Project\\BunnyUp\\Engine\\TextureShader.hlsl");
-		LoadShader<VertexSkin>("Skinning", "C:\\Project\\BunnyUp\\Engine\\SkinningShader.hlsl");
+		LoadShader<VertexPNUT>("Default_shader", "C:\\Project\\BunnyUp\\Engine\\BasicShader.hlsl");
+		LoadShader<VertexPNUT>("Textured_shader", "C:\\Project\\BunnyUp\\Engine\\TextureShader.hlsl");
+		LoadShader<VertexSkin>("Skinning_shader", "C:\\Project\\BunnyUp\\Engine\\SkinningShader.hlsl");
+
+		// Create primitive meshes
+		auto quadData = PrimitiveMeshFactory::CreateQuad();
+		CreateMesh<VertexPNUT>("Primitive_quad", quadData.vertices, quadData.indices);
+		auto cubeData = PrimitiveMeshFactory::CreateCube();
+		CreateMesh<VertexPNUT>("Primitive_cube", cubeData.vertices, cubeData.indices);
+
+		// Create materials
+		auto defaultMaterial = CreateMaterial("Default_material");
+		defaultMaterial->SetShader(GetShader("Default_shader"));
+		defaultMaterial->SetRenderState(RenderStateManager::GetInstance().GetState("Opaque"));
+		defaultMaterial->SetColor(Vector4(0.3f, 0.3f, 0.3f, 1.0f));
+
+		auto texturedMaterial = CreateMaterial("Textured_material");
+		texturedMaterial->SetShader(GetShader("Textured_shader"));
+		texturedMaterial->SetRenderState(RenderStateManager::GetInstance().GetState("Opaque"));
 	}
 
 	void ResourceManager::Clear()
@@ -25,6 +43,8 @@ namespace Engine
 		m_models.clear();
 		m_textures.clear();
 		m_shaders.clear();
+		m_meshes.clear();
+		m_materials.clear();
 	}
 
 	std::shared_ptr<Shader> ResourceManager::GetShader(const std::string& name)
@@ -133,6 +153,44 @@ namespace Engine
 		if (it == m_animations.end())
 		{
 			LOG_ERROR("Animation not found: %s", name.c_str());
+			return nullptr;
+		}
+
+		return it->second;
+	}
+
+	std::shared_ptr<Mesh> ResourceManager::GetMesh(const std::string& name)
+	{
+		auto it = m_meshes.find(name);
+		if (it == m_meshes.end())
+		{
+			LOG_ERROR("Mess not found: %s", name.c_str());
+			return nullptr;
+		}
+
+		return it->second;
+	}
+
+	std::shared_ptr<Material> ResourceManager::CreateMaterial(const std::string& name)
+	{
+		if (m_materials.contains(name))
+		{
+			return m_materials[name];
+		}
+
+		auto mat = std::make_shared<Material>();
+		mat->SetName(name);
+
+		m_materials[name] = mat;
+		return mat;
+	}
+
+	std::shared_ptr<Material> ResourceManager::GetMaterial(const std::string& name)
+	{
+		auto it = m_materials.find(name);
+		if (it == m_materials.end())
+		{
+			LOG_ERROR("Material not found: %s", name.c_str());
 			return nullptr;
 		}
 

@@ -13,12 +13,41 @@ namespace Engine
 	class RendererComponent : public Component
 	{
 	public:
-		void AddMaterial(std::shared_ptr<Material> material) { m_materials.push_back(material); }
+		// Set all material to parameter
+		void SetMaterial(std::shared_ptr<Material> material) 
+		{ 
+			for (auto& mat : m_materials)
+			{
+				mat = material;
+			}
+		}
+		// Set material corresponded to index
+		void SetMaterial(uint32_t index, std::shared_ptr<Material> material)
+		{
+			if (index >= m_materials.size())
+			{
+				return;
+			}
+
+			m_materials[index] = material->CreateClone();
+		}
+
+		// getter
 		std::vector<std::shared_ptr<Material>>& GetMaterials() { return m_materials; }
+		std::shared_ptr<Material> GetMaterial(uint32_t index)
+		{
+			if (index >= m_materials.size())
+			{
+				return nullptr;
+			}
+
+			return m_materials[index];
+		}
+
 		void Render(Renderer& renderer) 
 		{
 			UpdateConstantBuffer(renderer);
-			OnRender();
+			OnRender(renderer);
 		}
 
 	protected:
@@ -26,6 +55,6 @@ namespace Engine
 		ConstantBufferPerObject m_cbPerObject;
 
 		virtual void UpdateConstantBuffer(Renderer& renderer) { }
-		virtual void OnRender() {};
+		virtual void OnRender(Renderer& renderer) {};
 	};
 }

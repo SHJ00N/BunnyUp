@@ -31,7 +31,7 @@ namespace Engine
 	void Transform::updateWorldMatrix() const
 	{
 		if (parentTransform)
-			m_worldMatrix = parentTransform->GetWorldMatrix() * calculateLocalMatrix();
+			m_worldMatrix = calculateLocalMatrix() * parentTransform->GetWorldMatrix();
 		else
 			m_worldMatrix = calculateLocalMatrix();
 

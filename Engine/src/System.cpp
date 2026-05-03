@@ -137,17 +137,15 @@ namespace Engine
 				}
 			}
 
+			 //LOG_INFO("Delta time : %f", TimeClass::GetDeltaTime());
 
 			// Update scene
 			// Fixed Update
-			int fixedcount = 0;
 			while (TimeClass::ShouldPerformFixedUpdate())
 			{
 				SceneManager::GetInstance().CurrentSceneFixedUpdate(TimeClass::GetFixedDeltaTime());
 				TimeClass::ConsumeFixedUpdateTime();
-				fixedcount++;
 			}
-			 LOG_INFO("Fixed count : %f", TimeClass::GetDeltaTime());
 			// Scaled delta time update
 			SceneManager::GetInstance().CurrentSceneUpdate(TimeClass::GetDeltaTime());
 
