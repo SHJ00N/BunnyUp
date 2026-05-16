@@ -45,7 +45,7 @@ namespace Engine
 		std::shared_ptr<Shader> GetShader(const std::string& name);
 		const std::unordered_map<std::string, std::shared_ptr<Shader>>& GetShaders() const { return m_shaders; }
 
-		std::shared_ptr<Texture2D> LoadTexture(const std::string& name, const std::string& filePath);
+		std::shared_ptr<Texture2D> LoadTexture(const std::string& name, const std::string& filePath, TextureType type = TextureType::Default);
 		std::shared_ptr<Texture2D> GetTexture(const std::string& name);
 		const std::unordered_map<std::string, std::shared_ptr<Texture2D>>& GetTextures() const { return m_textures; }
 

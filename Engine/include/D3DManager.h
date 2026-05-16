@@ -34,8 +34,12 @@ namespace Engine
 
 		ID3D11Device* GetDevice() { return m_pd3dDevice.Get(); };
 		ID3D11DeviceContext* GetDeviceContext() { return m_pd3dDeviceContext.Get(); };
+		ID3D11Texture2D* GetBackBuffer() { return m_pBackBuffer.Get(); }
 		ID3D11RenderTargetView* GetRenderTarget() { return m_pRenderTarget.Get(); }
 		ID3D11DepthStencilView* GetDepthStencil() { return m_pDepthStencilView.Get(); }
+
+		// get meta data
+		const D3D11_TEXTURE2D_DESC& GetBackBufferDesc() const { return m_backBufferDesc; }
 
 	private:
 		// direct3D device

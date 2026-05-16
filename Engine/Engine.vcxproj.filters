@@ -22,6 +22,18 @@
     <Filter Include="소스 파일\Components">
       <UniqueIdentifier>{d7a70a43-03d6-45dd-bc7f-5fa84c4d8052}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\RenderPipeline">
+      <UniqueIdentifier>{20f699d3-2752-48b3-9640-b06791257c05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\RenderPipeline\RenderPasses">
+      <UniqueIdentifier>{f8142412-eb69-460d-b7fb-f484cd6f7df4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\RenderPipeline">
+      <UniqueIdentifier>{c79692c3-70b1-4193-bdb4-5a5ed4c3b9aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\RenderPipeline\RenderPasses">
+      <UniqueIdentifier>{156e7e00-9234-447d-8e7a-113d33e6ee6c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\System.h">
@@ -39,7 +51,7 @@
     <ClInclude Include="include\WindowClass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="include\Renderer.h">
+    <ClInclude Include="include\ConstantBufferManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="include\ConstantBuffer.h">
@@ -147,6 +159,24 @@
     <ClInclude Include="include\VertexType.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="include\RenderPipeline.h">
+      <Filter>헤더 파일\RenderPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderPass.h">
+      <Filter>헤더 파일\RenderPipeline\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderCommandList.h">
+      <Filter>헤더 파일\RenderPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ResourceDesc.h">
+      <Filter>헤더 파일\RenderPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderTargetResource.h">
+      <Filter>헤더 파일\RenderPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Light.h">
+      <Filter>헤더 파일\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\D3DManager.cpp">
@@ -161,7 +191,7 @@
     <ClCompile Include="src\InputManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer.cpp">
+    <ClCompile Include="src\ConstantBufferManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="src\Shader.cpp">
@@ -257,6 +287,27 @@
     <ClCompile Include="src\PrimitiveMeshFactory.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="src\RenderPipeline.cpp">
+      <Filter>소스 파일\RenderPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="include\RenderGraph.h">
+      <Filter>헤더 파일\RenderPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderCommandList.cpp">
+      <Filter>소스 파일\RenderPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderGraph.cpp">
+      <Filter>소스 파일\RenderPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ResourceDesc.cpp">
+      <Filter>소스 파일\RenderPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderTargetResource.cpp">
+      <Filter>소스 파일\RenderPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Light.cpp">
+      <Filter>소스 파일\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="BasicShader.hlsl">
@@ -268,84 +319,8 @@
     <FxCompile Include="SkinningShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="container.jpg">
+    <FxCompile Include="PBR_ToonShader.hlsl">
       <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="T_Chibi_Rabbit_00.png">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="T_Chibi_Emo_01.png">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resources\models\Textures\T_Chibi_Emo_03.png">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resources\models\Textures\T_Chibi_Emo_06.png">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resources\models\Textures\T_Chibi_Emo_10.png">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resources\models\Textures\T_Chibi_Emo_11.png">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resources\models\Textures\T_Chibi_Emo_12.png">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resources\models\Textures\T_Chibi_Emo_13.png">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resources\models\Textures\T_Chibi_Emo_16.png">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resources\models\Textures\T_Chibi_Emo_19.png">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resources\models\Textures\T_Chibi_Emo_21.png">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resources\models\Textures\T_Chibi_Emo_25.png">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resources\models\Textures\T_Chibi_Rabbit_03.png">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resources\models\Textures\T_Chibi_Rabbit_04.png">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resources\models\Textures\T_Chibi_Rabbit_06.png">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="resources\snow_ground.jpg">
-      <Filter>리소스 파일</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Chibi_Rabbit.fbx">
-      <Filter>리소스 파일</Filter>
-    </None>
-    <None Include="resources\animations\Anim_Chibi%40IdleA.fbx">
-      <Filter>리소스 파일</Filter>
-    </None>
-    <None Include="resources\animations\Anim_Chibi%40IdleB.fbx">
-      <Filter>리소스 파일</Filter>
-    </None>
-    <None Include="resources\animations\Anim_Chibi%40IdleC.fbx">
-      <Filter>리소스 파일</Filter>
-    </None>
-    <None Include="resources\animations\Anim_Chibi%40Jump.fbx">
-      <Filter>리소스 파일</Filter>
-    </None>
-    <None Include="resources\animations\Anim_Chibi%40Move.fbx">
-      <Filter>리소스 파일</Filter>
-    </None>
-    <None Include="resources\animations\Anim_Chibi%40Run.fbx">
-      <Filter>리소스 파일</Filter>
-    </None>
-    <None Include="resources\animations\Anim_Chibi%40Walk.fbx">
-      <Filter>리소스 파일</Filter>
-    </None>
+    </FxCompile>
   </ItemGroup>
 </Project>

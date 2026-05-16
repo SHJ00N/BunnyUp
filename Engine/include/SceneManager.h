@@ -13,7 +13,7 @@ namespace Engine
 		void LoadScene(const std::string& name);
 		void CurrentSceneUpdate(float dt);
 		void CurrentSceneFixedUpdate(float fdt);
-		void CurrentSceneRender(class Renderer& renderer);
+		void CurrentSceneRender(class ConstantBufferManager& cbManager);
 
 		void Initialize();
 		void Clear();

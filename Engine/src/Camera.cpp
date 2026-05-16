@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include "Renderer.h"
+#include "ConstantBufferManager.h"
 #include "D3DManager.h"
 #include "GameObject.h"
 #include "Scene.h"
@@ -26,10 +26,12 @@ namespace Engine
 		return PerspectiveFovLH(Radians(fov), D3DManager::GetInstance().GetAspectRatio(), nearPlane, farPlane);
 	}
 
-	void Camera::UpdateConstantBuffer(Renderer& renderer)
+	void Camera::UpdateConstantBuffer(ConstantBufferManager& cbManager)
 	{
+		Vector3 position = ownerGameObject->transform.GetWorldPosition();
+		m_cbPerCamera.position = Vector4(position.x, position.y, position.z, 1.0f);
 		m_cbPerCamera.view = GetViewMatrix();
 		m_cbPerCamera.projection = GetProjectionMatrix();
-		renderer.UpdatePerCamera(m_cbPerCamera);
+		cbManager.UpdatePerCamera(m_cbPerCamera);
 	}
 }

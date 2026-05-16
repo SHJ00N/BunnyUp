@@ -28,7 +28,7 @@ namespace Engine
 		}
 
 		// save path
-		m_directory = path.substr(0, path.find_last_of('/'));
+		m_directory = path.substr(0, path.find_last_of('\\'));
 		// create mesh and materials
 		processNode(scene->mRootNode, scene);
 		loadMaterials(scene);
@@ -202,13 +202,23 @@ namespace Engine
 			aiString path;
 			if (aiMat->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
 			{
-				std::string fullPath = m_directory + '/' + path.C_Str();
+				std::string fullPath = m_directory + '\\' + path.C_Str();
 				// load texture
-				auto tex = ResourceManager::GetInstance().LoadTexture(mat->GetName() + "_Diffuse", fullPath);
+				auto tex = ResourceManager::GetInstance().LoadTexture(mat->GetName() + "_Diffuse", fullPath, TextureType::Albedo);
 				// set texture slot
 				mat->SetTexture(0, tex);
 				// set sampler slot
 				mat->SetSampler(0, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+			}
+			if (aiMat->GetTexture(aiTextureType_NORMALS, 0, &path) == AI_SUCCESS)
+			{
+				std::string fullPath = m_directory + '\\' + path.C_Str();
+				// load texture
+				auto tex = ResourceManager::GetInstance().LoadTexture(mat->GetName() + "_Normal", fullPath, TextureType::Normal);
+				// set texture slot
+				mat->SetTexture(1, tex);
+				// set sampler slot
+				mat->SetSampler(1, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
 			}
 
 			// set shader

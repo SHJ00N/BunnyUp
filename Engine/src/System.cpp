@@ -65,6 +65,14 @@ namespace Engine
 			return hr;
 		}
 
+		// Initialize RenderPipline instance
+		m_pRenderPipeline = std::make_unique<RenderPipeline>();
+		hr = m_pRenderPipeline->Initialize();
+		if (FAILED(hr))
+		{
+			return hr;
+		}
+
 		// Initialize resource manager and load default resources
 		ResourceManager::CreateInstance();
 		ResourceManager::GetInstance().LoadDefaultResources();
@@ -73,10 +81,6 @@ namespace Engine
 		// Initialize input
 		InputManager::CreateInstance();
 		InputManager::GetInstance().Initialize(m_pWindowClass->GetHWND());
-
-		// Initialize renderer
-		m_pRenderer = std::make_unique<Renderer>();
-		hr = m_pRenderer->Initialize();
 
 		// Initialize imgui
 		m_pImGuiClass = std::make_unique<ImGuiClass>();
@@ -137,7 +141,7 @@ namespace Engine
 				}
 			}
 
-			 //LOG_INFO("Delta time : %f", TimeClass::GetDeltaTime());
+			 // LOG_INFO("Delta time : %f", TimeClass::GetDeltaTime());
 
 			// Update scene
 			// Fixed Update
@@ -158,15 +162,12 @@ namespace Engine
 
 	void System::render()
 	{
-		// Clear the back buffer and depth stencil
-		D3DManager::GetInstance().BeginFrame(0.1f, 0.1f, 0.1f, 1.0f);
-
 		if (InputManager::GetInstance().IsEditorMode())
 		{
 			m_pImGuiClass->BeginFrame();
 		}
-		// Render the active scene
-		SceneManager::GetInstance().CurrentSceneRender(*m_pRenderer);
+		// Build render graph and execute render passes based on render graph
+		m_pRenderPipeline->Render(SceneManager::GetInstance().GetCurrentScene());
 		// Render the UI
 		if (InputManager::GetInstance().IsEditorMode())
 		{

@@ -1,12 +1,15 @@
 #pragma once
 
 #include "GameObject.h"
+#include "ConstantBuffer.h"
 
 #include <memory>
 
 namespace Engine
 {
 	class Camera;
+	class Light;
+
 	class Scene
 	{
 	public:
@@ -19,7 +22,7 @@ namespace Engine
 		void SceneFixedUpdate(float fdt);
 		virtual void SceneExit() { }
 
-		void Render(class Renderer& renderer);
+		void Render(class ConstantBufferManager& cbManager);
 
 		GameObject* GetRoot() { return m_root.get(); }
 		// Read-only version for external access
@@ -49,20 +52,31 @@ namespace Engine
 		Camera* GetMainCamera() const { return m_mainCamera; }
 		void SetMainCamera(Camera* camera) { m_mainCamera = camera; }
 
+		// light management
+		void RegisterLight(Light* light);
+		void UnregisterLight(Light* light);
+		const std::vector<Light*>& GetLights() const { return m_lights; }
+		void UpdateLightBuffer(ConstantBufferManager& cbManager);
+
 	protected:
 		virtual void SceneEnter() { }
 
 	private:
+		// scene graph root
 		std::unique_ptr<GameObject> m_root;
-
+		// cameras in the scene
 		std::vector<Camera*> m_cameras;
 		Camera* m_mainCamera = nullptr;
+		// lights in the scene
+		std::vector<Light*> m_lights;
+		ConstantBufferPerLight m_cbPerLight;
+
 
 		// Helper functions for traversing the scene graph
 		void traverseAwake(GameObject* node);
 		void traverseStart(GameObject* node);
 		void traverseUpdate(GameObject* node, float dt);
 		void traverseFixedUpdate(GameObject* node, float fdt);
-		void traverseRender(GameObject* node, Renderer& renderer);
+		void traverseRender(GameObject* node, ConstantBufferManager& renderer);
 	};
 }

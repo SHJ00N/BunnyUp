@@ -15,7 +15,7 @@ namespace Engine
 		Matrix4x4 GetViewMatrix() const;
 		Matrix4x4 GetProjectionMatrix() const;
 
-		void UpdateConstantBuffer(class Renderer& renderer);
+		void UpdateConstantBuffer(class ConstantBufferManager& cbManager);
 
 	protected:
 		void OnAwake() override;

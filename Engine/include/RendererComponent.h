@@ -9,7 +9,7 @@
 
 namespace Engine
 {
-	class Renderer;
+	class ConstantBufferManager;
 	class RendererComponent : public Component
 	{
 	public:
@@ -44,17 +44,17 @@ namespace Engine
 			return m_materials[index];
 		}
 
-		void Render(Renderer& renderer) 
+		void Render(ConstantBufferManager& cbManager)
 		{
-			UpdateConstantBuffer(renderer);
-			OnRender(renderer);
+			UpdateConstantBuffer(cbManager);
+			OnRender(cbManager);
 		}
 
 	protected:
 		std::vector<std::shared_ptr<Material>>  m_materials;
 		ConstantBufferPerObject m_cbPerObject;
 
-		virtual void UpdateConstantBuffer(Renderer& renderer) { }
-		virtual void OnRender(Renderer& renderer) {};
+		virtual void UpdateConstantBuffer(ConstantBufferManager& cbManager) { }
+		virtual void OnRender(ConstantBufferManager& cbManager) {};
 	};
 }

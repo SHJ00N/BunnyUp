@@ -20,12 +20,15 @@ namespace Engine
 		LoadShader<VertexPNUT>("Default_shader", "C:\\Project\\BunnyUp\\Engine\\BasicShader.hlsl");
 		LoadShader<VertexPNUT>("Textured_shader", "C:\\Project\\BunnyUp\\Engine\\TextureShader.hlsl");
 		LoadShader<VertexSkin>("Skinning_shader", "C:\\Project\\BunnyUp\\Engine\\SkinningShader.hlsl");
+		LoadShader<VertexPU>("PBR_shader", "C:\\Project\\BunnyUp\\Engine\\PBR_ToonShader.hlsl");
 
 		// Create primitive meshes
 		auto quadData = PrimitiveMeshFactory::CreateQuad();
 		CreateMesh<VertexPNUT>("Primitive_quad", quadData.vertices, quadData.indices);
 		auto cubeData = PrimitiveMeshFactory::CreateCube();
 		CreateMesh<VertexPNUT>("Primitive_cube", cubeData.vertices, cubeData.indices);
+		auto fullScreenQuadData = PrimitiveMeshFactory::CreateFullScreenQuad();
+		CreateMesh<VertexPU>("Primitive_fullscreen_quad", fullScreenQuadData.vertices, fullScreenQuadData.indices);
 
 		// Create materials
 		auto defaultMaterial = CreateMaterial("Default_material");
@@ -59,7 +62,7 @@ namespace Engine
 		return it->second;
 	}
 
-	std::shared_ptr<Texture2D> ResourceManager::LoadTexture(const std::string& name, const std::string& filePath)
+	std::shared_ptr<Texture2D> ResourceManager::LoadTexture(const std::string& name, const std::string& filePath, TextureType type)
 	{
 		if (m_textures.find(name) != m_textures.end())
 		{
@@ -68,7 +71,7 @@ namespace Engine
 		}
 
 		auto texture = std::make_shared<Texture2D>();
-		if (FAILED(texture->CreateFromFile(filePath)))
+		if (FAILED(texture->CreateFromFile(filePath, type)))
 		{
 			LOG_ERROR("Failed to load texture: %s", filePath.c_str());
 			return nullptr;

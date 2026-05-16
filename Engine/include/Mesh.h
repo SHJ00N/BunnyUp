@@ -71,7 +71,7 @@ namespace Engine
 		bool GetSkinned() const { return m_isSkinned; }
 
 		void Render();
-		void Render(const std::vector<std::shared_ptr<Material>>& materials, Renderer& renderer) const;
+		void Render(const std::vector<std::shared_ptr<Material>>& materials, ConstantBufferManager& cbManager) const;
 	private:
 		// gpu vertex data
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pVertexBuffer;

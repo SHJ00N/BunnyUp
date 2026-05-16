@@ -5,6 +5,7 @@
 #include <Animator.h>
 #include <Camera.h>
 #include <SamplerStateManager.h>
+#include <Light.h>
 
 #include "DemoScene1.h"
 #include "CameraController.h"
@@ -79,5 +80,16 @@ namespace Scenes
 
         cube3->transform.SetLocalPosition(Vector3(-10.0f, 5.0f, 10.0f));
         cube3->transform.SetLocalScale(Vector3(5.0f, 5.0f, 5.0f));
+
+        auto directionalLight = CreateGameObject<GameObject>("DirectionalLight");
+        auto directionalLightRenderer = directionalLight->AddComponent<MeshRenderer>();
+        directionalLightRenderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
+        directionalLightRenderer->GetMaterial(0)->SetColor(Vector4(1.0f, 1.0f, 0.8f, 1.0f));
+        auto directionalLightComponent = directionalLight->AddComponent<Light>();
+        directionalLightComponent->type = LightType::Directional;
+        directionalLightComponent->color = Vector4(1.0f, 1.0f, 0.5f, 10.0f);
+        directionalLight->transform.SetLocalPosition(Vector3(0.0f, 25.0f, 0.0f));
+        directionalLight->transform.SetLocalRotation(Vector3(0.0f, 0.0f, 0.0f));
+
 	}
 }

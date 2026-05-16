@@ -13,7 +13,7 @@
 
 namespace Engine
 {
-	class Renderer;
+	class ConstantBufferManager;
 
 	class Material
 	{
@@ -34,7 +34,7 @@ namespace Engine
 		std::shared_ptr<Material> CreateClone() const;
 		void SetTexture(UINT slot, std::shared_ptr<Texture2D> texture);
 		void SetSampler(UINT slot, std::shared_ptr<Sampler> sampler);
-		void Bind(Renderer& renderer);
+		void Bind(ConstantBufferManager& cbManager);
 
 	private:
 		std::shared_ptr<Shader> m_pShader;

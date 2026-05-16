@@ -65,11 +65,11 @@ namespace Engine
 		}
 	}
 
-	void SceneManager::CurrentSceneRender(Renderer& renderer)
+	void SceneManager::CurrentSceneRender(ConstantBufferManager& cbManager)
 	{
 		if (m_currentScene)
 		{
-			m_currentScene->Render(renderer);
+			m_currentScene->Render(cbManager);
 		}
 	}
 

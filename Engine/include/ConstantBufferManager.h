@@ -8,11 +8,11 @@
 
 namespace Engine
 {
-	class Renderer
+	class ConstantBufferManager
 	{
 	public:
-		Renderer();
-		~Renderer();
+		ConstantBufferManager();
+		~ConstantBufferManager();
 		HRESULT Initialize();
 
 		template <typename T>
@@ -22,11 +22,13 @@ namespace Engine
 			// Update constant buffer
 			context->UpdateSubresource(buffer, 0, nullptr, &data, 0, 0);
 			context->VSSetConstantBuffers(slot, 1, &buffer);
+			context->PSSetConstantBuffers(slot, 1, &buffer);
 		}
 		void UpdatePerCamera(const ConstantBufferPerCamera& data);
 		void UpdatePerObject(const ConstantBufferPerObject& data);
 		void UpdateSkinPerObject(const ConstantBufferSkinPerObject& data);
 		void UpdatePerMaterial(const ConstantBufferPerMaterial& data);
+		void UpdatePerLight(const ConstantBufferPerLight& data);
 		
 	private:
 		// constant buffers
@@ -34,5 +36,6 @@ namespace Engine
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferPerObject;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferSkinPerObject;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferPerMaterial;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferPerLight;
 	};
 }

@@ -14,8 +14,8 @@ namespace Engine
 
 		virtual void OnImGui() override;
 	protected:
-		void UpdateConstantBuffer(class Renderer& renderer) override;
-		void OnRender(Renderer& renderer) override;
+		void UpdateConstantBuffer(ConstantBufferManager& renderer) override;
+		void OnRender(ConstantBufferManager& renderer) override;
 
 	private:
 		std::vector<std::shared_ptr<Mesh>> m_meshes;

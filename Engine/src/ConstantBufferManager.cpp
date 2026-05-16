@@ -1,4 +1,4 @@
-#include "Renderer.h"
+#include "ConstantBufferManager.h"
 #include "MathHelper.h"
 #include "D3DManager.h"
 #include "ResourceManager.h"
@@ -7,15 +7,15 @@
 
 namespace Engine
 {
-	Renderer::Renderer()
+    ConstantBufferManager::ConstantBufferManager()
 	{
 	}
   
-	Renderer::~Renderer()
+    ConstantBufferManager::~ConstantBufferManager()
 	{
 	}
 
-    HRESULT Renderer::Initialize()
+    HRESULT ConstantBufferManager::Initialize()
     {
         // create cube
         HRESULT hr = S_OK;
@@ -39,27 +39,36 @@ namespace Engine
         CD3D11_BUFFER_DESC cbPerMaterialDesc(sizeof(ConstantBufferPerMaterial), D3D11_BIND_CONSTANT_BUFFER);
         hr = device->CreateBuffer(&cbPerMaterialDesc, nullptr, m_pConstantBufferPerMaterial.GetAddressOf());
         if (FAILED(hr)) return hr;
+
+		CD3D11_BUFFER_DESC cbPerLightDesc(sizeof(ConstantBufferPerLight), D3D11_BIND_CONSTANT_BUFFER);
+        hr = device->CreateBuffer(&cbPerLightDesc, nullptr, m_pConstantBufferPerLight.GetAddressOf());
+        if (FAILED(hr)) return hr;
         
 		return hr;
 	}
 
-    void Renderer::UpdatePerCamera(const ConstantBufferPerCamera& data)
+    void ConstantBufferManager::UpdatePerCamera(const ConstantBufferPerCamera& data)
     {
         UpdateConstantBuffer(m_pConstantBufferPerCamera.Get(), CbSlot::PerCamera, data);
     }
 
-    void Renderer::UpdatePerObject(const ConstantBufferPerObject& data)
+    void ConstantBufferManager::UpdatePerObject(const ConstantBufferPerObject& data)
     {
         UpdateConstantBuffer(m_pConstantBufferPerObject.Get(), CbSlot::PerObject, data);
     }
 
-    void Renderer::UpdateSkinPerObject(const ConstantBufferSkinPerObject& data)
+    void ConstantBufferManager::UpdateSkinPerObject(const ConstantBufferSkinPerObject& data)
     {
         UpdateConstantBuffer(m_pConstantBufferSkinPerObject.Get(), CbSlot::SkinPerObject, data);
     }
 
-    void Renderer::UpdatePerMaterial(const ConstantBufferPerMaterial& data)
+    void ConstantBufferManager::UpdatePerMaterial(const ConstantBufferPerMaterial& data)
     {
         UpdateConstantBuffer(m_pConstantBufferPerMaterial.Get(), CbSlot::PerMaterial, data);
     }
+
+    void ConstantBufferManager::UpdatePerLight(const ConstantBufferPerLight& data)
+    {
+        UpdateConstantBuffer(m_pConstantBufferPerLight.Get(), CbSlot::PerLight, data);
+	}
 }

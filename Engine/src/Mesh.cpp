@@ -37,7 +37,7 @@ namespace Engine
 		}
 	}
 
-	void Mesh::Render(const std::vector<std::shared_ptr<Material>>& materials, Renderer& renderer) const
+	void Mesh::Render(const std::vector<std::shared_ptr<Material>>& materials, ConstantBufferManager& cbManager) const
 	{
 		assert(m_pVertexBuffer && m_pIndexBuffer);
 
@@ -52,7 +52,7 @@ namespace Engine
 		{
 			auto& mat = materials[sub.materialIndex];
 
-			mat->Bind(renderer);
+			mat->Bind(cbManager);
 
 			context->IASetPrimitiveTopology(sub.topology);
 			context->DrawIndexed(static_cast<UINT>(sub.indexCount), sub.indexStart, 0);

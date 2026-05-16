@@ -1,7 +1,7 @@
 #include "Material.h"
 #include "D3DManager.h"
 #include "ResourceManager.h"
-#include "Renderer.h"
+#include "ConstantBufferManager.h"
 
 namespace Engine
 {
@@ -57,12 +57,12 @@ namespace Engine
         m_samplers[idx] = sampler;
 	}
 
-	void Material::Bind(Renderer& renderer)
+	void Material::Bind(ConstantBufferManager& cbManager)
 	{
         auto context = D3DManager::GetInstance().GetDeviceContext();
 
         // Update constant buffer
-        renderer.UpdatePerMaterial(m_cbPerMaterial);
+        cbManager.UpdatePerMaterial(m_cbPerMaterial);
 
         // Bind shader
         if (m_pShader)

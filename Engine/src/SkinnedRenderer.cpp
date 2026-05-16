@@ -1,5 +1,5 @@
 #include "SkinnedRenderer.h"
-#include "Renderer.h"
+#include "ConstantBufferManager.h"
 #include "GameObject.h"
 #include "Animator.h"
 
@@ -11,11 +11,12 @@ namespace Engine
 		MeshRenderer::SetMesh(model);
 	}
 
-	void SkinnedRenderer::UpdateConstantBuffer(Renderer& renderer)
+	void SkinnedRenderer::UpdateConstantBuffer(ConstantBufferManager& cbManager)
 	{
 		// set object world matrix
 		m_cbPerObject.world = ownerGameObject->transform.GetWorldMatrix();
-		renderer.UpdatePerObject(m_cbPerObject);
+		m_cbPerObject.normalMatrix = Transpose(Inverse(m_cbPerObject.world));
+		cbManager.UpdatePerObject(m_cbPerObject);
 		// set object bone matrix
 		auto animator = ownerGameObject->GetComponent<Animator>();
 		if (animator)
@@ -26,6 +27,6 @@ namespace Engine
 				m_cbSkinPerObject.bones[i] = bones[i];
 			}
 		}
-		renderer.UpdateSkinPerObject(m_cbSkinPerObject);
+		cbManager.UpdateSkinPerObject(m_cbSkinPerObject);
 	}
 }

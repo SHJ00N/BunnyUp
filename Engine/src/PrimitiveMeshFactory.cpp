@@ -7,10 +7,10 @@ namespace Engine
         // Create quad geometry
         std::vector<VertexPNUT> Vertices =
         {
-            {Vector3{-0.5f, -0.5f,  0.0f}, Vector3{ 0.0f,  0.0f,  1.0f}, Vector2{0, 1}, Vector4{ 1.0f,  0.0f,  0.0f,  1.0f}},
-            {Vector3{-0.5f,  0.5f,  0.0f}, Vector3{ 0.0f,  0.0f,  1.0f}, Vector2{0, 0}, Vector4{ 1.0f,  0.0f,  0.0f,  1.0f}},
-            {Vector3{ 0.5f,  0.5f,  0.0f}, Vector3{ 0.0f,  0.0f,  1.0f}, Vector2{1, 0}, Vector4{ 1.0f,  0.0f,  0.0f,  1.0f}},
-            {Vector3{ 0.5f, -0.5f,  0.0f}, Vector3{ 0.0f,  0.0f,  1.0f}, Vector2{1, 1}, Vector4{ 1.0f,  0.0f,  0.0f,  1.0f}}
+            {Vector3{-0.5f, -0.5f,  0.0f}, Vector3{ 0.0f,  0.0f,  -1.0f}, Vector2{0, 1}, Vector4{ 1.0f,  0.0f,  0.0f,  1.0f}},
+            {Vector3{-0.5f,  0.5f,  0.0f}, Vector3{ 0.0f,  0.0f,  -1.0f}, Vector2{0, 0}, Vector4{ 1.0f,  0.0f,  0.0f,  1.0f}},
+            {Vector3{ 0.5f,  0.5f,  0.0f}, Vector3{ 0.0f,  0.0f,  -1.0f}, Vector2{1, 0}, Vector4{ 1.0f,  0.0f,  0.0f,  1.0f}},
+            {Vector3{ 0.5f, -0.5f,  0.0f}, Vector3{ 0.0f,  0.0f,  -1.0f}, Vector2{1, 1}, Vector4{ 1.0f,  0.0f,  0.0f,  1.0f}}
         };
         // Create index buffer based on counter-clock wise
         std::vector<uint32_t> Indices =
@@ -85,15 +85,15 @@ namespace Engine
         return data;
 	}
 
-	PrimitiveMeshData<VertexPU> PrimitiveMeshFactory::CreateFullScreenQuad()
-	{
+    PrimitiveMeshData<VertexPU> PrimitiveMeshFactory::CreateFullScreenQuad()
+    {
         // Create quad geometry
         std::vector<VertexPU> Vertices =
         {
             {Vector3{-1.0f, -1.0f,  0.0f}, Vector2{0, 1}},
             {Vector3{-1.0f,  1.0f,  0.0f}, Vector2{0, 0}},
             {Vector3{ 1.0f,  1.0f,  0.0f}, Vector2{1, 0}},
-            {Vector3{ 1.0f, -1.0f,  0.0f}, Vector2{1, 1}}
+            {Vector3{ 1.0f, -1.0f,  0.0f},  Vector2{1, 1}}
         };
         // Create index buffer based on counter-clock wise
         std::vector<uint32_t> Indices =
@@ -106,5 +106,5 @@ namespace Engine
         data.vertices = Vertices;
         data.indices = Indices;
         return data;
-	}
+    }
 }

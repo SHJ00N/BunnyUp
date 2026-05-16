@@ -1,5 +1,5 @@
 #include "MeshRenderer.h"
-#include "Renderer.h"
+#include "ConstantBufferManager.h"
 #include "GameObject.h"
 #include "ImGuiClass.h"
 #include "ResourceManager.h"
@@ -32,18 +32,19 @@ namespace Engine
 		}
 	}
 
-	void MeshRenderer::OnRender(Renderer& renderer)
+	void MeshRenderer::OnRender(ConstantBufferManager& cbManager)
 	{
 		for (const auto& mesh : m_meshes)
 		{
-			mesh->Render(m_materials, renderer);
+			mesh->Render(m_materials, cbManager);
 		}
 	}
 
-	void MeshRenderer::UpdateConstantBuffer(Renderer& renderer)
+	void MeshRenderer::UpdateConstantBuffer(ConstantBufferManager& cbManager)
 	{
 		m_cbPerObject.world = ownerGameObject->transform.GetWorldMatrix();
-		renderer.UpdatePerObject(m_cbPerObject);
+		m_cbPerObject.normalMatrix = Transpose(Inverse(m_cbPerObject.world));
+		cbManager.UpdatePerObject(m_cbPerObject);
 	}
 
 	void MeshRenderer::OnImGui()
