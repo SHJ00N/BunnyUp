@@ -129,6 +129,7 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="PBR_ToonShader.hlsl" />
+    <FxCompile Include="PostProcessShader.hlsl" />
     <FxCompile Include="SkinningShader.hlsl" />
     <FxCompile Include="TextureShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VSMain</EntryPointName>

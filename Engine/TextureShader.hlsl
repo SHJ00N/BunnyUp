@@ -73,7 +73,7 @@ PS_OUTPUT PSMain(PS_INPUT input) : SV_TARGET
     // store normal
     Output.Normal = float4(normalize(input.Normal) * 0.5f + 0.5f, 0.0f);
     
-    Output.MetallicRoughnessAO = float4(0.0f, 0.0f, 1.0f, 1.0f); // placeholder, can be replaced with actual metallic, roughness, ao values from texture maps
+    Output.MetallicRoughnessAO = float4(0.0f, 0.5f, 1.0f, 1.0f); // placeholder, can be replaced with actual metallic, roughness, ao values from texture maps
     
     return Output;
 }

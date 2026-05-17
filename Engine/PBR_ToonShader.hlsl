@@ -119,11 +119,14 @@ void reflectanceEquation(float3 V, float3 N, float3 F0, float3 albedo, float rou
     kD *= 1.0 - metallic;
 
     // scale light by NdotL
-    float NdotL = max(dot(N, L), 0.0);
-   // NdotL = NdotL * 0.5 + 0.5 * NdotL * NdotL;
+    // float NdotL = max(dot(N, L), 0.0);
+    // toon shading: quantize NdotL to create discrete lighting levels
+    float NdotL = saturate(dot(N, L));
+    float levels = 2.0f;
+    float toon = floor(NdotL * levels) / (levels - 1.0f);
 
-    diffuseOut = kD * albedo / PI * radiance * NdotL;
-    specularOut = specular * radiance * NdotL;
+    diffuseOut = kD * albedo / PI * radiance * toon;
+    specularOut = specular * radiance * toon;
 }
 // direction ------------------------------------------------------------------
 void calculateDirectionLight(float3 V, float3 N, float3 F0, float3 albedo, float roughness, float metallic, Light light, out float3 diffuseOut, out float3 specularOut)
@@ -147,9 +150,13 @@ void calculatePointLight(float3 lightPosition, float3 lightColor, float3 WorldPo
 
 float4 PSMain(PS_INPUT input) : SV_TARGET
 {
+    float depth = depthMap.Sample(linearClamp, input.UV).r;
+    if(depth >= 1.0f) // if depth is 1.0, it means this pixel is background, discard it for better performance
+        discard;
+    
     float3 albedo = albedoMap.Sample(linearClamp, input.UV).rgb;
     float metallic = metallicRoughnessAoMap.Sample(linearClamp, input.UV).r;
-    float roughness = clamp(metallicRoughnessAoMap.Sample(linearClamp, input.UV).g, 0.0f, 1.0f);
+    float roughness = clamp(metallicRoughnessAoMap.Sample(linearClamp, input.UV).g, 0.04f, 1.0f);
     float ao = metallicRoughnessAoMap.Sample(linearClamp, input.UV).b;
     
     // get world position from position map
@@ -180,23 +187,18 @@ float4 PSMain(PS_INPUT input) : SV_TARGET
         }
         // spot light can be implemented similarly by adding cutoff calculations
         
+        // toon specular
+        float specStrength = max(specular.r, max(specular.g, specular.b));
+        float specMask = floor(specStrength * 2.0) / 1.0;
+        float3 toonSpecular = specular * specMask;
+        
         diffuseSum += diffuse;
-        specularSum += specular;
+        specularSum += toonSpecular;
     }
     
-    float3 ambient = 0.5f * albedo * ao;
+    float3 ambient = 0.75f * albedo * ao;
     
-    // toon shading: quantize the diffuse lighting to create a cartoon-like effect
-    float luminance = dot(diffuseSum, float3(0.299, 0.587, 0.114));
-    float levels = 2.0f;
-    float toon = floor(saturate(luminance) * levels) / (levels - 1.0);
-    float3 toonDiffuse = diffuseSum * toon / max(luminance, 0.001f);
-    
-    float specStrength = max(specularSum.r, max(specularSum.g, specularSum.b));
-    float specMask = smoothstep(0.6, 0.9, specStrength);
-    float3 toonSpecular = specularSum * specMask;
-    
-    float3 color = ambient + toonDiffuse + toonSpecular;
+    float3 color = ambient + diffuseSum + specularSum;
     
     // HDR tonemapping
     color = color / (color + 1.0f);
@@ -204,6 +206,13 @@ float4 PSMain(PS_INPUT input) : SV_TARGET
     color = pow(color, 1.0f / 2.2f);
 
     float4 FragColor = float4(color, 1.0f);
+    
+    // if the alpha value of metallicRoughnessAoMap is less than 0.5, use albedo color without lighting for toon shading effect
+    if (metallicRoughnessAoMap.Sample(linearClamp, input.UV).a < 0.5f)
+    {
+        float3 testColor = albedo / (albedo + 1.0f);
+        testColor = pow(testColor, 1.0f / 2.2f);
+        FragColor = float4(testColor, 1.0f);
+    }
     return FragColor;
-
 }

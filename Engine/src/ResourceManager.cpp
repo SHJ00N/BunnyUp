@@ -21,6 +21,7 @@ namespace Engine
 		LoadShader<VertexPNUT>("Textured_shader", "C:\\Project\\BunnyUp\\Engine\\TextureShader.hlsl");
 		LoadShader<VertexSkin>("Skinning_shader", "C:\\Project\\BunnyUp\\Engine\\SkinningShader.hlsl");
 		LoadShader<VertexPU>("PBR_shader", "C:\\Project\\BunnyUp\\Engine\\PBR_ToonShader.hlsl");
+		LoadShader<VertexPU>("PostProcess_shader", "C:\\Project\\BunnyUp\\Engine\\PostProcessShader.hlsl");
 
 		// Create primitive meshes
 		auto quadData = PrimitiveMeshFactory::CreateQuad();

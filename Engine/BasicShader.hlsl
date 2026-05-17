@@ -76,7 +76,9 @@ PS_OUTPUT PSMain(PS_INPUT input) : SV_TARGET
     // store normal
     Output.Normal = float4(normalize(input.Normal) * 0.5f + 0.5f, 0.0f);
     
-    Output.MetallicRoughnessAO = float4(0.0f, 0.0f, 1.0f, 1.0f); // placeholder, can be replaced with actual metallic, roughness, ao values from texture maps
+    // placeholder, can be replaced with actual metallic, roughness, ao values from texture maps
+    // if alpha is 0.0f, it means don't apply any lighting, just use the albedo color as the final color (useful for unlit objects)
+    Output.MetallicRoughnessAO = float4(0.0f, 1.0f, 1.0f, 0.0f); 
     
     return Output;
 }
