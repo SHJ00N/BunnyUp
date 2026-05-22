@@ -6,15 +6,14 @@
 #include "Scene.h"
 #include "ResourceManager.h"
 #include "SamplerStateManager.h"
+#include "EnvironmentMap.h"
+#include "RenderStateManager.h"
 
 namespace Engine
 {
-    HRESULT RenderPipeline::Initialize()
+    void RenderPipeline::Initialize(ConstantBufferManager* cbManager)
     {
-        m_cbManager = std::make_unique<ConstantBufferManager>();
-        HRESULT hr = m_cbManager->Initialize();
-
-        return hr;
+        m_cbManager = cbManager;
     }
 
 	void RenderPipeline::Render(Scene* scene)
@@ -33,7 +32,7 @@ namespace Engine
 	{
         // get back buffer info
         auto& d3d = D3DManager::GetInstance();
-        ResourceDesc backBufferDesc = ResourceDesc::CreateBackBuffer(d3d.GetBackBufferDesc().Width, d3d.GetBackBufferDesc().Height, d3d.GetBackBufferDesc().Format);
+        ResourceDesc backBufferDesc = ResourceDesc::CreateWriteOnlyBuffer(d3d.GetBackBufferDesc().Width, d3d.GetBackBufferDesc().Height, d3d.GetBackBufferDesc().Format);
 
         // register back buffer as a resource in the graph
         ResourceHandle backBuffer = graph.Import(
@@ -88,11 +87,11 @@ namespace Engine
                 const auto& normalDesc = graph.GetResourceDesc(normalBuffer);
                 cmd.SetViewport(static_cast<float>(normalDesc.width), static_cast<float>(normalDesc.height));
 
-                scene->Render(*m_cbManager.get());
+                scene->Render(*m_cbManager);
 
 				// Unbind resources after rendering to avoid hazard in next pass
-                ID3D11ShaderResourceView* nullSRVs[4] = { nullptr, nullptr, nullptr, nullptr };
-				cmd.SetShaderResource(0, nullSRVs, 4);
+                ID3D11RenderTargetView* nullRTVs[4] = { nullptr, nullptr, nullptr, nullptr };
+                cmd.SetRenderTargets(nullRTVs, nullptr, 4);
             }
         );
         
@@ -115,7 +114,7 @@ namespace Engine
             "LightingPass",
             PassType::Graphics,
             lightingPassParams,
-            [positionBuffer, normalBuffer, depthBuffer, albedoBuffer, roughnessMetallicAoBuffer, lightingPassOutput, lightingShader, &graph, this](RenderCommandList& cmd)
+            [positionBuffer, normalBuffer, depthBuffer, albedoBuffer, roughnessMetallicAoBuffer, lightingPassOutput, lightingShader, &graph, scene, this](RenderCommandList& cmd)
             {
                 // get resources
                 auto* positionRes = graph.GetResource(positionBuffer);
@@ -124,6 +123,11 @@ namespace Engine
                 auto* albedoRes = graph.GetResource(albedoBuffer);
                 auto* roughnessMetallicAoRes = graph.GetResource(roughnessMetallicAoBuffer);
                 auto* lightingPassOutputRes = graph.GetResource(lightingPassOutput);
+                // get environment map resources
+                auto environmentMap = scene->GetEnvironmentMap();
+                auto* irradianceMapRes = environmentMap->GetIrradianceMap();
+                auto* prefilteredMapRes = environmentMap->GetPrefilteredEnvMap();
+                auto* brdfLUTRes = environmentMap->GetBrdfLUT();
 				// Clear outputBuffer
                 const float clearColor[4] = { 0.1f, 0.1f, 0.3f, 1.0f };
 				cmd.ClearRenderTarget(lightingPassOutputRes->GetRenderTargetView(), clearColor);
@@ -134,8 +138,18 @@ namespace Engine
                 const auto& outPutDesc = graph.GetResourceDesc(lightingPassOutput);
                 cmd.SetViewport(static_cast<float>(outPutDesc.width), static_cast<float>(outPutDesc.height));
 				// Set shader resources
-                ID3D11ShaderResourceView* srvs[5] = { positionRes->GetShaderResouceView(), normalRes->GetShaderResouceView(), albedoRes->GetShaderResouceView(), roughnessMetallicAoRes->GetShaderResouceView(), depthRes->GetShaderResouceView() };
-                cmd.SetShaderResource(0, srvs, 5);
+                ID3D11ShaderResourceView* srvs[8] =
+                {
+                    positionRes->GetShaderResourceView(),
+                    normalRes->GetShaderResourceView(),
+                    albedoRes->GetShaderResourceView(),
+                    roughnessMetallicAoRes->GetShaderResourceView(),
+                    depthRes->GetShaderResourceView(),
+                    irradianceMapRes->GetShaderResourceView(),
+                    prefilteredMapRes->GetShaderResourceView(),
+                    brdfLUTRes->GetShaderResourceView()
+                };
+                cmd.SetShaderResource(0, srvs, 8);
 				SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp)->Bind(0);
 
 				// bind shader and draw fullscreen quad
@@ -143,16 +157,73 @@ namespace Engine
 				cmd.DrawFullScreenQuad();
 
                 // Unbind resources after rendering to avoid hazard in next pass
-                ID3D11ShaderResourceView* nullSRVs[5] = { nullptr, nullptr, nullptr, nullptr, nullptr };
-                cmd.SetShaderResource(0, nullSRVs, 5);
+                ID3D11ShaderResourceView* nullSRVs[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+                cmd.SetShaderResource(0, nullSRVs, 8);
+                ID3D11RenderTargetView* nullRTVs[1] = { nullptr };
+                cmd.SetRenderTargets(nullRTVs, nullptr, 1);
             },
 			lightingShader
 		);
 
+        // Skybox pass
+		// ----------------------------------------------------------------
+        // create skybox pass resource
+        ResourceHandle skyboxPassOutput = graph.Create("SkyboxPassOutput", ResourceDesc::CreateColorTarget(backBufferDesc.width, backBufferDesc.height, backBufferDesc.format));
+        // create skybox pass parameter
+		RenderPassParameter skyboxPassParams;
+		skyboxPassParams.reads.push_back(depthBuffer);
+        skyboxPassParams.reads.push_back(lightingPassOutput);
+		skyboxPassParams.writes.push_back(skyboxPassOutput);
+        // get shader
+		Shader* skyboxShader = ResourceManager::GetInstance().GetShader("Skybox_shader").get();
+		// add skybox pass
+        graph.AddPass(
+            "SkyboxPass",
+            PassType::Graphics,
+            skyboxPassParams,
+            [depthBuffer, lightingPassOutput, skyboxPassOutput, skyboxShader, &graph, scene, this](RenderCommandList& cmd)
+            {
+                if(scene->GetEnvironmentMap() == nullptr)
+                {
+                    return; // skip skybox pass if no environment map
+				}
+
+                // Get resources
+                auto* depthRes = graph.GetResource(depthBuffer);
+                auto* lightingPassOutputRes = graph.GetResource(lightingPassOutput);
+                auto* skyboxPassOutputRes = graph.GetResource(skyboxPassOutput);
+				auto* environmentMapRes = scene->GetEnvironmentMap()->GetEnvCubeMap();
+                // Clear outputBuffer
+                const float clearColor[4] = { 0.1f, 0.1f, 0.3f, 1.0f };
+                cmd.ClearRenderTarget(skyboxPassOutputRes->GetRenderTargetView(), clearColor);
+                // Set RenderTargets
+                ID3D11RenderTargetView* rtvs[] = { skyboxPassOutputRes->GetRenderTargetView() };
+                cmd.SetRenderTargets(rtvs, nullptr);
+                // Set viewport
+                const auto& outPutDesc = graph.GetResourceDesc(skyboxPassOutput);
+                cmd.SetViewport(static_cast<float>(outPutDesc.width), static_cast<float>(outPutDesc.height));
+                // Set shader resources
+                ID3D11ShaderResourceView* srvs[3] = { environmentMapRes->GetShaderResourceView(), lightingPassOutputRes->GetShaderResourceView(), depthRes->GetShaderResourceView() };
+                cmd.SetShaderResource(0, srvs, 3);
+                SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp)->Bind(0);
+
+				// bind shader and draw skybox
+                skyboxShader->Bind();
+                cmd.DrawFullScreenQuad();
+
+                // Unbind resources after rendering to avoid hazard in next pass
+                ID3D11ShaderResourceView* nullSRVs[3] = { nullptr, nullptr, nullptr };
+				cmd.SetShaderResource(0, nullSRVs, 3);
+                ID3D11RenderTargetView* nullRTVs[1] = { nullptr };
+                cmd.SetRenderTargets(nullRTVs, nullptr, 1);
+            },
+            skyboxShader
+        );
+
         // Post-process pass
 		// ----------------------------------------------------------------
 		RenderPassParameter postProcessPassParams;
-		postProcessPassParams.reads.push_back(lightingPassOutput);
+		postProcessPassParams.reads.push_back(skyboxPassOutput);
 		postProcessPassParams.reads.push_back(normalBuffer);
 		postProcessPassParams.reads.push_back(depthBuffer);
 		postProcessPassParams.writes.push_back(backBuffer);
@@ -163,10 +234,10 @@ namespace Engine
             "PostProcessPass",
             PassType::Graphics,
             postProcessPassParams,
-            [lightingPassOutput, backBuffer, normalBuffer, depthBuffer, postProcessShader, & graph, this](RenderCommandList& cmd)
+            [skyboxPassOutput, backBuffer, normalBuffer, depthBuffer, postProcessShader, & graph, this](RenderCommandList& cmd)
             {
                 // get resources
-                auto* lightingPassOutputRes = graph.GetResource(lightingPassOutput);
+                auto* skyboxPassOutputRes = graph.GetResource(skyboxPassOutput);
 				auto* normalRes = graph.GetResource(normalBuffer);
 				auto* depthRes = graph.GetResource(depthBuffer);
                 auto* backBufferRes = graph.GetResource(backBuffer);
@@ -180,7 +251,7 @@ namespace Engine
                 const auto& bbDesc = graph.GetResourceDesc(backBuffer);
                 cmd.SetViewport(static_cast<float>(bbDesc.width), static_cast<float>(bbDesc.height));
                 // Set shader resources
-                ID3D11ShaderResourceView* srvs[3] = { lightingPassOutputRes->GetShaderResouceView(), normalRes->GetShaderResouceView(), depthRes->GetShaderResouceView() };
+                ID3D11ShaderResourceView* srvs[3] = { skyboxPassOutputRes->GetShaderResourceView(), normalRes->GetShaderResourceView(), depthRes->GetShaderResourceView() };
                 cmd.SetShaderResource(0, srvs, 3);
                 SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp)->Bind(0);
 

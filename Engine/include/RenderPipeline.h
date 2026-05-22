@@ -12,11 +12,11 @@ namespace Engine
 	class RenderPipeline
 	{
 	public:
-		HRESULT Initialize();
+		void Initialize(ConstantBufferManager* cbManager);
 		void Render(Scene* scene);
 	private:
 		void build(RenderGraph& graph, Scene* scene);
 
-		std::unique_ptr<ConstantBufferManager> m_cbManager;
+		ConstantBufferManager *m_cbManager = nullptr;
 	};
 }

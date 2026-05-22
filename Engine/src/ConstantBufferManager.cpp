@@ -43,6 +43,10 @@ namespace Engine
 		CD3D11_BUFFER_DESC cbPerLightDesc(sizeof(ConstantBufferPerLight), D3D11_BIND_CONSTANT_BUFFER);
         hr = device->CreateBuffer(&cbPerLightDesc, nullptr, m_pConstantBufferPerLight.GetAddressOf());
         if (FAILED(hr)) return hr;
+
+        CD3D11_BUFFER_DESC cbPrefilteredEnvMapDesc(sizeof(ConstantBufferPrefilteredEnvMap), D3D11_BIND_CONSTANT_BUFFER);
+        hr = device->CreateBuffer(&cbPrefilteredEnvMapDesc, nullptr, m_pConstantBufferPrefilteredEnvMap.GetAddressOf());
+        if (FAILED(hr)) return hr;
         
 		return hr;
 	}
@@ -71,4 +75,9 @@ namespace Engine
     {
         UpdateConstantBuffer(m_pConstantBufferPerLight.Get(), CbSlot::PerLight, data);
 	}
+
+    void ConstantBufferManager::UpdatePrefilteredEnvMap(const ConstantBufferPrefilteredEnvMap& data)
+    {
+        UpdateConstantBuffer(m_pConstantBufferPrefilteredEnvMap.Get(), CbSlot::PrefilteredEnvMap, data);
+    }
 }

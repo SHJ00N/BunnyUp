@@ -5,10 +5,11 @@
 
 #include "ConstantBuffer.h"
 #include "D3DManager.h"
+#include "Singleton.h"
 
 namespace Engine
 {
-	class ConstantBufferManager
+	class ConstantBufferManager : public Singleton<ConstantBufferManager>
 	{
 	public:
 		ConstantBufferManager();
@@ -29,6 +30,7 @@ namespace Engine
 		void UpdateSkinPerObject(const ConstantBufferSkinPerObject& data);
 		void UpdatePerMaterial(const ConstantBufferPerMaterial& data);
 		void UpdatePerLight(const ConstantBufferPerLight& data);
+		void UpdatePrefilteredEnvMap(const ConstantBufferPrefilteredEnvMap& data);
 		
 	private:
 		// constant buffers
@@ -37,5 +39,6 @@ namespace Engine
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferSkinPerObject;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferPerMaterial;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferPerLight;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferPrefilteredEnvMap;
 	};
 }

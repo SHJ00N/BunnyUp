@@ -5,12 +5,22 @@ cbuffer ViewProjectionConstantBuffer : register(b0)
     float4 CameraPosition;
     matrix View; // view matrix
     matrix Projection; // projection matrix
+    matrix InvView;
+    matrix InvProjection; // inverse projection matrix
 };
 
 cbuffer ModelConstantBuffer : register(b1)
 {
     matrix mWorld;
     matrix mNormalMatrix;
+}
+
+cbuffer MaterialConstantBuffer : register(b3)
+{
+    float4 mColor;
+    float Roughness;
+    float Metallic;
+    float PaddingMat[2];
 }
 
 struct VS_INPUT
@@ -65,15 +75,16 @@ PS_OUTPUT PSMain(PS_INPUT input) : SV_TARGET
 {
     PS_OUTPUT Output;
     // store albedo, discard if alpha is too low
-    Output.Albedo = texture0.Sample(sampler0, input.UV);
-    if (Output.Albedo.a < 0.1f)
+    float4 albedo = texture0.Sample(sampler0, input.UV);
+    Output.Albedo = float4(albedo.rgb * mColor.rgb, albedo.a);
+    if (albedo.a < 0.1f)
         discard;
     
     Output.Position = input.WorldPosition; // store world position in output for later use in deferred shading
     // store normal
     Output.Normal = float4(normalize(input.Normal) * 0.5f + 0.5f, 0.0f);
     
-    Output.MetallicRoughnessAO = float4(0.0f, 0.5f, 1.0f, 1.0f); // placeholder, can be replaced with actual metallic, roughness, ao values from texture maps
+    Output.MetallicRoughnessAO = float4(Metallic, Roughness, 1.0f, 1.0f); // placeholder, can be replaced with actual metallic, roughness, ao values from texture maps
     
     return Output;
 }

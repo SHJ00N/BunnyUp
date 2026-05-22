@@ -53,16 +53,23 @@ namespace Engine
 		{
 			auto& mat = m_materials[m];
 
-			auto color = mat->GetColor();
-			ImGui::DragFloat4("Color", &color.x, 0.01f);
-			mat->SetColor(Vector4(color.x, color.y, color.z, color.w));
-
 			std::string matLabel = mat->GetName() + "##" + std::to_string(m);
 
 			if (ImGui::TreeNode(matLabel.c_str()))
 			{
-				auto& textures = mat->GetTextures();
+				// material color
+				auto color = mat->GetColor();
+				ImGui::DragFloat3("RGB", &color.x, 0.01f, 0.0f, 1.0f);
+				mat->SetColor(Vector4(color.x, color.y, color.z, color.w));
 
+				// material roughness, metallic
+				Vector2 mR(mat->GetMetallic(), mat->GetRoughness());
+				ImGui::DragFloat2("MR", &mR.x, 0.01f, 0.0f, 1.0f);
+				mat->SetMetallic(mR.x);
+				mat->SetRoughness(mR.y);
+
+				// material textures
+				auto& textures = mat->GetTextures();
 				for (int i = 0; i < textures.size(); ++i)
 				{
 					std::string texLabel = "Texture Slot " + std::to_string(i);

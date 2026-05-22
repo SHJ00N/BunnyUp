@@ -29,6 +29,12 @@ namespace Engine
 		return (static_cast<uint32_t>(flags & flag) != 0);
 	}
 
+	enum class ResourceType
+	{
+		Texture2D,
+		TextureCube,
+	};
+
 	struct ResourceDesc
 	{
 		uint32_t width = 0;
@@ -36,9 +42,11 @@ namespace Engine
 		DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN;
 
 		ResourceFlags flags = ResourceFlags::None;
+		ResourceType type = ResourceType::Texture2D;
+		unsigned int mipLevels = 1;
 
-		static ResourceDesc CreateColorTarget(uint32_t width, uint32_t height, DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM);
-		static ResourceDesc CreateDepthStencil(uint32_t width, uint32_t height, DXGI_FORMAT format = DXGI_FORMAT_R24G8_TYPELESS);
-		static ResourceDesc CreateBackBuffer(uint32_t width, uint32_t height, DXGI_FORMAT format = DXGI_FORMAT_B8G8R8A8_UNORM);
+		static ResourceDesc CreateColorTarget(uint32_t width, uint32_t height, DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM, ResourceType type = ResourceType::Texture2D, unsigned int mipLevels = 1);
+		static ResourceDesc CreateDepthStencil(uint32_t width, uint32_t height, DXGI_FORMAT format = DXGI_FORMAT_R24G8_TYPELESS, ResourceType type = ResourceType::Texture2D, unsigned int mipLevels = 1);
+		static ResourceDesc CreateWriteOnlyBuffer(uint32_t width, uint32_t height, DXGI_FORMAT format = DXGI_FORMAT_B8G8R8A8_UNORM, ResourceType type = ResourceType::Texture2D, unsigned int mipLevels = 1);
 	};
 }

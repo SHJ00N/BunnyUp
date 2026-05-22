@@ -32,6 +32,8 @@ namespace Engine
 		m_cbPerCamera.position = Vector4(position.x, position.y, position.z, 1.0f);
 		m_cbPerCamera.view = GetViewMatrix();
 		m_cbPerCamera.projection = GetProjectionMatrix();
+		m_cbPerCamera.invView = Inverse(m_cbPerCamera.view);
+		m_cbPerCamera.invProjection = Inverse(m_cbPerCamera.projection);
 		cbManager.UpdatePerCamera(m_cbPerCamera);
 	}
 }

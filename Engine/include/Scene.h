@@ -9,6 +9,7 @@ namespace Engine
 {
 	class Camera;
 	class Light;
+	class EnvironmentMap;
 
 	class Scene
 	{
@@ -58,6 +59,10 @@ namespace Engine
 		const std::vector<Light*>& GetLights() const { return m_lights; }
 		void UpdateLightBuffer(ConstantBufferManager& cbManager);
 
+		// environment map management
+		void SetEnvironmentMap(std::shared_ptr<EnvironmentMap> envMap) { m_environmentMap = envMap; }
+		std::shared_ptr<EnvironmentMap> GetEnvironmentMap() const { return m_environmentMap; }
+
 	protected:
 		virtual void SceneEnter() { }
 
@@ -70,7 +75,8 @@ namespace Engine
 		// lights in the scene
 		std::vector<Light*> m_lights;
 		ConstantBufferPerLight m_cbPerLight;
-
+		// environment map
+		std::shared_ptr<EnvironmentMap> m_environmentMap;
 
 		// Helper functions for traversing the scene graph
 		void traverseAwake(GameObject* node);

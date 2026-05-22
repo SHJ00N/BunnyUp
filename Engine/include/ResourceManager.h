@@ -14,6 +14,7 @@ namespace Engine
 	class Shader;
 	class Texture2D;
 	class Animation;
+	class EnvironmentMap;
 
 	class ResourceManager : public Singleton<ResourceManager>
 	{
@@ -56,6 +57,10 @@ namespace Engine
 		std::shared_ptr<Animation> LoadAnimation(const std::string& name, const std::string& filePath, Model* model, bool isLoop = false);
 		std::shared_ptr<Animation> GetAnimation(const std::string& name);
 		const std::unordered_map<std::string, std::shared_ptr<Animation>>& GetAnimations() const { return m_animations; }
+
+		std::shared_ptr<EnvironmentMap> LoadEnvironmentMap(const std::string& name, const std::string& filePath);
+		std::shared_ptr<EnvironmentMap> GetEnvironmentMap(const std::string& name);
+		const std::unordered_map<std::string, std::shared_ptr<EnvironmentMap>>& GetEnvironmentMaps() const { return m_environmentMaps; }
 
 		// Mesh for caching (e.g. primitive)
 		template<typename VertexType>
@@ -107,5 +112,6 @@ namespace Engine
 		std::unordered_map<std::string, std::shared_ptr<Animation>> m_animations;
 		std::unordered_map<std::string, std::shared_ptr<Mesh>> m_meshes;	// primitive meshes
 		std::unordered_map<std::string, std::shared_ptr<Material>> m_materials;
+		std::unordered_map<std::string, std::shared_ptr<EnvironmentMap>> m_environmentMaps;
 	};
 }

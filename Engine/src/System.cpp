@@ -10,6 +10,7 @@
 #include "TimeClass.h"
 #include "EventBus.h"
 #include "InputManager.h"
+#include "ConstantBufferManager.h"
 
 extern void LoadGameResources();
 extern void RegistractionGameScenes();
@@ -65,13 +66,16 @@ namespace Engine
 			return hr;
 		}
 
-		// Initialize RenderPipline instance
-		m_pRenderPipeline = std::make_unique<RenderPipeline>();
-		hr = m_pRenderPipeline->Initialize();
+		// Initialize constant buffer manager
+		ConstantBufferManager::CreateInstance();
+		hr = ConstantBufferManager::GetInstance().Initialize();
 		if (FAILED(hr))
 		{
 			return hr;
 		}
+		// Initialize RenderPipline instance
+		m_pRenderPipeline = std::make_unique<RenderPipeline>();
+		m_pRenderPipeline->Initialize(&ConstantBufferManager::GetInstance());
 
 		// Initialize resource manager and load default resources
 		ResourceManager::CreateInstance();
@@ -193,6 +197,7 @@ namespace Engine
 		RenderStateManager::DestroyInstance();
 		SamplerStateManager::DestroyInstance();
 		InputManager::DestroyInstance();
+		ConstantBufferManager::DestroyInstance();
 
 		// Shutdown direct3D and related resources
 		m_pImGuiClass->Shutdown();

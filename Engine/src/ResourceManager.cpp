@@ -3,6 +3,7 @@
 #include "Model.h"
 #include "Animation.h"
 #include "PrimitiveMeshFactory.h"
+#include "EnvironmentMap.h"
 
 namespace Engine
 {
@@ -17,11 +18,21 @@ namespace Engine
 	void ResourceManager::LoadDefaultResources()
 	{
 		// Load default shader
+		// ---------------------------------------------------------------------
+		// mesh shader
 		LoadShader<VertexPNUT>("Default_shader", "C:\\Project\\BunnyUp\\Engine\\BasicShader.hlsl");
 		LoadShader<VertexPNUT>("Textured_shader", "C:\\Project\\BunnyUp\\Engine\\TextureShader.hlsl");
 		LoadShader<VertexSkin>("Skinning_shader", "C:\\Project\\BunnyUp\\Engine\\SkinningShader.hlsl");
+		// render target shader
 		LoadShader<VertexPU>("PBR_shader", "C:\\Project\\BunnyUp\\Engine\\PBR_ToonShader.hlsl");
 		LoadShader<VertexPU>("PostProcess_shader", "C:\\Project\\BunnyUp\\Engine\\PostProcessShader.hlsl");
+		LoadShader<VertexPU>("Skybox_shader", "C:\\Project\\BunnyUp\\Engine\\SkyboxShader.hlsl");
+		// IBL shader
+		LoadShader<VertexPNUT>("EnvCubeMap_shader", "C:\\Project\\BunnyUp\\Engine\\EnvironmentCubeShader.hlsl");
+		LoadShader<VertexPNUT>("IrradianceMap_shader", "C:\\Project\\BunnyUp\\Engine\\IrradianceMapShader.hlsl");
+		LoadShader<VertexPNUT>("PrefilteredEnvMap_shader", "C:\\Project\\BunnyUp\\Engine\\PrefilteredEnvMapShader.hlsl");
+		LoadShader<VertexPU>("Brdf_shader", "C:\\Project\\BunnyUp\\Engine\\BrdfShader.hlsl");
+
 
 		// Create primitive meshes
 		auto quadData = PrimitiveMeshFactory::CreateQuad();
@@ -35,7 +46,6 @@ namespace Engine
 		auto defaultMaterial = CreateMaterial("Default_material");
 		defaultMaterial->SetShader(GetShader("Default_shader"));
 		defaultMaterial->SetRenderState(RenderStateManager::GetInstance().GetState("Opaque"));
-		defaultMaterial->SetColor(Vector4(0.3f, 0.3f, 0.3f, 1.0f));
 
 		auto texturedMaterial = CreateMaterial("Textured_material");
 		texturedMaterial->SetShader(GetShader("Textured_shader"));
@@ -198,6 +208,35 @@ namespace Engine
 			return nullptr;
 		}
 
+		return it->second;
+	}
+
+	std::shared_ptr<EnvironmentMap> ResourceManager::LoadEnvironmentMap(const std::string& name, const std::string& filePath)
+	{
+		if (m_environmentMaps.find(name) != m_environmentMaps.end())
+		{
+			LOG_WARNING("Environment map already exists: %s", name.c_str());
+			return m_environmentMaps[name];
+		}
+		auto envMap = std::make_shared<EnvironmentMap>();
+		if (FAILED(envMap->CreateFromHDRFile(filePath)))
+		{
+			LOG_ERROR("Failed to load environment map: %s", filePath.c_str());
+			return nullptr;
+		}
+		m_environmentMaps[name] = envMap;
+		LOG_INFO("Environment map loaded: %s", filePath.c_str());
+		return envMap;
+	}
+
+	std::shared_ptr<EnvironmentMap> ResourceManager::GetEnvironmentMap(const std::string& name)
+	{
+		auto it = m_environmentMaps.find(name);
+		if (it == m_environmentMaps.end())
+		{
+			LOG_ERROR("Environment map not found: %s", name.c_str());
+			return nullptr;
+		}
 		return it->second;
 	}
 }

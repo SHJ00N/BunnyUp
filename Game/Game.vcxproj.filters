@@ -66,4 +66,23 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\textures\sky.hdr">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\textures\T_Sky0005_DaySun.PNG">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\textures\FS003_Day_Sunless.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\textures\FS017_Day_Sunless.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="resources\textures\FS002_Day_Sunless.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

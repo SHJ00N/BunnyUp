@@ -53,8 +53,7 @@ namespace Engine
 		Matrix4x4 rotX = Rotation(AngleAxis(m_rotation.x, Vector3(1, 0, 0)));
 		Matrix4x4 rotY = Rotation(AngleAxis(m_rotation.y, Vector3(0, 1, 0)));
 		Matrix4x4 rotZ = Rotation(AngleAxis(m_rotation.z, Vector3(0, 0, 1)));
-		Matrix4x4 rotation = rotY * rotX * rotZ;	// Note: Yaw-Pitch-Roll order (Y * X * Z)
-
+		Matrix4x4 rotation = rotZ * rotX * rotY;
 		// scaling
 		Matrix4x4 scaling = Scaling(m_scale);
 

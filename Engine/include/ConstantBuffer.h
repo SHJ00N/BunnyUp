@@ -12,7 +12,8 @@ namespace Engine
 		PerObject = 1,
 		SkinPerObject = 2,
 		PerMaterial = 3,
-		PerLight = 4
+		PerLight = 4,
+		PrefilteredEnvMap = 5,
 	};
 
 	struct ConstantBufferPerCamera
@@ -20,6 +21,8 @@ namespace Engine
 		Vector4 position;
 		Matrix4x4 view;
 		Matrix4x4 projection;
+		Matrix4x4 invView;
+		Matrix4x4 invProjection;
 	};
 
 	struct ConstantBufferPerObject
@@ -35,7 +38,10 @@ namespace Engine
 
 	struct ConstantBufferPerMaterial
 	{
-		Vector4 color;
+		Vector4 color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		float roughness = 1.0f;
+		float metallic = 0.0f;
+		Vector2 padding;
 	};
 
 	// Light
@@ -51,7 +57,16 @@ namespace Engine
 	struct ConstantBufferPerLight
 	{
 		LightBuffer lights[MaxLights];
-		uint32_t lightCount;
+		uint32_t lightCount = 0;
 		uint32_t padding[3];
+	};
+
+	// IBL prefiltered environment map
+	struct ConstantBufferPrefilteredEnvMap
+	{
+		float roughness;
+		float resolution;
+		unsigned int maxMip;
+		float padding; // Padding to align to 16 bytes
 	};
 }

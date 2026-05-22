@@ -5,6 +5,8 @@ cbuffer ViewProjectionConstantBuffer : register(b0)
     float4 CameraPosition;
     matrix View; // view matrix
     matrix Projection; // projection matrix
+    matrix InvView;
+    matrix InvProjection; // inverse projection matrix
 };
 
 cbuffer ModelConstantBuffer : register(b1)
@@ -16,6 +18,9 @@ cbuffer ModelConstantBuffer : register(b1)
 cbuffer MaterialConstantBuffer : register(b3)
 {
     float4 mColor;
+    float Roughness;
+    float Metallic;
+    float Padding[2];
 }
 
 struct VS_INPUT
@@ -78,7 +83,7 @@ PS_OUTPUT PSMain(PS_INPUT input) : SV_TARGET
     
     // placeholder, can be replaced with actual metallic, roughness, ao values from texture maps
     // if alpha is 0.0f, it means don't apply any lighting, just use the albedo color as the final color (useful for unlit objects)
-    Output.MetallicRoughnessAO = float4(0.0f, 1.0f, 1.0f, 0.0f); 
+    Output.MetallicRoughnessAO = float4(Metallic, Roughness, 1.0f, 1.0f);
     
     return Output;
 }
