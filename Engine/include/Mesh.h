@@ -9,6 +9,7 @@
 
 #include "Material.h"
 #include "D3DManager.h"
+#include "BoundingVolume.h"
 
 namespace Engine
 {
@@ -25,6 +26,7 @@ namespace Engine
 	class Mesh
 	{
 	public:
+
 		std::vector<SubMesh> subMeshes;
 		
 		Mesh();
@@ -33,6 +35,15 @@ namespace Engine
 		template<typename VertexType>
 		bool CreateMesh(const std::vector<VertexType>& vertices, const std::vector<uint32_t>& indices)
 		{
+			// copy to cpu vertex data
+			for (const auto& v : vertices)
+			{
+				m_positions.push_back(v.position);
+			}
+			m_indices = indices;
+			// create bounding volume from vertex position data
+			m_bound = std::make_unique<AABB>(m_positions);
+
 			m_stride = sizeof(VertexType);
 			m_indexCount = static_cast<UINT>(indices.size());
 
@@ -51,7 +62,7 @@ namespace Engine
 			}
 
 			// Create index buffer
-			CD3D11_BUFFER_DESC iDesc(static_cast < UINT>(sizeof(uint32_t)* indices.size()), D3D11_BIND_INDEX_BUFFER);
+			CD3D11_BUFFER_DESC iDesc(static_cast <UINT>(sizeof(uint32_t)* indices.size()), D3D11_BIND_INDEX_BUFFER);
 			
 			D3D11_SUBRESOURCE_DATA iData;
 			ZeroMemory(&iData, sizeof(D3D11_SUBRESOURCE_DATA));
@@ -69,15 +80,22 @@ namespace Engine
 
 		void SetSkinned(bool isSkinned) { m_isSkinned = isSkinned; }
 		bool GetSkinned() const { return m_isSkinned; }
+		AABB* GetBound() const { return m_bound.get(); }
 
 		void Render();
 		void Render(const std::vector<std::shared_ptr<Material>>& materials, ConstantBufferManager& cbManager) const;
 	private:
+		// cpu vertex data
+		std::vector<Vector3> m_positions;
+		std::vector<uint32_t> m_indices;
 		// gpu vertex data
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pVertexBuffer;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pIndexBuffer;
 		// Is skinned 
 		bool m_isSkinned = false;
+
+		// bounding volume for frustum culling
+		std::unique_ptr<AABB> m_bound;
 
 		UINT m_stride;
 		UINT m_indexCount;

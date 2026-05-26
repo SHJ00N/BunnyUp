@@ -5,9 +5,11 @@
 #include "Camera.h"
 #include "EditorCameraController.h"
 #include "Light.h"
+#include "Frustum.h"
 
 namespace Engine
 {
+	static int renderCount = 0;
 	Scene::Scene()
 	{
 		m_root = std::make_unique<GameObject>("Root");
@@ -84,6 +86,7 @@ namespace Engine
 
 	void Scene::Render(ConstantBufferManager& cbManager)
 	{
+		renderCount = 0;
 		if (!m_mainCamera)
 		{
 			LOG_WARNING("Main camera does not exist");
@@ -91,23 +94,36 @@ namespace Engine
 		}
 
 		m_mainCamera->UpdateConstantBuffer(cbManager);
+		auto camFrustum = createFrustumFromCamera(*m_mainCamera);
+
 		UpdateLightBuffer(cbManager);
-		traverseRender(m_root.get(), cbManager);
+
+		for (auto& child : m_root->GetChildren())
+		{
+			traverseRender(child.get(), cbManager, camFrustum);
+		}
+		// LOG_INFO("%d", renderCount);
 	}
 
-	void Scene::traverseRender(GameObject* node, ConstantBufferManager& cbManager)
+	void Scene::traverseRender(GameObject* node, ConstantBufferManager& cbManager, Frustum& camFrustum)
 	{
 		for (auto& component : node->GetComponents())
 		{
 			auto renderable = dynamic_cast<RendererComponent*>(component.get());
 			if (renderable)
 			{
-				renderable->Render(cbManager);
+				const AABB* bound = renderable->GetBound();
+
+				if (!bound || bound->IsOnFrustum(camFrustum, renderable->ownerGameObject->transform))
+				{
+					renderCount++;
+					renderable->Render(cbManager);
+				}
 			}
 		}
 		for (auto& child : node->GetChildren())
 		{
-			traverseRender(child.get(), cbManager);
+			traverseRender(child.get(), cbManager, camFrustum);
 		}
 	}
 

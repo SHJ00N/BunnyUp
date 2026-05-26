@@ -28,6 +28,12 @@ namespace Engine
 		return Normalize(Vector3(worldMatrix.m00, worldMatrix.m01, worldMatrix.m02));
 	}
 
+	const Vector3 Transform::GetUp() const
+	{
+		auto& worldMatrix = GetWorldMatrix();
+		return Normalize(Vector3(worldMatrix.m10, worldMatrix.m11, worldMatrix.m12));
+	}
+
 	const Vector3 Transform::GetWorldPosition() const
 	{
 		auto& worldMatrix = GetWorldMatrix();

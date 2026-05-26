@@ -30,8 +30,6 @@ namespace Scenes
 		bunny->transform.SetLocalRotation(Vector3(0.0f, 180.0f, 0.0f));
 		bunny->AddComponent<SkinnedRenderer>()->SetModel(ResourceManager::GetInstance().GetModel("Chibi_Rabbit"));
 
-		auto model = ResourceManager::GetInstance().GetModel("Chibi_Rabbit");
-
 		auto animator = bunny->AddComponent<Animator>();
 		animator->Awake();
 

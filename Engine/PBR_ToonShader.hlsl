@@ -62,6 +62,7 @@ TextureCube irradianceMap : register(t5);
 TextureCube prefilteredMap : register(t6);
 Texture2D brdfLUT : register(t7);
 SamplerState linearClamp : register(s0);
+SamplerState pointClamp : register(s1);
 
 static const float PI = 3.14159265359;
 // ----------------------------------------------------------------------------
@@ -168,7 +169,7 @@ void calculatePointLight(float3 lightPosition, float3 lightColor, float3 WorldPo
 
 float4 PSMain(PS_INPUT input) : SV_TARGET
 {
-    float depth = depthMap.Sample(linearClamp, input.UV).r;
+    float depth = depthMap.Sample(pointClamp, input.UV).r;
     if(depth >= 1.0f) // if depth is 1.0, it means this pixel is background, discard it for better performance
         discard;
     

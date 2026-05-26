@@ -151,6 +151,10 @@ namespace Engine
                 };
                 cmd.SetShaderResource(0, srvs, 8);
 				SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp)->Bind(0);
+                SamplerStateManager::GetInstance().GetSampler(SamplerType::PointClamp)->Bind(1);
+
+                // set render state
+                cmd.DisableDepthCull();
 
 				// bind shader and draw fullscreen quad
                 lightingShader->Bind();
@@ -206,6 +210,10 @@ namespace Engine
                 ID3D11ShaderResourceView* srvs[3] = { environmentMapRes->GetShaderResourceView(), lightingPassOutputRes->GetShaderResourceView(), depthRes->GetShaderResourceView() };
                 cmd.SetShaderResource(0, srvs, 3);
                 SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp)->Bind(0);
+                SamplerStateManager::GetInstance().GetSampler(SamplerType::PointClamp)->Bind(1);
+
+                // set render state
+                cmd.DisableDepthCull();
 
 				// bind shader and draw skybox
                 skyboxShader->Bind();
@@ -254,6 +262,10 @@ namespace Engine
                 ID3D11ShaderResourceView* srvs[3] = { skyboxPassOutputRes->GetShaderResourceView(), normalRes->GetShaderResourceView(), depthRes->GetShaderResourceView() };
                 cmd.SetShaderResource(0, srvs, 3);
                 SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp)->Bind(0);
+                SamplerStateManager::GetInstance().GetSampler(SamplerType::PointClamp)->Bind(1);
+                
+                // set render state
+                cmd.DisableDepthCull();
 
 				// bind shader and draw fullscreen quad
                 postProcessShader->Bind();

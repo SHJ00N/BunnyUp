@@ -83,6 +83,6 @@ namespace Engine
 		void traverseStart(GameObject* node);
 		void traverseUpdate(GameObject* node, float dt);
 		void traverseFixedUpdate(GameObject* node, float fdt);
-		void traverseRender(GameObject* node, ConstantBufferManager& renderer);
+		void traverseRender(GameObject* node, ConstantBufferManager& renderer, struct Frustum& camFrustum);
 	};
 }

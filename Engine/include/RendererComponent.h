@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "ConstantBuffer.h"
 #include "Material.h"
+#include "BoundingVolume.h"
 
 #include <d3d11.h>
 #include <wrl/client.h>
@@ -43,6 +44,7 @@ namespace Engine
 
 			return m_materials[index];
 		}
+		const AABB* GetBound() const { return m_bound.get(); }
 
 		void Render(ConstantBufferManager& cbManager)
 		{
@@ -53,8 +55,11 @@ namespace Engine
 	protected:
 		std::vector<std::shared_ptr<Material>>  m_materials;
 		ConstantBufferPerObject m_cbPerObject;
+		std::unique_ptr<AABB> m_bound;
 
 		virtual void UpdateConstantBuffer(ConstantBufferManager& cbManager) { }
-		virtual void OnRender(ConstantBufferManager& cbManager) {};
+		virtual void OnRender(ConstantBufferManager& cbManager) { }
+
+		virtual void generateBound() { }
 	};
 }

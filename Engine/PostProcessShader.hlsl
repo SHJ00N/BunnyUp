@@ -25,6 +25,7 @@ Texture2D fullScreenQuad : register(t0);
 Texture2D normalMap : register(t1);
 Texture2D depthMap : register(t2);
 SamplerState linearClamp : register(s0);
+SamplerState pointClamp : register(s1);
 
 // Calculate outline color with Sobel operator
 float CalculateSobelFilter(float2 uv, float2 texelSize)
@@ -36,7 +37,7 @@ float CalculateSobelFilter(float2 uv, float2 texelSize)
     {
         for (int j = -1; j <= 1; j++)
         {
-            depth[i + 1][j + 1] = depthMap.Sample(linearClamp, uv + float2(j, i) * texelSize).r;
+            depth[i + 1][j + 1] = depthMap.Sample(pointClamp, uv + float2(j, i) * texelSize).r;
             normal[i + 1][j + 1] = normalMap.Sample(linearClamp, uv + float2(j, i) * texelSize).xyz;
         }
     }

@@ -8,7 +8,8 @@ namespace Engine
 	enum class SamplerType
 	{
 		LinearClamp,
-		LinearWrap
+		LinearWrap,
+		PointClamp
 	};
 
 	class Sampler

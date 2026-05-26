@@ -36,6 +36,15 @@ namespace Engine
 		m_context->RSSetViewports(1, &viewport);
 	}
 
+	void RenderCommandList::DisableDepthCull()
+	{
+		auto& state = RenderStateManager::GetInstance().GetState("DisableDepthCull");
+		float blendFactor[4] = { 0,0,0,0 };
+		m_context->OMSetBlendState(state.blend.Get(), blendFactor, 0xffffffff);
+		m_context->OMSetDepthStencilState(state.depth.Get(), 0);
+		m_context->RSSetState(state.raster.Get());
+	}
+
 	void RenderCommandList::DrawFullScreenQuad()
 	{
 		// no vertex buffer

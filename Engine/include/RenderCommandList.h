@@ -18,6 +18,8 @@ namespace Engine
 		void SetShaderResource(UINT slot, ID3D11ShaderResourceView* const* srv, UINT numViews = 1);
 		void SetViewport(const float width, const float height, const float minDepth = 0.0f, const float maxDepth = 1.0f);
 
+		// set render state
+		void DisableDepthCull();
 		// draw fullscreen Triangle
 		void DrawFullScreenQuad();
 	private:

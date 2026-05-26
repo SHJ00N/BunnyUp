@@ -34,9 +34,10 @@ TextureCube environmentMap : register(t0);
 Texture2D lightingMap : register(t1);
 Texture2D depthMap : register(t2);
 SamplerState linearClamp : register(s0);
+SamplerState pointClamp : register(s1);
 float4 PSMain(PS_INPUT input) : SV_TARGET
 {
-    float depth = depthMap.Sample(linearClamp, input.UV).r;
+    float depth = depthMap.Sample(pointClamp, input.UV).r;
     float3 color = lightingMap.Sample(linearClamp, input.UV).rgb;
     if(depth < 0.9999f)
     {

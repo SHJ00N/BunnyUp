@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\BoundingVolume.h" />
     <ClInclude Include="include\EnvironmentMap.h" />
     <ClInclude Include="include\Animation.h" />
     <ClInclude Include="include\Animator.h" />
@@ -26,6 +27,7 @@
     <ClInclude Include="include\Assimp_DX_helpers.h" />
     <ClInclude Include="include\Bone.h" />
     <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\Frustum.h" />
     <ClInclude Include="include\Light.h" />
     <ClInclude Include="include\RenderCommandList.h" />
     <ClInclude Include="include\Component.h" />
@@ -67,7 +69,6 @@
     <ClInclude Include="include\Transform.h" />
     <ClInclude Include="include\VertexType.h" />
     <ClInclude Include="include\WindowClass.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\external\ImGui\imgui.cpp" />

@@ -19,6 +19,8 @@ namespace Scenes
 
 	void DemoScene2::SceneEnter()
 	{
+        SetEnvironmentMap(ResourceManager::GetInstance().GetEnvironmentMap("Sky_EnvMap"));
+
 		auto bunny = CreateGameObject<GameObject>("Bunny");
 		bunny->transform.SetLocalScale(Vector3(0.085f, 0.085f, 0.085f));
 		bunny->transform.SetLocalRotation(Vector3(0.0f, 180.0f, 0.0f));

@@ -16,6 +16,7 @@ namespace Engine
 	protected:
 		void UpdateConstantBuffer(ConstantBufferManager& renderer) override;
 		void OnRender(ConstantBufferManager& renderer) override;
+		void generateBound() override;
 
 	private:
 		std::vector<std::shared_ptr<Mesh>> m_meshes;

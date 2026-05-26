@@ -33,6 +33,15 @@ namespace Engine
 		}
 		m_samplers[SamplerType::LinearClamp] = linearClampSampler;
 
+		// Create Point Clamp Sampler
+		std::shared_ptr<Sampler> PointClampSampler = std::make_shared<Sampler>();
+		hr = PointClampSampler->CreateSampler(SamplerType::PointClamp);
+		if (FAILED(hr))
+		{
+			return hr;
+		}
+		m_samplers[SamplerType::PointClamp] = PointClampSampler;
+
 		return hr;
 	}
 
