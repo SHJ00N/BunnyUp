@@ -38,6 +38,8 @@ namespace Engine
 		ID3D11RenderTargetView* GetRenderTarget() { return m_pRenderTarget.Get(); }
 		ID3D11DepthStencilView* GetDepthStencil() { return m_pDepthStencilView.Get(); }
 
+		void SetDepthStencil(Microsoft::WRL::ComPtr<ID3D11Texture2D> buffer, Microsoft::WRL::ComPtr<ID3D11DepthStencilView> dsv, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> srv);
+
 		// get meta data
 		const D3D11_TEXTURE2D_DESC& GetBackBufferDesc() const { return m_backBufferDesc; }
 
@@ -54,6 +56,7 @@ namespace Engine
 		// DXGI swap chain device resources for depth stencil buffer
 		Microsoft::WRL::ComPtr<ID3D11Texture2D> m_pDepthStencilBuffer;
 		Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  m_pDepthStencilView;
+		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  m_pDepthStencilResourceView;
 
 		// meta data
 		D3D_FEATURE_LEVEL m_featureLevel;

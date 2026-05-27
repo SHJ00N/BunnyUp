@@ -7,6 +7,13 @@
 namespace Engine
 {
 	struct ResourceDesc;
+
+	struct RenderTargetReousrceExportData
+	{
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> texture;
+		std::vector<Microsoft::WRL::ComPtr<ID3D11DepthStencilView>> dsvs;
+		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> srv;
+	};
 	class RenderTargetResource
 	{
 	public:
@@ -20,6 +27,7 @@ namespace Engine
 		ID3D11DepthStencilView* GetDepthStencilView() const { return m_pDepthStencilViews[0].Get(); }
 		ID3D11ShaderResourceView* GetShaderResourceView() const { return m_pShaderResourceView.Get(); }
 
+		RenderTargetReousrceExportData ExportResource() const;
 	private:
 		Microsoft::WRL::ComPtr<ID3D11Texture2D> m_pTexture;
 		std::vector<Microsoft::WRL::ComPtr<ID3D11RenderTargetView>> m_pRenderTargetViews;

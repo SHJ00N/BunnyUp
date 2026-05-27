@@ -76,6 +76,13 @@ namespace Engine
 		// Initialize RenderPipline instance
 		m_pRenderPipeline = std::make_unique<RenderPipeline>();
 		m_pRenderPipeline->Initialize(&ConstantBufferManager::GetInstance());
+		// Initialize DebugRenderer instance
+		m_pDebugRenderer = std::make_unique<DebugRenderer>();
+		hr = m_pDebugRenderer->Initialize(&D3DManager::GetInstance(), &ConstantBufferManager::GetInstance());
+		if (FAILED(hr))
+		{
+			return hr;
+		}
 
 		// Initialize resource manager and load default resources
 		ResourceManager::CreateInstance();
@@ -175,6 +182,7 @@ namespace Engine
 		// Render the UI
 		if (InputManager::GetInstance().IsEditorMode())
 		{
+			m_pDebugRenderer->Render(SceneManager::GetInstance().GetCurrentScene());
 			m_pImGuiClass->RenderUI();
 			m_pImGuiClass->EndFrame();
 		}

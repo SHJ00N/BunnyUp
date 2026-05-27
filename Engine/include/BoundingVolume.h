@@ -110,12 +110,12 @@ namespace Engine
 
 			const AABB globalAABB(globalCenter, newIi, newIj, newIk);
 
-			float d1 = globalAABB.IsOnOrForwardPlane(camFrustum.leftFace);
-			float d2 = globalAABB.IsOnOrForwardPlane(camFrustum.rightFace);
-			float d3 = globalAABB.IsOnOrForwardPlane(camFrustum.topFace);
-			float d4 = globalAABB.IsOnOrForwardPlane(camFrustum.bottomFace);
-			float d5 = globalAABB.IsOnOrForwardPlane(camFrustum.nearFace);
-			float d6 = globalAABB.IsOnOrForwardPlane(camFrustum.farFace);
+			//float d1 = globalAABB.IsOnOrForwardPlane(camFrustum.leftFace);
+			//float d2 = globalAABB.IsOnOrForwardPlane(camFrustum.rightFace);
+			//float d3 = globalAABB.IsOnOrForwardPlane(camFrustum.topFace);
+			//float d4 = globalAABB.IsOnOrForwardPlane(camFrustum.bottomFace);
+			//float d5 = globalAABB.IsOnOrForwardPlane(camFrustum.nearFace);
+			//float d6 = globalAABB.IsOnOrForwardPlane(camFrustum.farFace);
 			//LOG_INFO("name : %s\nleft : %f, right : %f, top : %f, bottom : %f, near : %f, far : %f\n", transform.owner->GetName().c_str(), d1, d2, d3, d4, d5, d6);
 			//LOG_INFO("extens : %f, %f, %f", globalAABB.extents.x, globalAABB.extents.y, globalAABB.extents.z);
 

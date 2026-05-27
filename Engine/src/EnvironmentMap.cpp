@@ -245,12 +245,6 @@ namespace Engine
 			return hr;
 		}
 
-		auto& state = RenderStateManager::GetInstance().GetState("DisableDepthCull");
-		float blendFactor[4] = { 0,0,0,0 };
-		context->OMSetBlendState(state.blend.Get(), blendFactor, 0xffffffff);
-		context->OMSetDepthStencilState(state.depth.Get(), 0);
-		context->RSSetState(state.raster.Get());
-
 		// Bind Shader
 		ResourceManager::GetInstance().GetShader("Brdf_shader")->Bind();
 

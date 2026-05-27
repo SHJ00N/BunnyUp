@@ -19,7 +19,9 @@ namespace Engine
 		void SetViewport(const float width, const float height, const float minDepth = 0.0f, const float maxDepth = 1.0f);
 
 		// set render state
-		void DisableDepthCull();
+		void SetBlendState(ID3D11BlendState* state);
+		void SetDepthState(ID3D11DepthStencilState* state);
+		void SetRasterState(ID3D11RasterizerState* state);
 		// draw fullscreen Triangle
 		void DrawFullScreenQuad();
 	private:

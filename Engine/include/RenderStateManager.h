@@ -9,6 +9,24 @@
 
 namespace Engine
 {
+	enum class BlendType
+	{
+		Disable,
+		Alpha
+	};
+	enum class DepthType
+	{
+		Disable,
+		ReadWrite,
+		Read
+	};
+	enum class RasterType
+	{
+		None,
+		Front,
+		Back
+	};
+
 	struct RenderState
 	{
 		Microsoft::WRL::ComPtr<ID3D11BlendState> blend;
@@ -25,7 +43,13 @@ namespace Engine
 		// create render state presets
 		HRESULT Initialize();
 		const RenderState& GetState(const std::string& name);
+		ID3D11BlendState* GetBlendState(BlendType type);
+		ID3D11DepthStencilState* GetDepthState(DepthType type);
+		ID3D11RasterizerState* GetRasterState(RasterType type);
 	private:
-		std::unordered_map<std::string, RenderState> m_states;
+		std::unordered_map<std::string, RenderState> m_states;		// preset
+		std::unordered_map<BlendType, Microsoft::WRL::ComPtr<ID3D11BlendState>> m_blendStates;
+		std::unordered_map<DepthType, Microsoft::WRL::ComPtr<ID3D11DepthStencilState>> m_depthStates;
+		std::unordered_map<RasterType, Microsoft::WRL::ComPtr<ID3D11RasterizerState>> m_rasterStates;
 	};
 }

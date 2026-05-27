@@ -9,7 +9,6 @@
 
 namespace Engine
 {
-	static int renderCount = 0;
 	Scene::Scene()
 	{
 		m_root = std::make_unique<GameObject>("Root");
@@ -86,7 +85,6 @@ namespace Engine
 
 	void Scene::Render(ConstantBufferManager& cbManager)
 	{
-		renderCount = 0;
 		if (!m_mainCamera)
 		{
 			LOG_WARNING("Main camera does not exist");
@@ -102,7 +100,6 @@ namespace Engine
 		{
 			traverseRender(child.get(), cbManager, camFrustum);
 		}
-		// LOG_INFO("%d", renderCount);
 	}
 
 	void Scene::traverseRender(GameObject* node, ConstantBufferManager& cbManager, Frustum& camFrustum)
@@ -116,7 +113,6 @@ namespace Engine
 
 				if (!bound || bound->IsOnFrustum(camFrustum, renderable->ownerGameObject->transform))
 				{
-					renderCount++;
 					renderable->Render(cbManager);
 				}
 			}

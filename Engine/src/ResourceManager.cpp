@@ -33,6 +33,8 @@ namespace Engine
 		LoadShader<VertexPNUT>("PrefilteredEnvMap_shader", "C:\\Project\\BunnyUp\\Engine\\PrefilteredEnvMapShader.hlsl");
 		LoadShader<VertexPU>("Brdf_shader", "C:\\Project\\BunnyUp\\Engine\\BrdfShader.hlsl");
 
+		// Debug shader
+		LoadShader<VertexPC>("Debug_Bound_shader", "C:\\Project\\BunnyUp\\Engine\\DebugBoundShader.hlsl");
 
 		// Create primitive meshes
 		auto quadData = PrimitiveMeshFactory::CreateQuad();

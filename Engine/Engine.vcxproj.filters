@@ -43,6 +43,9 @@
     <Filter Include="헤더 파일\Bounds">
       <UniqueIdentifier>{f12f6c4d-0667-4872-97a9-dfd2850b82fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Components\Camera">
+      <UniqueIdentifier>{cffd78d9-bc65-4b17-aba5-b0ecfb732af4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\System.h">
@@ -195,6 +198,9 @@
     <ClInclude Include="include\Frustum.h">
       <Filter>헤더 파일\Bounds</Filter>
     </ClInclude>
+    <ClInclude Include="include\DebugRenderer.h">
+      <Filter>헤더 파일\RenderPipeline</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\D3DManager.cpp">
@@ -293,13 +299,7 @@
     <ClCompile Include="src\SkinnedRenderer.cpp">
       <Filter>소스 파일\Components</Filter>
     </ClCompile>
-    <ClCompile Include="src\Camera.cpp">
-      <Filter>소스 파일\Components</Filter>
-    </ClCompile>
     <ClCompile Include="src\Component.cpp">
-      <Filter>소스 파일\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EditorCameraController.cpp">
       <Filter>소스 파일\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\PrimitiveMeshFactory.cpp">
@@ -331,6 +331,15 @@
     </ClCompile>
     <ClCompile Include="src\stb_image.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DebugRenderer.cpp">
+      <Filter>소스 파일\RenderPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>소스 파일\Components\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EditorCameraController.cpp">
+      <Filter>소스 파일\Components\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -364,5 +373,6 @@
     <FxCompile Include="BrdfShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
+    <FxCompile Include="DebugBoundShader.hlsl" />
   </ItemGroup>
 </Project>

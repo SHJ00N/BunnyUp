@@ -36,17 +36,29 @@ namespace Engine
 		m_context->RSSetViewports(1, &viewport);
 	}
 
-	void RenderCommandList::DisableDepthCull()
+	void RenderCommandList::SetBlendState(ID3D11BlendState* state)
 	{
-		auto& state = RenderStateManager::GetInstance().GetState("DisableDepthCull");
 		float blendFactor[4] = { 0,0,0,0 };
-		m_context->OMSetBlendState(state.blend.Get(), blendFactor, 0xffffffff);
-		m_context->OMSetDepthStencilState(state.depth.Get(), 0);
-		m_context->RSSetState(state.raster.Get());
+		m_context->OMSetBlendState(state, blendFactor, 0xffffffff);
+	}
+
+	void RenderCommandList::SetDepthState(ID3D11DepthStencilState* state)
+	{
+		m_context->OMSetDepthStencilState(state, 0);
+	}
+
+	void RenderCommandList::SetRasterState(ID3D11RasterizerState* state)
+	{
+		m_context->RSSetState(state);
 	}
 
 	void RenderCommandList::DrawFullScreenQuad()
 	{
+		// disable depth cull
+		auto& state = RenderStateManager::GetInstance().GetState("DisableDepthCull");
+		SetBlendState(state.blend.Get());
+		SetDepthState(state.depth.Get());
+		SetRasterState(state.raster.Get());
 		// no vertex buffer
 		const auto& fullScreenQuad = ResourceManager::GetInstance().GetMesh("Primitive_fullscreen_quad");
 		fullScreenQuad->Render();

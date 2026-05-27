@@ -17,6 +17,13 @@ namespace Engine
 		return static_cast<float>(m_backBufferDesc.Width) / static_cast<float>(m_backBufferDesc.Height);
 	}
 
+	void D3DManager::SetDepthStencil(Microsoft::WRL::ComPtr<ID3D11Texture2D> buffer, Microsoft::WRL::ComPtr<ID3D11DepthStencilView> dsv, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> srv)
+	{
+		m_pDepthStencilBuffer = buffer;
+		m_pDepthStencilView = dsv;
+		m_pDepthStencilResourceView = srv;
+	}
+
 
 	HRESULT D3DManager::CreateDeviceResources()
 	{

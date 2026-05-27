@@ -92,6 +92,10 @@ namespace Engine
 				// Unbind resources after rendering to avoid hazard in next pass
                 ID3D11RenderTargetView* nullRTVs[4] = { nullptr, nullptr, nullptr, nullptr };
                 cmd.SetRenderTargets(nullRTVs, nullptr, 4);
+
+                // copy depth stencil buffer to backbuffer depth stencil buffer
+                auto data = depthRes->ExportResource();
+                D3DManager::GetInstance().SetDepthStencil(data.texture, data.dsvs[0], data.srv);
             }
         );
         
@@ -153,9 +157,6 @@ namespace Engine
 				SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp)->Bind(0);
                 SamplerStateManager::GetInstance().GetSampler(SamplerType::PointClamp)->Bind(1);
 
-                // set render state
-                cmd.DisableDepthCull();
-
 				// bind shader and draw fullscreen quad
                 lightingShader->Bind();
 				cmd.DrawFullScreenQuad();
@@ -212,9 +213,6 @@ namespace Engine
                 SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp)->Bind(0);
                 SamplerStateManager::GetInstance().GetSampler(SamplerType::PointClamp)->Bind(1);
 
-                // set render state
-                cmd.DisableDepthCull();
-
 				// bind shader and draw skybox
                 skyboxShader->Bind();
                 cmd.DrawFullScreenQuad();
@@ -263,9 +261,6 @@ namespace Engine
                 cmd.SetShaderResource(0, srvs, 3);
                 SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp)->Bind(0);
                 SamplerStateManager::GetInstance().GetSampler(SamplerType::PointClamp)->Bind(1);
-                
-                // set render state
-                cmd.DisableDepthCull();
 
 				// bind shader and draw fullscreen quad
                 postProcessShader->Bind();
@@ -277,5 +272,10 @@ namespace Engine
             },
             postProcessShader
         );
+
+        // copy gDepth pass
+        RenderPassParameter depthCopyPassParams;
+        depthCopyPassParams.reads.push_back(depthBuffer);
+        depthCopyPassParams.writes.push_back(backBuffer);
 	}
 }

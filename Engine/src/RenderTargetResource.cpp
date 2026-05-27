@@ -21,6 +21,16 @@ namespace Engine
 		return (index < m_pRenderTargetViews.size()) ? m_pRenderTargetViews[index].Get() : nullptr;
 	}
 
+	RenderTargetReousrceExportData RenderTargetResource::ExportResource() const
+	{
+		RenderTargetReousrceExportData data;
+		data.texture = m_pTexture;
+		data.dsvs = m_pDepthStencilViews;
+		data.srv = m_pShaderResourceView;
+
+		return data;
+	}
+
 	HRESULT RenderTargetResource::CreateResource(const ResourceDesc& desc, ID3D11Device* device)
 	{
 		// Check d3d device

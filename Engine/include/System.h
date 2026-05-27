@@ -6,6 +6,7 @@
 #include "WindowClass.h"
 #include "ImGuiClass.h"
 #include "RenderPipeline.h"
+#include "DebugRenderer.h"
 
 namespace Engine
 {
@@ -23,7 +24,8 @@ namespace Engine
 	private:
 		std::unique_ptr<WindowClass> m_pWindowClass;
 		std::unique_ptr<ImGuiClass> m_pImGuiClass;
-		std::unique_ptr <RenderPipeline> m_pRenderPipeline;
+		std::unique_ptr<RenderPipeline> m_pRenderPipeline;
+		std::unique_ptr<DebugRenderer> m_pDebugRenderer;
 
 		void render();
 	};
