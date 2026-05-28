@@ -13,23 +13,40 @@ namespace Engine
 
 		Plane() = default;
 		Plane(const Vector3& p, const Vector3 norm) : normal(Normalize(norm)), distance(Dot(normal, p)) { }
-		Plane(float a, float b, float c, float d)
-		{
-			Vector3 norm = { a, b, c };
-			float len = Length(norm);
-
-			norm /= len;
-			d /= len;
-			
-			normal = norm;
-			distance = d;
-		}
-
 		float GetSignedDistanceToPlane(const Vector3& point) const
 		{
 			return Dot(normal, point) - distance;
 		}
+		Plane(float a, float b, float c, float d)
+		{
+			Vector3 n(a, b, c);
+
+			float len = Length(n);
+
+			n /= len;
+			d /= len;
+
+			normal = n;
+			distance = -d;
+		}
 	};
+
+	inline Vector3 IntersectPlanes(const Plane& p1, const Plane& p2, const Plane& p3)
+	{
+		const Vector3& n1 = p1.normal;
+		const Vector3& n2 = p2.normal;
+		const Vector3& n3 = p3.normal;
+
+		Vector3 cross23 = Cross(n2, n3);
+		Vector3 cross31 = Cross(n3, n1);
+		Vector3 cross12 = Cross(n1, n2);
+
+		float denom = Dot(n1, cross23);
+
+		assert(fabs(denom) > 0.0001f);
+
+		return (cross23 * p1.distance + cross31 * p2.distance + cross12 * p3.distance) / denom;
+	}
 
 	struct Frustum
 	{
@@ -41,6 +58,26 @@ namespace Engine
 
 		Plane farFace;
 		Plane nearFace;
+
+		std::array<Vector3, 8> GetCorners() const
+		{
+			return
+			{
+				// Near
+				IntersectPlanes(nearFace, leftFace,  topFace),
+				IntersectPlanes(nearFace, topFace,   rightFace),
+				IntersectPlanes(nearFace, bottomFace,leftFace),
+				IntersectPlanes(nearFace, rightFace, bottomFace),
+
+				// Far
+				IntersectPlanes(farFace,  topFace,   leftFace),
+				IntersectPlanes(farFace,  rightFace, topFace),
+				IntersectPlanes(farFace,  leftFace,  bottomFace),
+				IntersectPlanes(farFace,  bottomFace,rightFace)
+			};
+		}
+
+		Vector4 planes[6];
 	};
 
 	inline Frustum createFrustumFromCamera(const Camera& camera)
@@ -51,24 +88,12 @@ namespace Engine
 		// get frustum
 		Frustum frustum;
 
-		//frustum.leftFace       = Plane(vpMat.m30 + vpMat.m00, vpMat.m31 + vpMat.m01, vpMat.m32 + vpMat.m02, vpMat.m33 + vpMat.m03);
-		//frustum.rightFace     = Plane(vpMat.m30 - vpMat.m00, vpMat.m31 - vpMat.m01, vpMat.m32 - vpMat.m02, vpMat.m33 - vpMat.m03);
-		//frustum.topFace       = Plane(vpMat.m30 - vpMat.m10, vpMat.m31 - vpMat.m11, vpMat.m32 - vpMat.m12, vpMat.m33 - vpMat.m13);
-		//frustum.bottomFace = Plane(vpMat.m30 + vpMat.m10, vpMat.m31 + vpMat.m11, vpMat.m32 + vpMat.m12, vpMat.m33 + vpMat.m13);
-		//frustum.nearFace     = Plane(vpMat.m20, vpMat.m21, vpMat.m22, vpMat.m23);
-		//frustum.farFace        = Plane(vpMat.m30 - vpMat.m20, vpMat.m31 - vpMat.m21, vpMat.m32 - vpMat.m22, vpMat.m33 - vpMat.m23);
-
-		auto& transform = camera.ownerGameObject->transform;
-		Vector3 cameraPos = transform.GetWorldPosition();
-		Vector3 cameraFront = transform.GetForward();
-		// near/far plane
-		frustum.nearFace = { cameraPos + camera.nearPlane * cameraFront, cameraFront };
-		frustum.farFace = { cameraPos + camera.farPlane * cameraFront, cameraFront * -1.0f };
-		// left/right/top/bottom plane
-		frustum.leftFace = { cameraPos, Vector3(vpMat.m[0][3] + vpMat.m[0][0], vpMat.m[1][3] + vpMat.m[1][0], vpMat.m[2][3] + vpMat.m[2][0]) };
-		frustum.rightFace = { cameraPos, Vector3(vpMat.m[0][3] - vpMat.m[0][0], vpMat.m[1][3] - vpMat.m[1][0], vpMat.m[2][3] - vpMat.m[2][0]) };
-		frustum.topFace = { cameraPos, Vector3(vpMat.m[0][3] - vpMat.m[0][1], vpMat.m[1][3] - vpMat.m[1][1], vpMat.m[2][3] - vpMat.m[2][1]) };
-		frustum.bottomFace = { cameraPos, Vector3(vpMat.m[0][3] + vpMat.m[0][1], vpMat.m[1][3] + vpMat.m[1][1], vpMat.m[2][3] + vpMat.m[2][1]) };
+		frustum.nearFace = { vpMat.m[0][2], vpMat.m[1][2], vpMat.m[2][2], vpMat.m[3][2] };
+		frustum.farFace = { vpMat.m[0][3] - vpMat.m[0][2], vpMat.m[1][3] - vpMat.m[1][2], vpMat.m[2][3] - vpMat.m[2][2], vpMat.m[3][3] - vpMat.m[3][2] };
+		frustum.leftFace = { vpMat.m[0][3] + vpMat.m[0][0], vpMat.m[1][3] + vpMat.m[1][0], vpMat.m[2][3] + vpMat.m[2][0], vpMat.m[3][3] + vpMat.m[3][0] };
+		frustum.rightFace = { vpMat.m[0][3] - vpMat.m[0][0], vpMat.m[1][3] - vpMat.m[1][0], vpMat.m[2][3] - vpMat.m[2][0], vpMat.m[3][3] - vpMat.m[3][0] };
+		frustum.topFace = { vpMat.m[0][3] - vpMat.m[0][1], vpMat.m[1][3] - vpMat.m[1][1], vpMat.m[2][3] - vpMat.m[2][1], vpMat.m[3][3] - vpMat.m[3][1] };
+		frustum.bottomFace = { vpMat.m[0][3] + vpMat.m[0][1], vpMat.m[1][3] + vpMat.m[1][1], vpMat.m[2][3] + vpMat.m[2][1], vpMat.m[3][3] + vpMat.m[3][1] };
 
 		return frustum;
 	}

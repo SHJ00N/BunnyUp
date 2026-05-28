@@ -136,7 +136,7 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="BrdfShader.hlsl" />
-    <FxCompile Include="DebugBoundShader.hlsl" />
+    <FxCompile Include="DebugShader.hlsl" />
     <FxCompile Include="EnvironmentCubeShader.hlsl" />
     <FxCompile Include="IrradianceMapShader.hlsl" />
     <FxCompile Include="PBR_ToonShader.hlsl" />

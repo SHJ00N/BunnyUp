@@ -86,4 +86,7 @@ void CameraController::OnImGui()
 	ImGui::DragFloat("Move Speed", &moveSpeed, 0.1f, 1.0f, 50.0f);
 	ImGui::DragFloat("Sensitivity", &sensitivity, 0.01f, 0.01f, 0.1f);
     ImGui::DragFloat("Scroll Speed", &scrollSpeed, 0.01f, 0.1f, 0.01f);
+
+    auto camera = ownerGameObject->GetComponent<Engine::Camera>();
+    ImGui::Checkbox("Show Frustum", &camera->frustumVisible);
 }

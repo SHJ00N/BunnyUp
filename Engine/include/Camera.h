@@ -10,7 +10,8 @@ namespace Engine
 	public:
 		float fov = 60.0f;
 		float nearPlane = 0.1f;
-		float farPlane = 1000.0f;
+		float farPlane = 500.0f;
+		bool frustumVisible = true;
 
 		Matrix4x4 GetViewMatrix() const;
 		Matrix4x4 GetProjectionMatrix() const;

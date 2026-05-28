@@ -51,7 +51,13 @@ namespace Engine
 		void UnregisterCamera(Camera* camera);
 		const std::vector<Camera*>& GetCameras() const { return m_cameras; }
 		Camera* GetMainCamera() const { return m_mainCamera; }
-		void SetMainCamera(Camera* camera) { m_mainCamera = camera; }
+		void SetMainCamera(Camera* camera) 
+		{ 
+			m_mainCamera = camera;  
+			if (!m_cullingCamera) m_cullingCamera = camera;
+		}
+		Camera* GetCullingCamera() const { return m_cullingCamera; }
+		void SetCullingCamera(Camera* camera) { m_cullingCamera = camera; }	// for debugging frustum culling
 
 		// light management
 		void RegisterLight(Light* light);
@@ -72,6 +78,7 @@ namespace Engine
 		// cameras in the scene
 		std::vector<Camera*> m_cameras;
 		Camera* m_mainCamera = nullptr;
+		Camera* m_cullingCamera = nullptr;
 		// lights in the scene
 		std::vector<Light*> m_lights;
 		ConstantBufferPerLight m_cbPerLight;

@@ -9,12 +9,6 @@ cbuffer ViewProjectionConstantBuffer : register(b0)
     matrix InvProjection; // inverse projection matrix
 };
 
-cbuffer ModelConstantBuffer : register(b1)
-{
-    matrix mWorld;
-    matrix mNormalMatrix;
-}
-
 struct VS_INPUT
 {
     float3 vPos : POSITION;
@@ -31,7 +25,6 @@ PS_INPUT VSMain(VS_INPUT input)
 {
     PS_INPUT Output;
     float4 pos = float4(input.vPos, 1.0f);
-    pos = mul(pos, mWorld);
     pos = mul(pos, View);
     pos = mul(pos, Projection);
     Output.Position = pos;

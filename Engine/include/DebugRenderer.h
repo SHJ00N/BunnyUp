@@ -12,7 +12,9 @@ namespace Engine
 	class D3DManager;
 	class GameObject;
 	class Scene;
+	class Transform;
 	struct AABB;
+	struct Frustum;
 	
 	constexpr UINT MaxDebugVertices = 65536;
 
@@ -39,10 +41,15 @@ namespace Engine
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pLineVertexBuffer;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pTriangleVertexBuffer;
 
-		// draw bounds
-		void traverseRender(GameObject* node);
-		void renderAABB(const AABB* bound);
-		// draw camera frustum
-		// void renderFrustums();
+		// add vertices
+		void traverseObject(GameObject* node);
+		void addLine(const Vector3& p0, const Vector3& p1, const Vector4& color);
+		void addTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector4& color);
+		void addAABB(const AABB* bound, const Transform& transform);
+		void addFrustum(const Frustum& frustum);
+		
+		// flush
+		void flushLine();
+		void flushTriangle();
 	};
 }

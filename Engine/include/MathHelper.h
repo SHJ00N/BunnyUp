@@ -267,7 +267,9 @@ namespace Engine
 
 	// Matrix4x4
 	inline Vector3 operator*(const Matrix4x4& m, const Vector3& v) noexcept { return Vector3::FromSIMD(DirectX::XMVector3Transform(v.ToSIMD(), m.ToSIMD())); }
+	inline Vector3 operator*(const Vector3& v, const Matrix4x4& m) noexcept { return Vector3::FromSIMD(DirectX::XMVector3Transform(v.ToSIMD(), m.ToSIMD())); }
 	inline Vector4 operator*(const Matrix4x4& m, const Vector4& v) noexcept { return Vector4::FromSIMD(DirectX::XMVector4Transform(v.ToSIMD(), m.ToSIMD())); }
+	inline Vector4 operator*(const Vector4& v, const Matrix4x4& m) noexcept { return Vector4::FromSIMD(DirectX::XMVector4Transform(v.ToSIMD(), m.ToSIMD())); }
 	inline Matrix4x4 operator*(const Matrix4x4& m, float scalar) noexcept { return Matrix4x4::FromSIMD(m.ToSIMD() * scalar); }
 	inline Matrix4x4 operator*(const Matrix4x4& a, const Matrix4x4& b) noexcept { return Matrix4x4::FromSIMD(DirectX::XMMatrixMultiply(a.ToSIMD(), b.ToSIMD())); }
 

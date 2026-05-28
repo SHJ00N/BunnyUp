@@ -373,6 +373,8 @@
     <FxCompile Include="BrdfShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="DebugBoundShader.hlsl" />
+    <FxCompile Include="DebugShader.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

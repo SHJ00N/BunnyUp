@@ -39,15 +39,18 @@ namespace Scenes
 		animator->RegistAnimation("Run", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Run").get());
 		animator->PlayAnimation("IdleA");
 
-		auto camera1 = CreateGameObject<GameObject>("Camera1");
-		camera1->AddComponent<Camera>();
-		camera1->transform.SetLocalPosition(Vector3(0.0f, 100.0f, 0.0f));
-		camera1->transform.SetLocalRotation(Vector3(90.0f, 0.0f, 0.0f));
+		//auto camera1 = CreateGameObject<GameObject>("Camera1");
+		//camera1->AddComponent<Camera>();
+		//camera1->transform.SetLocalPosition(Vector3(0.0f, 100.0f, 0.0f));
+		//camera1->transform.SetLocalRotation(Vector3(90.0f, 0.0f, 0.0f));
 
-		auto camera2 = CreateGameObject<GameObject>("Camera2");
+		auto camera2 = CreateGameObject<GameObject>("Culling Debug Camera");
 		camera2->AddComponent<Camera>();
 		camera2->AddComponent<CameraController>();
 		camera2->transform.SetLocalPosition(Vector3(0.0f, 10.0f, -30.0f));
+        camera2->transform.SetLocalScale(Vector3(0.75f, 0.75f, 1.0f));
+        auto camera2Renderer = camera2->AddComponent<MeshRenderer>();
+        camera2Renderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
 
         auto floor = CreateGameObject<GameObject>("Floor");
         auto floorRenderer = floor->AddComponent<MeshRenderer>();

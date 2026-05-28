@@ -158,7 +158,7 @@ namespace Engine
 
 			ImGui::DragFloat3("Position", &position.x, 0.1f);
 			ImGui::DragFloat3("Rotation", &rotation.x, 0.1f);
-			ImGui::DragFloat3("Scale", &scale.x, 0.01f);
+			ImGui::DragFloat3("Scale", &scale.x, 0.01f, 0.01f, 1000.0f);
 
 			m_selectedGameObject->transform.SetLocalPosition(position);
 			m_selectedGameObject->transform.SetLocalRotation(rotation);
@@ -185,21 +185,22 @@ namespace Engine
 		if (!scene) return;
 
 		const auto& cameras = scene->GetCameras();
-		Camera* current = scene->GetMainCamera();
 
 		ImGui::Begin("TopBar", nullptr,
 			ImGuiWindowFlags_NoTitleBar |
 			ImGuiWindowFlags_NoScrollbar);
 
-		// ÄÞº¸ ¹Ú½º
-		const char* preview = current ?
-			current->ownerGameObject->GetName().c_str() : "None";
+		// main camera
+		// -------------------------------------------------------------------------------------------------------------
+		Camera* mainCamera = scene->GetMainCamera();
+		const char* mainPreview = mainCamera ? mainCamera->ownerGameObject->GetName().c_str() : "None";
 
-		if (ImGui::BeginCombo("Camera", preview))
+		ImGui::SetNextItemWidth(100.0f);
+		if (ImGui::BeginCombo("Main Camera", mainPreview))
 		{
 			for (Camera* cam : cameras)
 			{
-				bool selected = (cam == current);
+				bool selected = (cam == mainCamera);
 
 				const char* name = nullptr;
 				if (cam && cam->ownerGameObject)
@@ -210,6 +211,36 @@ namespace Engine
 				if (ImGui::Selectable(name, selected))
 				{
 					scene->SetMainCamera(cam);
+				}
+
+				if (selected)
+					ImGui::SetItemDefaultFocus();
+			}
+
+			ImGui::EndCombo();
+		}
+
+		// culling camera
+		// -------------------------------------------------------------------------------------------------------------
+		ImGui::SetNextItemWidth(100.0f);
+		Camera* cullingCamera = scene->GetCullingCamera();
+		const char* cullingPreview = cullingCamera ? cullingCamera->ownerGameObject->GetName().c_str() : "None";
+
+		if (ImGui::BeginCombo("Culling Camera", cullingPreview))
+		{
+			for (Camera* cam : cameras)
+			{
+				bool selected = (cam == cullingCamera);
+
+				const char* name = nullptr;
+				if (cam && cam->ownerGameObject)
+				{
+					name = cam->ownerGameObject->GetName().c_str();
+				}
+
+				if (ImGui::Selectable(name, selected))
+				{
+					scene->SetCullingCamera(cam);
 				}
 
 				if (selected)

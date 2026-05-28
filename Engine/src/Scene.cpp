@@ -92,7 +92,7 @@ namespace Engine
 		}
 
 		m_mainCamera->UpdateConstantBuffer(cbManager);
-		auto camFrustum = createFrustumFromCamera(*m_mainCamera);
+		auto camFrustum = createFrustumFromCamera(m_cullingCamera? *m_cullingCamera : *m_mainCamera);
 
 		UpdateLightBuffer(cbManager);
 
@@ -129,7 +129,7 @@ namespace Engine
 
 		if (!m_mainCamera)
 		{
-			m_mainCamera = camera;
+			SetMainCamera(camera);
 		}
 	}
 
@@ -142,7 +142,14 @@ namespace Engine
 
 		if (m_mainCamera == camera)
 		{
-			m_mainCamera = m_cameras.empty() ? nullptr : m_cameras[0];
+			if (!m_cameras.empty())
+			{
+				SetMainCamera(m_cameras[0]);
+			} 
+			else
+			{
+				m_mainCamera = nullptr;
+			}
 		}
 	}
 
