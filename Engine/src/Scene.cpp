@@ -6,6 +6,7 @@
 #include "EditorCameraController.h"
 #include "Light.h"
 #include "Frustum.h"
+#include "Collider.h"
 
 namespace Engine
 {
@@ -185,5 +186,19 @@ namespace Engine
 		}
 		m_cbPerLight.lightCount = count;
 		cbManager.UpdatePerLight(m_cbPerLight);
+	}
+
+
+	void Scene::RegisterCollider(Collider* collider)
+	{
+		m_colliders.push_back(collider);
+	}
+
+	void Scene::UnregisterCollider(Collider* collider)
+	{
+		m_colliders.erase(
+			std::remove(m_colliders.begin(), m_colliders.end(), collider),
+			m_colliders.end()
+		);
 	}
 }

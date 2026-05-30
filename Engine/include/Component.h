@@ -3,6 +3,7 @@
 namespace Engine
 {
 	class GameObject;
+	class Collider;
 
 	class Component
 	{
@@ -18,6 +19,18 @@ namespace Engine
 		void Destroy();
 		virtual void Update(float dt) { }
 		virtual void FixedUpdate(float fdt) { }
+		
+		bool isEnabled() const { return m_isEnabled; }
+		void SetEnabled(bool value) { m_isEnabled = value; }
+
+		// physics methods
+		virtual void OnCollisionEnter(Collider* other) { }
+		virtual void OnCollisionStay(Collider* other) { }
+		virtual void OnCollisionExit(Collider* other) { }
+
+		virtual void OnTriggerEnter(Collider* other) { }
+		virtual void OnTriggerStay(Collider* other) { }
+		virtual void OnTriggerExit(Collider* other) { }
 
 		virtual void OnImGui() { }
 	protected:
@@ -27,6 +40,7 @@ namespace Engine
 		virtual void OnDestroy() { }
 
 	private:
+		bool m_isEnabled = true;
 		bool m_isAwake = false;
 		bool m_isStarted = false;
 		bool m_isDestroyed = false;

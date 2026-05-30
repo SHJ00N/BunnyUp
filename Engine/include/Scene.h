@@ -9,6 +9,7 @@ namespace Engine
 {
 	class Camera;
 	class Light;
+	class Collider;
 	class EnvironmentMap;
 
 	class Scene
@@ -65,6 +66,11 @@ namespace Engine
 		const std::vector<Light*>& GetLights() const { return m_lights; }
 		void UpdateLightBuffer(ConstantBufferManager& cbManager);
 
+		// collider management
+		void RegisterCollider(Collider* collider);
+		void UnregisterCollider(Collider* collider);
+		const std::vector<Collider*>& GetColliders() const { return m_colliders; }
+
 		// environment map management
 		void SetEnvironmentMap(std::shared_ptr<EnvironmentMap> envMap) { m_environmentMap = envMap; }
 		std::shared_ptr<EnvironmentMap> GetEnvironmentMap() const { return m_environmentMap; }
@@ -82,6 +88,8 @@ namespace Engine
 		// lights in the scene
 		std::vector<Light*> m_lights;
 		ConstantBufferPerLight m_cbPerLight;
+		// colliders in the scene
+		std::vector<Collider*> m_colliders;
 		// environment map
 		std::shared_ptr<EnvironmentMap> m_environmentMap;
 

@@ -1,6 +1,5 @@
 #include "SkinnedRenderer.h"
 #include "ConstantBufferManager.h"
-#include "GameObject.h"
 #include "Animator.h"
 
 namespace Engine

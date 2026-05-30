@@ -46,6 +46,9 @@
     <Filter Include="소스 파일\Components\Camera">
       <UniqueIdentifier>{cffd78d9-bc65-4b17-aba5-b0ecfb732af4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\Components\Physics">
+      <UniqueIdentifier>{8da015e9-321f-4458-9012-6c987e5c5946}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\System.h">
@@ -201,6 +204,9 @@
     <ClInclude Include="include\DebugRenderer.h">
       <Filter>헤더 파일\RenderPipeline</Filter>
     </ClInclude>
+    <ClInclude Include="include\Collider.h">
+      <Filter>헤더 파일\Components\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\D3DManager.cpp">
@@ -340,6 +346,9 @@
     </ClCompile>
     <ClCompile Include="src\EditorCameraController.cpp">
       <Filter>소스 파일\Components\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Collider.cpp">
+      <Filter>소스 파일\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

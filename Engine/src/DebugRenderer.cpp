@@ -9,6 +9,7 @@
 #include "VertexType.h"
 #include "ResourceManager.h"
 #include "Frustum.h"
+#include "Collider.h"
 
 namespace Engine
 {
@@ -54,11 +55,17 @@ namespace Engine
             traverseObject(child.get());
         }
 
-        //// render camera frsutum
+        // render camera frsutum
         for (auto camera : scene->GetCameras())
         {
             if (scene->GetMainCamera() == camera || !camera->frustumVisible) continue;
-            addFrustum(createFrustumFromCamera(*camera));
+            addFrustum(createFrustumFromCamera(*camera), Vector4(1.0f, 1.0f, 0.0f, 0.2f));
+        }
+
+        // render collider
+        for (auto collider : scene->GetColliders())
+        {
+            collider->BuildDebugRender(this);
         }
 
         // render debug vertices
@@ -92,7 +99,7 @@ namespace Engine
 
             if (bounds)
             {
-                addAABB(bounds, renderable->ownerGameObject->transform);
+                addAABB(bounds, renderable->ownerGameObject->transform, Vector4(1.0f, 1.0f, 0.0f, 1.0f));
             }
         }
 
@@ -135,7 +142,7 @@ namespace Engine
         m_triangleVertices.push_back(v2);
     }
 
-    void DebugRenderer::addAABB(const AABB* bound, const Transform& transform)
+    void DebugRenderer::addAABB(const AABB* bound, const Transform& transform, const Vector4& color)
     {
         const auto vertices = bound->GetVertices();    // get vertices
         const auto& worldMatrix = transform.GetWorldMatrix();   // world matrix
@@ -151,11 +158,11 @@ namespace Engine
         {
             const auto& p0 = vertices[edges[i]] * worldMatrix;
             const auto& p1 = vertices[edges[i + 1]] * worldMatrix;
-            addLine(p0, p1, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
+            addLine(p0, p1, color);
         }
     }
 
-    void DebugRenderer::addFrustum(const Frustum& frustum)
+    void DebugRenderer::addFrustum(const Frustum& frustum, const Vector4& color)
     {
         const auto corners = frustum.GetCorners();
 
@@ -170,9 +177,6 @@ namespace Engine
         Vector3 f1 = corners[5];
         Vector3 f2 = corners[6];
         Vector3 f3 = corners[7];
-
-        // color
-        Vector4 color = Vector4(1.0f, 1.0f, 0.0f, 0.2f);
 
         // Near
         addTriangle(n0, n1, n2, color);
@@ -215,7 +219,63 @@ namespace Engine
         {
             const auto& p0 = verts[edges[i]];
             const auto& p1 = verts[edges[i + 1]];
-            addLine(p0, p1, Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+            addLine(p0, p1, Vector4(color.x, color.y, color.z, 1.0f));
+        }
+    }
+
+    void DebugRenderer::AddBox(const Vector3& center, const Vector3& extents, const Transform& transform, const Vector4& color)
+    {
+        AABB aabb(center, extents.x, extents.y, extents.z);
+
+        addAABB(&aabb, transform, color);
+    }
+
+    void DebugRenderer::AddSphere(const Vector3& center, const float radius, const Vector4& color)
+    {
+        constexpr int segments = 32;
+        constexpr float PI = 3.14159265359f;
+
+        for (int x = 0; x < segments; ++x)
+        {
+            const float theta0 = PI * static_cast<float>(x) / segments;
+            const float theta1 = PI * static_cast<float>(x + 1) / segments;
+
+            for (int y = 0; y < segments; ++y)
+            {
+                const float phi0 = 2.0f * PI * static_cast<float>(y) / segments;
+                const float phi1 = 2.0f * PI * static_cast<float>(y + 1) / segments;
+
+                Vector3 p00 =
+                {
+                    radius * sinf(theta0) * cosf(phi0),
+                    radius * cosf(theta0),
+                    radius * sinf(theta0) * sinf(phi0)
+                };
+
+                Vector3 p01 =
+                {
+                    radius * sinf(theta0) * cosf(phi1),
+                    radius * cosf(theta0),
+                    radius * sinf(theta0) * sinf(phi1)
+                };
+
+                Vector3 p10 =
+                {
+                    radius * sinf(theta1) * cosf(phi0),
+                    radius * cosf(theta1),
+                    radius * sinf(theta1) * sinf(phi0)
+                };
+
+                p00 += center;
+                p01 += center;
+                p10 += center;
+
+                // latitude line
+                addLine(p00, p01, color);
+
+                // longitude line
+                addLine(p00, p10, color);
+            }
         }
     }
 

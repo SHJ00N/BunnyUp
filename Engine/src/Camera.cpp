@@ -1,8 +1,8 @@
 #include "Camera.h"
 #include "ConstantBufferManager.h"
 #include "D3DManager.h"
-#include "GameObject.h"
 #include "Scene.h"
+#include "GameObject.h"
 
 namespace Engine
 {

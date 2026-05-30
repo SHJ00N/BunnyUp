@@ -6,6 +6,7 @@
 #include <Camera.h>
 #include <SamplerStateManager.h>
 #include <Light.h>
+#include <Collider.h>
 
 #include "DemoScene1.h"
 #include "CameraController.h"
@@ -29,6 +30,8 @@ namespace Scenes
 		bunny->transform.SetLocalScale(Vector3(0.085f, 0.085f, 0.085f));
 		bunny->transform.SetLocalRotation(Vector3(0.0f, 180.0f, 0.0f));
 		bunny->AddComponent<SkinnedRenderer>()->SetModel(ResourceManager::GetInstance().GetModel("Chibi_Rabbit"));
+
+        auto bunnyCollider = bunny->AddComponent<SphereCollider>();
 
 		auto animator = bunny->AddComponent<Animator>();
 		animator->Awake();
@@ -109,6 +112,8 @@ namespace Scenes
         lightingCubeRenderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
         lightingCube->transform.SetLocalPosition(Vector3(15.0f, 5.0f, -15.0f));
         lightingCube->transform.SetLocalScale(Vector3(10.0f, 10.0f, 10.0f));
+
+        auto cubeCollider = lightingCube->AddComponent<BoxCollider>();
 
 	}
 }

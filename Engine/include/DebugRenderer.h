@@ -29,6 +29,9 @@ namespace Engine
 	public:
 		HRESULT Initialize(D3DManager* d3dManager, ConstantBufferManager* cbManager);
 		void Render(Scene* scene);
+
+		void AddBox(const Vector3& center, const Vector3& extents, const Transform& transform, const Vector4& color);
+		void AddSphere(const Vector3& center, const float radius, const Vector4& color);
 	private:
 		// manager instances
 		D3DManager* m_d3dManager;
@@ -45,8 +48,8 @@ namespace Engine
 		void traverseObject(GameObject* node);
 		void addLine(const Vector3& p0, const Vector3& p1, const Vector4& color);
 		void addTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector4& color);
-		void addAABB(const AABB* bound, const Transform& transform);
-		void addFrustum(const Frustum& frustum);
+		void addAABB(const AABB* bound, const Transform& transform, const Vector4& color);
+		void addFrustum(const Frustum& frustum, const Vector4& color);
 		
 		// flush
 		void flushLine();

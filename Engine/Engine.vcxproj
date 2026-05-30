@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BoundingVolume.h" />
+    <ClInclude Include="include\Collider.h" />
     <ClInclude Include="include\DebugRenderer.h" />
     <ClInclude Include="include\EnvironmentMap.h" />
     <ClInclude Include="include\Animation.h" />
@@ -83,6 +84,7 @@
     <ClCompile Include="src\Animator.cpp" />
     <ClCompile Include="src\Bone.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Collider.cpp" />
     <ClCompile Include="src\DebugRenderer.cpp" />
     <ClCompile Include="src\EnvironmentMap.cpp" />
     <ClCompile Include="src\Light.cpp" />
