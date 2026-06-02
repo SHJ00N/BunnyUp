@@ -3,6 +3,8 @@
 #include "ImGuiClass.h"
 #include "ResourceManager.h"
 
+#include <algorithm>
+
 namespace Engine
 {
 	void MeshRenderer::SetMesh(std::shared_ptr<Mesh> mesh) 
@@ -54,23 +56,12 @@ namespace Engine
 
 	void MeshRenderer::generateBound()
 	{
-		Vector3 finalMin = { FLT_MAX, FLT_MAX , FLT_MAX };
-		Vector3 finalMax = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
+		m_bound.reset();
+		m_bound = std::make_unique<AABB>();
 		for (const auto& mesh : m_meshes)
 		{
-			const auto* meshBound = mesh->GetBound();
-			const auto minAABB = meshBound->GetMin();
-			const auto maxAABB = meshBound->GetMax();
-			finalMin.x = std::min(finalMin.x, minAABB.x);
-			finalMin.y = std::min(finalMin.y, minAABB.y);
-			finalMin.z = std::min(finalMin.z, minAABB.z);
-
-			finalMax.x = max(finalMax.x, maxAABB.x);
-			finalMax.y = max(finalMax.y, maxAABB.y);
-			finalMax.z = max(finalMax.z, maxAABB.z);
+			m_bound->MergeBounds(*mesh->GetBound());
 		}
-
-		m_bound = std::make_unique<AABB>(finalMin, finalMax);
 	}
 
 	void MeshRenderer::OnImGui()

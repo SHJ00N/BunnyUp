@@ -11,6 +11,7 @@ namespace Engine
 	{
 		float x, y;
 		constexpr Vector2() noexcept : x(0), y(0) {}
+		constexpr Vector2(float f) noexcept : x(f), y(f) {}
 		constexpr Vector2(float x, float y) noexcept : x(x), y(y) {}
 
 		// convert to XMVECTOR
@@ -25,12 +26,23 @@ namespace Engine
 			DirectX::XMStoreFloat2(reinterpret_cast<DirectX::XMFLOAT2*>(&result.x), v);
 			return result;
 		}
+
+		// index operator for array-like access
+		float& operator[](size_t index)
+		{
+			return (&x)[index];
+		}
+		const float& operator[](size_t index) const
+		{
+			return (&x)[index];
+		}
 	};
 
 	struct Vector3
 	{
 		float x, y, z;
 		constexpr Vector3() noexcept : x(0), y(0), z(0) {}
+		constexpr Vector3(float f) noexcept : x(f), y(f), z(f) {}
 		constexpr Vector3(float x, float y, float z) noexcept : x(x), y(y), z(z) {}
 		
 		// convert to XMVECTOR
@@ -45,12 +57,23 @@ namespace Engine
 			DirectX::XMStoreFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(&result.x), v);
 			return result;
 		}
+
+		// index operator for array-like access
+		float& operator[](size_t index)
+		{
+			return (&x)[index];
+		}
+		const float& operator[](size_t index) const
+		{
+			return (&x)[index];
+		}
 	};
 
 	struct Vector4
 	{
 		float x, y, z, w;
 		constexpr Vector4() noexcept : x(0), y(0), z(0), w(0) {}
+		constexpr Vector4(float f) noexcept : x(f), y(f), z(f), w(f) {}
 		constexpr Vector4(float x, float y, float z, float w) noexcept : x(x), y(y), z(z), w(w) {}
 		
 		// convert to XMVECTOR
@@ -64,6 +87,16 @@ namespace Engine
 			Vector4 result;
 			DirectX::XMStoreFloat4(reinterpret_cast<DirectX::XMFLOAT4*>(&result.x), v);
 			return result;
+		}
+
+		// index operator for array-like access
+		float& operator[](size_t index)
+		{
+			return (&x)[index];
+		}
+		const float& operator[](size_t index) const
+		{
+			return (&x)[index];
 		}
 	};
 
@@ -90,6 +123,16 @@ namespace Engine
 			Quaternion result;
 			DirectX::XMStoreFloat4(reinterpret_cast<DirectX::XMFLOAT4*>(&result.x), v);
 			return result;
+		}
+
+		// index operator for array-like access
+		float& operator[](size_t index)
+		{
+			return (&x)[index];
+		}
+		const float& operator[](size_t index) const
+		{
+			return (&x)[index];
 		}
 	};
 

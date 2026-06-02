@@ -6,10 +6,10 @@
 #include <string>
 
 #include "Singleton.h"
+#include "Scene.h"
 
 namespace Engine
 {
-	class Scene;
 	using SceneCreateFunction = std::function<std::unique_ptr<Scene>()>;
 
 	class SceneFactory : public Singleton<SceneFactory>

@@ -27,6 +27,7 @@
     <ClCompile Include="src\CameraController.cpp" />
     <ClCompile Include="src\DemoScene2.cpp" />
     <ClCompile Include="src\LoadGameResources.cpp" />
+    <ClCompile Include="src\PlayerController.cpp" />
     <ClCompile Include="src\RegistractionGameScenes.cpp" />
     <ClCompile Include="src\DemoScene1.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -36,6 +37,7 @@
     <ClInclude Include="include\CameraController.h" />
     <ClInclude Include="include\DemoScene1.h" />
     <ClInclude Include="include\DemoScene2.h" />
+    <ClInclude Include="include\PlayerController.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="targetver.h" />

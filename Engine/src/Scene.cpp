@@ -7,11 +7,16 @@
 #include "Light.h"
 #include "Frustum.h"
 #include "Collider.h"
+#include "EventBus.h"
 
 namespace Engine
 {
 	Scene::Scene()
 	{
+		// Initialize physics system
+		m_physicsSystem = std::make_unique<Physics>();
+
+		// Create root GameObject
 		m_root = std::make_unique<GameObject>("Root");
 		m_root->scene = this;
 
@@ -36,6 +41,12 @@ namespace Engine
 	void Scene::SceneStart()
 	{
 		traverseStart(m_root.get());
+
+		// Initialize physics system after all colliders have been registered
+		if (m_physicsSystem && !m_physicsSystem->IsInitialized())
+		{
+			m_physicsSystem->Initialize(this);
+		}
 	}
 
 	void Scene::SceneUpdate(float dt)
@@ -46,6 +57,8 @@ namespace Engine
 	void Scene::SceneFixedUpdate(float fdt)
 	{
 		traverseFixedUpdate(m_root.get(), fdt);
+		// Update physics system
+		m_physicsSystem->Update(this, fdt);
 	}
 
 	void Scene::traverseAwake(GameObject* node)
@@ -68,6 +81,11 @@ namespace Engine
 
 	void Scene::traverseUpdate(GameObject* node, float dt)
 	{
+		if (node->IsDestroyed())
+		{
+			return;
+		}
+
 		node->Update(dt);
 		for (auto& child : node->GetChildren())
 		{
@@ -77,10 +95,44 @@ namespace Engine
 
 	void Scene::traverseFixedUpdate(GameObject* node, float fdt)
 	{
+		if(node->IsDestroyed())
+		{
+			return;
+		}
+
 		node->FixedUpdate(fdt);
 		for (auto& child : node->GetChildren())
 		{
 			traverseFixedUpdate(child.get(), fdt);
+		}
+	}
+
+	void Scene::SceneObjectDestroy()
+	{
+		destroyList.clear();
+		traverseDestroyed(m_root.get());	// collect destoryed object
+		// destroy
+		for (auto object : destroyList)
+		{
+			EventBus::GetInstance().Publish<ObjectDestroyedEvent>(ObjectDestroyedEvent{ object });
+			if (auto parent = object->GetParent())
+			{
+				parent->RemoveChild(object);
+			}
+		}
+	}
+
+	void Scene::traverseDestroyed(GameObject* node)
+	{
+		if (m_root.get() != node && node->IsDestroyed())
+		{
+			destroyList.push_back(node);
+			return;
+		}
+
+		for (auto& child : node->GetChildren())
+		{
+			traverseDestroyed(child.get());
 		}
 	}
 
@@ -196,6 +248,11 @@ namespace Engine
 
 	void Scene::UnregisterCollider(Collider* collider)
 	{
+		if(collider->bvhNode)
+		{
+			BVH::RemoveLeaf(m_physicsSystem->GetBVHRootPtr(), collider->bvhNode);
+		}
+
 		m_colliders.erase(
 			std::remove(m_colliders.begin(), m_colliders.end(), collider),
 			m_colliders.end()

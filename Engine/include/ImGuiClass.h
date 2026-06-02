@@ -9,6 +9,7 @@
 
 namespace Engine
 {
+	class GameObject;
 	class ImGuiClass
 	{
 	public:
@@ -24,16 +25,19 @@ namespace Engine
 
 		void InitState();
 
+		GameObject* GetSelectedObject() const { return m_selectedGameObject; }
 	private:
 		void renderLogWindow();		// Log window to display engine logs
 
 		// Editor windows
-		class GameObject* m_selectedGameObject;
+		GameObject* m_selectedGameObject;
 		void renderSceneHierarchyWindow();
 		void renderGameObjectNode(class GameObject* gameObject);
 		void renderInspectorWindow();
 		void renderTopBar();
+		void frameRateCounter();
 
-		ListenerID m_listenerID;
+		ListenerID m_sceneChangeListenerID;
+		ListenerID m_objectDestroyedListenerID;
 	};
 }

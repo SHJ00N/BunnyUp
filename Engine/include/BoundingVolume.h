@@ -20,6 +20,8 @@ namespace Engine
 		Vector3 center = { 0.0f, 0.0f, 0.0f };
 		Vector3 extents = { 0.0f, 0.0f, 0.0f };
 
+		AABB() = default;
+
 		AABB(const Vector3& min, const Vector3& max)
 			: BoundingVolume{}, center{ (max + min) * 0.5f }, extents{ (max - min) * 0.5f }
 		{
@@ -37,16 +39,16 @@ namespace Engine
 			Vector3 maxAABB(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 			for (auto&& pos : positions)
 			{
-				minAABB.x = min(minAABB.x, pos.x);
-				minAABB.y = min(minAABB.y, pos.y);
-				minAABB.z = min(minAABB.z, pos.z);
+				minAABB.x = minAABB.x < pos.x ? minAABB.x : pos.x;
+				minAABB.y = minAABB.y < pos.y ? minAABB.y : pos.y;
+				minAABB.z = minAABB.z < pos.z ? minAABB.z : pos.z;
 
-				maxAABB.x = max(maxAABB.x, pos.x);
-				maxAABB.y = max(maxAABB.y, pos.y);
-				maxAABB.z = max(maxAABB.z, pos.z);
+				maxAABB.x = maxAABB.x > pos.x ? maxAABB.x : pos.x;
+				maxAABB.y = maxAABB.y > pos.y ? maxAABB.y : pos.y;
+				maxAABB.z = maxAABB.z > pos.z ? maxAABB.z : pos.z;
 			}
 			
-			center = { (maxAABB + minAABB) * 0.5f };
+			center = (maxAABB + minAABB) * 0.5f;
 			extents = { maxAABB.x - center.x, maxAABB.y - center.y, maxAABB.z - center.z };
 		}
 
@@ -73,6 +75,37 @@ namespace Engine
 		Vector3 GetMax() const
 		{
 			return center + extents;
+		}
+
+		void MergeBounds(const AABB& other)
+		{
+			Vector3 minAABB = GetMin();
+			Vector3 maxAABB = GetMax();
+			Vector3 otherMin = other.GetMin();
+			Vector3 otherMax = other.GetMax();
+			minAABB.x = minAABB.x < otherMin.x ? minAABB.x : otherMin.x;
+			minAABB.y = minAABB.y < otherMin.y ? minAABB.y : otherMin.y;
+			minAABB.z = minAABB.z < otherMin.z ? minAABB.z : otherMin.z;
+			maxAABB.x = maxAABB.x > otherMax.x ? maxAABB.x : otherMax.x;
+			maxAABB.y = maxAABB.y > otherMax.y ? maxAABB.y : otherMax.y;
+			maxAABB.z = maxAABB.z > otherMax.z ? maxAABB.z : otherMax.z;
+			center = (maxAABB + minAABB) * 0.5f;
+			extents = (maxAABB - minAABB) * 0.5f;
+		}
+
+		static AABB MergeBounds(const AABB& a, const AABB& b)
+		{
+			Vector3 minAABB = a.GetMin();
+			Vector3 maxAABB = a.GetMax();
+			Vector3 otherMin = b.GetMin();
+			Vector3 otherMax = b.GetMax();
+			minAABB.x = minAABB.x < otherMin.x ? minAABB.x : otherMin.x;
+			minAABB.y = minAABB.y < otherMin.y ? minAABB.y : otherMin.y;
+			minAABB.z = minAABB.z < otherMin.z ? minAABB.z : otherMin.z;
+			maxAABB.x = maxAABB.x > otherMax.x ? maxAABB.x : otherMax.x;
+			maxAABB.y = maxAABB.y > otherMax.y ? maxAABB.y : otherMax.y;
+			maxAABB.z = maxAABB.z > otherMax.z ? maxAABB.z : otherMax.z;
+			return AABB(minAABB, maxAABB);
 		}
 
 		bool IsOnOrForwardPlane(const Plane& plane) const final
@@ -118,6 +151,24 @@ namespace Engine
 				globalAABB.IsOnOrForwardPlane(camFrustum.nearFace) &&
 				globalAABB.IsOnOrForwardPlane(camFrustum.farFace)
 			);
+		}
+
+		bool IsIntersectsAABB(const AABB& other) const
+		{
+			return (
+				std::abs(center.x - other.center.x) <= (extents.x + other.extents.x) &&
+				std::abs(center.y - other.center.y) <= (extents.y + other.extents.y) &&
+				std::abs(center.z - other.center.z) <= (extents.z + other.extents.z)
+				);
+		}
+
+		bool Contains(const AABB& other) const
+		{
+			return (
+				std::abs(center.x - other.center.x) + other.extents.x <= extents.x &&
+				std::abs(center.y - other.center.y) + other.extents.y <= extents.y &&
+				std::abs(center.z - other.center.z) + other.extents.z <= extents.z
+				);
 		}
 	};
 }

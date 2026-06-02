@@ -12,6 +12,8 @@ namespace Engine
 	float TimeClass::s_fixedDeltaTime = 0.01667f; // 60 FPS
 	float TimeClass::s_accumulatedTime = 0.0f;
 
+	float TimeClass::s_fpsTimer = 0.0f;
+	float TimeClass::s_frameRate = 0.0f;
 	int TimeClass::s_frameCount = 0;
 
 	void TimeClass::Start()
@@ -44,5 +46,12 @@ namespace Engine
 		
 		// frame management
 		s_frameCount++;
+		s_fpsTimer += s_unscaledDeltaTime;
+		if (s_fpsTimer >= 1.0f)
+		{
+			s_frameRate = static_cast<float>(s_frameCount) / s_fpsTimer;
+			s_frameCount = 0;
+			s_fpsTimer = 0.0f;
+		}
 	}
 }

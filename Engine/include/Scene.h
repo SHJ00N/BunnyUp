@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include "ConstantBuffer.h"
+#include "Physics.h"
 
 #include <memory>
 
@@ -22,6 +23,7 @@ namespace Engine
 		void SceneStart();
 		void SceneUpdate(float dt);
 		void SceneFixedUpdate(float fdt);
+		void SceneObjectDestroy();
 		virtual void SceneExit() { }
 
 		void Render(class ConstantBufferManager& cbManager);
@@ -75,6 +77,8 @@ namespace Engine
 		void SetEnvironmentMap(std::shared_ptr<EnvironmentMap> envMap) { m_environmentMap = envMap; }
 		std::shared_ptr<EnvironmentMap> GetEnvironmentMap() const { return m_environmentMap; }
 
+		Physics* GetPhysicsSystem() { return m_physicsSystem.get(); }
+
 	protected:
 		virtual void SceneEnter() { }
 
@@ -93,11 +97,18 @@ namespace Engine
 		// environment map
 		std::shared_ptr<EnvironmentMap> m_environmentMap;
 
+		// destroyed object list
+		std::vector<GameObject*> destroyList;
+
+		// physics system
+		std::unique_ptr<Physics> m_physicsSystem;
+
 		// Helper functions for traversing the scene graph
 		void traverseAwake(GameObject* node);
 		void traverseStart(GameObject* node);
 		void traverseUpdate(GameObject* node, float dt);
 		void traverseFixedUpdate(GameObject* node, float fdt);
 		void traverseRender(GameObject* node, ConstantBufferManager& renderer, struct Frustum& camFrustum);
+		void traverseDestroyed(GameObject* node);
 	};
 }

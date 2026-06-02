@@ -20,6 +20,7 @@ namespace Engine
 		static float GetTotalTime() { return s_totalTime; }
 		static float GetTimeScale() { return s_timeScale; }
 		static float GetFixedDeltaTime() { return s_fixedDeltaTime; }
+		static float GetFrameRate() { return s_frameRate; }
 
 		// fixed update management
 		static bool ShouldPerformFixedUpdate() { return s_accumulatedTime >= s_fixedDeltaTime; }
@@ -38,6 +39,8 @@ namespace Engine
 		// Time scale is a multiplier for delta time, allowing for effects like slow motion or fast forward.
 		static float s_timeScale;
 
+		static float s_fpsTimer;	// Timer for calculating FPS
 		static int s_frameCount;
+		static float s_frameRate;
 	};
 }

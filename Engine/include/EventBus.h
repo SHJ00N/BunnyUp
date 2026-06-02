@@ -8,29 +8,79 @@
 
 namespace Engine
 {
-	enum class EventType
-	{
-		SceneChange
-	};
-
-	using EventCallback = std::function<void()>;
 	using ListenerID = size_t;
 
-	struct Listener
+	struct IEvent
 	{
-		ListenerID id;
-		EventCallback invoke;
+		virtual ~IEvent() = default;
+	};
+
+	struct SceneChangedEvent : public IEvent
+	{
+	};
+
+	class GameObject;
+	struct ObjectDestroyedEvent : public IEvent
+	{
+		GameObject* object;
+		ObjectDestroyedEvent(GameObject* obj) : object(obj) { }
 	};
 
 	class EventBus : public Singleton<EventBus>
 	{
 	public:
-		ListenerID Subscribe(EventType type, EventCallback callback);
-		void Unsubscribe(EventType type, ListenerID id);
-		void Publish(EventType type);
 		void Clear();
+
+		template<typename TEvent>
+		ListenerID Subscribe(std::function<void(const TEvent&)> callback)
+		{
+			auto& listeners = m_listeners[typeid(TEvent)];
+			// add listener
+			ListenerID id = m_nextListenerID++;
+			listeners.push_back(
+				{
+					id,
+					[callback](const IEvent& event)
+					{
+						callback(static_cast<const TEvent&>(event));
+					}
+				}
+			);
+
+			return id;
+		}
+
+		template<typename TEvent>
+		void Publish(const TEvent& event)
+		{
+			auto it = m_listeners.find(typeid(TEvent));
+
+			if (it == m_listeners.end())
+			{
+				return;
+			}
+			// invoke listener's function
+			for (auto& listener : it->second)
+			{
+				listener.invoke(event);
+			}
+		}
+
+		void Unsubscribe(std::type_index type, ListenerID id);
+		template<typename TEvent>
+		void Unsubscribe(ListenerID id)
+		{
+			Unsubscribe(typeid(TEvent), id);
+		}
 	private:
-		std::unordered_map<EventType, std::vector<Listener>> m_listeners;
+		struct Listener
+		{
+			ListenerID id;
+			std::function<void(const IEvent&)> invoke;
+		};
+
+		std::unordered_map<std::type_index, std::vector<Listener>> m_listeners;
+
 		ListenerID m_nextListenerID = 0;
 	};
 }

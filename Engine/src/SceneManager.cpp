@@ -38,7 +38,7 @@ namespace Engine
 		if (m_currentScene)
 		{
 			m_currentScene->SceneAwake(); // scene initialize
-			EventBus::GetInstance().Publish(EventType::SceneChange);
+			EventBus::GetInstance().Publish<SceneChangedEvent>(SceneChangedEvent{});
 		}
 	}
 
@@ -62,6 +62,14 @@ namespace Engine
 		{
 			m_currentScene->SceneStart();
 			m_currentScene->SceneFixedUpdate(fdt);
+		}
+	}
+
+	void SceneManager::CurrentSceneObjectDestroy()
+	{
+		if (m_currentScene)
+		{
+			m_currentScene->SceneObjectDestroy();
 		}
 	}
 

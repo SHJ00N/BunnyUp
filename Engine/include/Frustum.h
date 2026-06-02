@@ -4,6 +4,8 @@
 #include "Camera.h"
 #include "GameObject.h"
 
+#include <array>
+
 namespace Engine
 {
 	struct Plane

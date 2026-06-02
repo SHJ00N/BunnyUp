@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "MathHelper.h"
+#include "BVHNode.h"
 
 namespace Engine
 {
@@ -16,7 +17,7 @@ namespace Engine
 	struct AABB;
 	struct Frustum;
 	
-	constexpr UINT MaxDebugVertices = 65536;
+	constexpr UINT MaxDebugVertices = 262144;
 
 	struct DebugVertex
 	{
@@ -31,7 +32,7 @@ namespace Engine
 		void Render(Scene* scene);
 
 		void AddBox(const Vector3& center, const Vector3& extents, const Transform& transform, const Vector4& color);
-		void AddSphere(const Vector3& center, const float radius, const Vector4& color);
+		void AddSphere(const Vector3& center, float radius, const Transform& transform, const Vector4& color);
 	private:
 		// manager instances
 		D3DManager* m_d3dManager;
@@ -46,6 +47,7 @@ namespace Engine
 
 		// add vertices
 		void traverseObject(GameObject* node);
+		void traverseBVHNode(const BVH::BVHNode* node);
 		void addLine(const Vector3& p0, const Vector3& p1, const Vector4& color);
 		void addTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector4& color);
 		void addAABB(const AABB* bound, const Transform& transform, const Vector4& color);

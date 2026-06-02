@@ -10,6 +10,8 @@
 namespace Engine
 {
 	class Scene;
+	class Collider;
+
 	class GameObject
 	{
 	public:
@@ -83,12 +85,25 @@ namespace Engine
 		void Start();
 		void Update(float dt);
 		void FixedUpdate(float fdt);
-
+		void Destroy();
+		
 		const std::string& GetName() const { return m_name; }
 		void SetName(const std::string& name) { m_name = name; }
+		bool IsDestroyed() const { return m_isDestroyed; }
+		bool IsAncestorOf(const GameObject* node) const;
+		GameObject* GetParent() const { return parent; }
+
+		// physics event handlers
+		void OnTriggerEnter(Collider* other);
+		void OnTriggerStay(Collider* other);
+		void OnTriggerExit(Collider* other);
+		void OnCollisionEnter(Collider* other);
+		void OnCollisionStay(Collider* other);
+		void OnCollisionExit(Collider* other);
 
 	protected:
 		std::string m_name;
+		bool m_isDestroyed = false;
 
 		// Scene graph
 		GameObject* parent;

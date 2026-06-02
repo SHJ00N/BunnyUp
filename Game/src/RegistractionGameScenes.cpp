@@ -1,4 +1,5 @@
-#include "SceneFactory.h"
+#include <EngineSystem.h>
+
 #include "DemoScene1.h"
 #include "DemoScene2.h"
 

@@ -152,8 +152,6 @@ namespace Engine
 				}
 			}
 
-			 // LOG_INFO("Delta time : %f", TimeClass::GetDeltaTime());
-
 			// Update scene
 			// Fixed Update
 			while (TimeClass::ShouldPerformFixedUpdate())
@@ -163,7 +161,8 @@ namespace Engine
 			}
 			// Scaled delta time update
 			SceneManager::GetInstance().CurrentSceneUpdate(TimeClass::GetDeltaTime());
-
+			// delete destroyed object
+			SceneManager::GetInstance().CurrentSceneObjectDestroy();
 			// Render
 			render();
 		}

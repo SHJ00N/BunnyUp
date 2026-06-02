@@ -18,6 +18,7 @@ namespace Engine
 		const Vector3 GetRight() const;
 		const Vector3 GetUp() const;
 		const Vector3 GetWorldPosition() const;
+		const Vector3 GetLossyScale() const;
 
 		void SetLocalPosition(const Vector3& position);
 		void SetLocalRotation(const Vector3& rotation);

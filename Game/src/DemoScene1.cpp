@@ -1,15 +1,8 @@
-#include <SceneFactory.h>
-#include <ResourceManager.h>
-#include <GameObject.h>
-#include <SkinnedRenderer.h>
-#include <Animator.h>
-#include <Camera.h>
-#include <SamplerStateManager.h>
-#include <Light.h>
-#include <Collider.h>
+#include <EngineSystem.h>
 
 #include "DemoScene1.h"
 #include "CameraController.h"
+#include "PlayerController.h"
 
 namespace Scenes
 {
@@ -26,12 +19,19 @@ namespace Scenes
         SetEnvironmentMap(ResourceManager::GetInstance().GetEnvironmentMap("Sky_EnvMap"));
 
 		auto bunny = CreateGameObject<GameObject>("Bunny");
+        bunny->AddComponent<Player::PlayerController>();
         bunny->transform.SetLocalPosition(Vector3(-15.0f, 0.0f, -15.0f));
-		bunny->transform.SetLocalScale(Vector3(0.085f, 0.085f, 0.085f));
+		bunny->transform.SetLocalScale(Vector3(0.1f, 0.1f, 0.1f));
 		bunny->transform.SetLocalRotation(Vector3(0.0f, 180.0f, 0.0f));
 		bunny->AddComponent<SkinnedRenderer>()->SetModel(ResourceManager::GetInstance().GetModel("Chibi_Rabbit"));
 
+        //auto bunnyCollider = bunny->AddComponent<BoxCollider>();
+        //bunnyCollider->center = { 0.0f, 100.0f, 0.0f };
+        //bunnyCollider->extents = { 100.0f, 100.0f, 100.0f };
+
         auto bunnyCollider = bunny->AddComponent<SphereCollider>();
+        bunnyCollider->center = { 0.0f, 100.0f, 0.0f };
+        bunnyCollider->radius = 100.0f;
 
 		auto animator = bunny->AddComponent<Animator>();
 		animator->Awake();
@@ -50,20 +50,20 @@ namespace Scenes
 		auto camera2 = CreateGameObject<GameObject>("Culling Debug Camera");
 		camera2->AddComponent<Camera>();
 		camera2->AddComponent<CameraController>();
-		camera2->transform.SetLocalPosition(Vector3(0.0f, 10.0f, -30.0f));
+		camera2->transform.SetLocalPosition(Vector3(0.0f, 15.0f, -80.0f));
         camera2->transform.SetLocalScale(Vector3(0.75f, 0.75f, 1.0f));
         auto camera2Renderer = camera2->AddComponent<MeshRenderer>();
         camera2Renderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
 
-        auto floor = CreateGameObject<GameObject>("Floor");
-        auto floorRenderer = floor->AddComponent<MeshRenderer>();
-        floorRenderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_quad"));
-        floorRenderer->SetMaterial(0, ResourceManager::GetInstance().GetMaterial("Textured_material"));
-        floorRenderer->GetMaterial(0)->SetTexture(0, ResourceManager::GetInstance().GetTexture("T_Snow_Ground"));
-        floorRenderer->GetMaterial(0)->SetSampler(0, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+        //auto floor = CreateGameObject<GameObject>("Floor");
+        //auto floorRenderer = floor->AddComponent<MeshRenderer>();
+        //floorRenderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_quad"));
+        //floorRenderer->SetMaterial(0, ResourceManager::GetInstance().GetMaterial("Textured_material"));
+        //floorRenderer->GetMaterial(0)->SetTexture(0, ResourceManager::GetInstance().GetTexture("T_Snow_Ground"));
+        //floorRenderer->GetMaterial(0)->SetSampler(0, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
 
-        floor->transform.SetLocalRotation(Vector3(90.0f, 0.0f, 0.0f));
-        floor->transform.SetLocalScale(Vector3(50.0f, 50.0f, 1.0f));
+        //floor->transform.SetLocalRotation(Vector3(90.0f, 0.0f, 0.0f));
+        //floor->transform.SetLocalScale(Vector3(100.0f, 100.0f, 1.0f));
 
         //auto cube1 = CreateGameObject<GameObject>("Cube1");
         //auto cube1Renderer = cube1->AddComponent<MeshRenderer>();
@@ -87,20 +87,19 @@ namespace Scenes
         //cube2->transform.SetLocalPosition(Vector3(-20.0f, 5.0f, -10.0f));
         //cube2->transform.SetLocalScale(Vector3(2.5f, 2.5f, 2.5f));
 
-        auto cube3 = CreateGameObject<GameObject>("PointLight");
-        auto cube3Renderer = cube3->AddComponent<MeshRenderer>();
-        cube3Renderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
-        cube3Renderer->GetMaterial(0)->SetColor(Vector4(1.0f, 5.0f, 1.0f, 1.0f));
-        auto cube3PointLight = cube3->AddComponent<Light>();
-        cube3PointLight->type = LightType::Point;
-        cube3PointLight->color = Vector4(1.0f, 5.0f, 1.0f, 1000.0f);
-        cube3->transform.SetLocalPosition(Vector3(0.0f, 15.0f, 10.0f));
-        cube3->transform.SetLocalScale(Vector3(5.0f, 5.0f, 5.0f));
+        //auto cube3 = CreateGameObject<GameObject>("PointLight");
+        //auto cube3Renderer = cube3->AddComponent<MeshRenderer>();
+        //cube3Renderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
+        //cube3Renderer->GetMaterial(0)->SetColor(Vector4(1.0f, 5.0f, 1.0f, 1.0f));
+        //auto cube3PointLight = cube3->AddComponent<Light>();
+        //cube3PointLight->type = LightType::Point;
+        //cube3PointLight->color = Vector4(1.0f, 5.0f, 1.0f, 1000.0f);
+        //cube3->transform.SetLocalPosition(Vector3(0.0f, 15.0f, 10.0f));
+        //cube3->transform.SetLocalScale(Vector3(5.0f, 5.0f, 5.0f));
 
         auto directionalLight = CreateGameObject<GameObject>("DirectionalLight");
         auto directionalLightRenderer = directionalLight->AddComponent<MeshRenderer>();
-        directionalLightRenderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
-        directionalLightRenderer->GetMaterial(0)->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+        // directionalLightRenderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
         auto directionalLightComponent = directionalLight->AddComponent<Light>();
         directionalLightComponent->type = LightType::Directional;
         directionalLightComponent->color = Vector4(1.0f, 1.0f, 0.8f, 1.0f);
@@ -110,10 +109,23 @@ namespace Scenes
         auto lightingCube = CreateGameObject<GameObject>("Cube");
         auto lightingCubeRenderer = lightingCube->AddComponent<MeshRenderer>();
         lightingCubeRenderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
-        lightingCube->transform.SetLocalPosition(Vector3(15.0f, 5.0f, -15.0f));
+        lightingCube->transform.SetLocalPosition(Vector3(15.0f, 10.0f, -15.0f));
         lightingCube->transform.SetLocalScale(Vector3(10.0f, 10.0f, 10.0f));
+        auto cubeCollider = lightingCube->AddComponent<SphereCollider>();
 
-        auto cubeCollider = lightingCube->AddComponent<BoxCollider>();
+        auto lightingCube1 = CreateGameObject<GameObject>("Cube1");
+        auto lightingCubeRenderer1 = lightingCube1->AddComponent<MeshRenderer>();
+        lightingCubeRenderer1->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
+        lightingCube1->transform.SetLocalPosition(Vector3(-15.0f, 10.0f, 15.0f));
+        lightingCube1->transform.SetLocalScale(Vector3(10.0f, 10.0f, 10.0f));
+        auto cubeCollider1 = lightingCube1->AddComponent<BoxCollider>();
+
+        auto lightingCube2 = CreateGameObject<GameObject>("Cube2");
+        auto lightingCubeRenderer2 = lightingCube2->AddComponent<MeshRenderer>();
+        lightingCubeRenderer2->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
+        lightingCube2->transform.SetLocalPosition(Vector3(15.0f, 10.0f, 15.0f));
+        lightingCube2->transform.SetLocalScale(Vector3(10.0f, 10.0f, 10.0f));
+        auto cubeCollider2 = lightingCube2->AddComponent<BoxCollider>();
 
 	}
 }

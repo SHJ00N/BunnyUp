@@ -1,5 +1,4 @@
-#include "ResourceManager.h"
-#include "Texture2D.h"
+#include <EngineSystem.h>
 
 void LoadGameResources()
 {

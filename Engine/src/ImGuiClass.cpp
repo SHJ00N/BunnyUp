@@ -3,6 +3,7 @@
 #include "ConstantBufferManager.h"
 #include "SceneManager.h"
 #include "Camera.h"
+#include "TimeClass.h"
 
 namespace Engine
 {
@@ -36,7 +37,17 @@ namespace Engine
 		ImGui_ImplDX11_Init(device, context);
 
 		// subscribe event
-		m_listenerID = EventBus::GetInstance().Subscribe(EventType::SceneChange, [this]() { InitState(); });
+		m_sceneChangeListenerID = EventBus::GetInstance().Subscribe<SceneChangedEvent>([this](const SceneChangedEvent& e) { InitState(); });
+		m_objectDestroyedListenerID = EventBus::GetInstance().Subscribe< ObjectDestroyedEvent>(
+			[this](const ObjectDestroyedEvent& e) 
+			{ 
+				if (m_selectedGameObject && e.object->IsAncestorOf(m_selectedGameObject))
+				{
+					m_selectedGameObject = nullptr;
+				}
+			}
+		);
+		
 	}
 
 	void ImGuiClass::BeginFrame()
@@ -59,7 +70,8 @@ namespace Engine
 		ImGui::DestroyContext();
 
 		// unsubscribe event
-		EventBus::GetInstance().Unsubscribe(EventType::SceneChange, m_listenerID);
+		EventBus::GetInstance().Unsubscribe<SceneChangedEvent>(m_sceneChangeListenerID);
+		EventBus::GetInstance().Unsubscribe<ObjectDestroyedEvent>(m_objectDestroyedListenerID);
 	}
 
 	void ImGuiClass::RenderUI()
@@ -68,6 +80,7 @@ namespace Engine
 		renderSceneHierarchyWindow();
 		renderInspectorWindow();
 		renderTopBar();
+		frameRateCounter();
 	}
 
 	void ImGuiClass::renderLogWindow()
@@ -250,6 +263,15 @@ namespace Engine
 			ImGui::EndCombo();
 		}
 
+		ImGui::End();
+	}
+
+	void ImGuiClass::frameRateCounter()
+	{
+		ImGui::Begin("Frame Rate", nullptr,
+			ImGuiWindowFlags_NoTitleBar |
+			ImGuiWindowFlags_NoScrollbar);
+		ImGui::Text("FPS: %d", static_cast<int>(Engine::TimeClass::GetFrameRate()));
 		ImGui::End();
 	}
 }

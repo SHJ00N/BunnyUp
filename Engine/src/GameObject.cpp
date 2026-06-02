@@ -2,17 +2,14 @@
 
 namespace Engine
 {
-	GameObject::GameObject(const std::string& name) : m_name(name), parent(nullptr), transform(), scene(nullptr)
+	GameObject::GameObject(const std::string& name) : m_name(name), parent(nullptr), transform(), scene(nullptr), m_isDestroyed(false)
 	{
 		transform.owner = this;
 	}
 
 	GameObject::~GameObject()
 	{
-		for (auto& component : m_components)
-		{
-			component->Destroy();
-		}
+		Destroy();
 	}
 
 	std::unique_ptr<GameObject> GameObject::RemoveChild(GameObject* node)
@@ -21,6 +18,7 @@ namespace Engine
 		{
 			if (children[i].get() == node)
 			{
+				assert(node->parent == this);
 				node->parent = nullptr;
 				node->transform.parentTransform = nullptr;
 				node->PropagateTransformDirtyFlag();
@@ -76,7 +74,74 @@ namespace Engine
 			component->FixedUpdate(fdt);
 		}
 	}
+	
+	void GameObject::Destroy()
+	{
+		if (!m_isDestroyed)
+		{
+			m_isDestroyed = true;
+			// Call Destroy on all components
+			for (const auto& component : m_components)
+			{
+				component->Destroy();
+			}
+		}
+	}
 
+	void GameObject::OnTriggerEnter(Collider* other)
+	{
+		// Call OnTriggerEnter on all components
+		for (const auto& component : m_components)
+		{
+			component->OnTriggerEnter(other);
+		}
+	}
+
+	void GameObject::OnTriggerStay(Collider* other)
+	{
+		// Call OnTriggerStay on all components
+		for (const auto& component : m_components)
+		{
+			component->OnTriggerStay(other);
+		}
+	}
+
+	void GameObject::OnTriggerExit(Collider* other)
+	{
+		// Call OnTriggerExit on all components
+		for (const auto& component : m_components)
+		{
+			component->OnTriggerExit(other);
+		}
+	}
+
+	void GameObject::OnCollisionEnter(Collider* other)
+	{
+		// Call OnCollisionEnter on all components
+		for (const auto& component : m_components)
+		{
+			component->OnCollisionEnter(other);
+		}
+	}
+
+	void GameObject::OnCollisionStay(Collider* other)
+	{
+		// Call OnCollisionStay on all components
+		for (const auto& component : m_components)
+		{
+			component->OnCollisionStay(other);
+		}
+	}
+
+	void GameObject::OnCollisionExit(Collider* other)
+	{
+		// Call OnCollisionExit on all components
+		for (const auto& component : m_components)
+		{
+			component->OnCollisionExit(other);
+		}
+	}
+	
 	void GameObject::PropagateTransformDirtyFlag()
 	{
 		transform.SetDirty();
@@ -84,5 +149,18 @@ namespace Engine
 		{
 			child->PropagateTransformDirtyFlag();
 		}
+	}
+
+	bool GameObject::IsAncestorOf(const GameObject* node) const
+	{
+		while (node)
+		{
+			if (node == this)
+				return true;
+
+			node = node->parent;
+		}
+
+		return false;
 	}
 }

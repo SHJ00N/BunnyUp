@@ -49,11 +49,11 @@ namespace Engine
         m_lineVertices.clear();
         m_triangleVertices.clear();
 
-        // render scene objects
-        for (auto& child : scene->GetRoot()->GetChildren())
-        {
-            traverseObject(child.get());
-        }
+        // render culling bounds
+        //for (auto& child : scene->GetRoot()->GetChildren())
+        //{
+        //    traverseObject(child.get());
+        //}
 
         // render camera frsutum
         for (auto camera : scene->GetCameras())
@@ -67,6 +67,9 @@ namespace Engine
         {
             collider->BuildDebugRender(this);
         }
+
+		// render BVH
+		traverseBVHNode(scene->GetPhysicsSystem()->GetBVHRoot());
 
         // render debug vertices
         // -----------------------------------------------------------------------------------
@@ -107,6 +110,18 @@ namespace Engine
         {
             traverseObject(child.get());
         }
+    }
+
+    void DebugRenderer::traverseBVHNode(const BVH::BVHNode* node)
+    {
+        if (node == nullptr) return;
+
+		addAABB(&node->bounds, Transform(), Vector4(1.0f, 0.0f, 1.0f, 1.0f));
+        if (!node->IsLeaf())
+        {
+            traverseBVHNode(node->left.get());
+            traverseBVHNode(node->right.get());
+		}
     }
 
     void DebugRenderer::addLine(const Vector3& p0, const Vector3& p1, const Vector4& color)
@@ -230,10 +245,13 @@ namespace Engine
         addAABB(&aabb, transform, color);
     }
 
-    void DebugRenderer::AddSphere(const Vector3& center, const float radius, const Vector4& color)
+    void DebugRenderer::AddSphere(const Vector3& center, float radius, const Transform& transform, const Vector4& color)
     {
-        constexpr int segments = 32;
+        constexpr int segments = 16;
         constexpr float PI = 3.14159265359f;
+        const auto& scale = transform.GetLocalScale();
+        float uniformScale = max(scale.x, max(scale.y, scale.z));
+        radius *= uniformScale;
 
         for (int x = 0; x < segments; ++x)
         {
