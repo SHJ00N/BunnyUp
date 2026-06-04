@@ -15,6 +15,11 @@ namespace Engine
         const auto& colliders = scene->GetColliders();
         std::vector<Collider*> colliderPtrs(colliders.begin(), colliders.end());
         m_bvhRoot = BVH::BuildBVH(colliderPtrs, 0, static_cast<int>(colliderPtrs.size()));
+        if (m_bvhRoot)
+        {
+            m_buildArea = m_bvhRoot->bounds.SurfaceArea();
+            m_buildAreaRatio = ComputeAreaRatio(m_bvhRoot.get());
+        }
         
         // subscribe object destroying event
         m_objectDestroyedListenerID = EventBus::GetInstance().Subscribe<ObjectDestroyedEvent>(
@@ -38,6 +43,7 @@ namespace Engine
         m_currentCollisionPairs.clear();
 
 		// Current frame collision detection
+        updateCollider(scene);
 		broadPhase(scene);
         narrowPhase();
 		// dispatch collision events based on current and previous collision pairs
@@ -80,10 +86,7 @@ namespace Engine
         // Both leaf nodes
         if (a->IsLeaf() && b->IsLeaf())
         {
-            m_candidateCollisionPairs.emplace_back(
-                a->collider,
-                b->collider);
-
+            m_candidateCollisionPairs.emplace_back(a->collider, b->collider);
             return;
         }
 
@@ -107,42 +110,82 @@ namespace Engine
         collectPairs(a->right.get(), b);
     }
 
+    bool Physics::needRebuildBVH(int colliderCount)
+    {
+        if (!m_bvhRoot)
+        {
+            return false;
+        }
+        // get ratio of current size to build size
+        float currentAreaRatio = ComputeAreaRatio(m_bvhRoot.get());
+        float ratio = currentAreaRatio / m_buildAreaRatio;
+
+        float growth = m_bvhRoot->bounds.SurfaceArea() / m_buildArea;
+
+        return ratio > 1.3f || growth > 2.0f;
+    }
+
+    void Physics::updateCollider(Scene* scene)
+    {
+        const auto& colliders = scene->GetColliders();
+        for (auto collider : colliders)
+        {
+            BVHNode* leaf = collider->bvhNode;
+
+            if (leaf == nullptr)
+            {
+                continue;
+            }
+            if (leaf->bounds.Contains(collider->GetBounds()))
+            {
+                continue;
+            }
+            // collider is out from bvh bounds
+            // The tree is reconstructed in the order of remove/insert -> rotation -> rebuild. Tree reconstruction can be terminated at each stage.
+            auto leafPtr = RemoveLeaf(m_bvhRoot, leaf);
+            leafPtr->bounds = CreateFatAABB(collider->GetBounds());
+            InsertLeaf(m_bvhRoot, std::move(leafPtr));
+
+            if (needRebuildBVH(static_cast<int>(colliders.size())))
+            {
+                LOG_INFO("BVH Rebuild");
+                std::vector<Collider*> colliderPtrs(colliders.begin(), colliders.end());
+                m_bvhRoot = BuildBVH(colliderPtrs, 0, static_cast<int>(colliderPtrs.size()));
+                if (m_bvhRoot)
+                {
+                    m_buildArea = m_bvhRoot->bounds.SurfaceArea();
+                    m_buildAreaRatio = ComputeAreaRatio(m_bvhRoot.get());
+                }
+            }
+        }
+    }
+
 	void Physics::broadPhase(Scene* scene)
 	{
 		m_candidateCollisionPairs.clear();
         const auto& colliders = scene->GetColliders();
 		// Naive O(n^2) broad phase - can be optimized with spatial partitioning (e.g., quadtrees, octrees, BVH)
-        for (size_t i = 0; i < colliders.size(); ++i)
-        {
-            for (size_t j = i + 1; j < colliders.size(); ++j)
-            {
-                auto* a = colliders[i];
-                auto* b = colliders[j];
+     //   for (size_t i = 0; i < colliders.size(); ++i)
+     //   {
+     //       for (size_t j = i + 1; j < colliders.size(); ++j)
+     //       {
+     //           auto* a = colliders[i];
+     //           auto* b = colliders[j];
 
-                if (Collision::Intersects(a, b))
-                {
-					m_currentCollisionPairs.emplace(a, b);
-                }
-            }
-        }
-
-        for(auto collider : colliders)
-        {
-			BVHNode* node = collider->bvhNode;
-            if(node != nullptr && !node->bounds.Contains(collider->GetBounds()))
-            {
-				BVH::RemoveLeaf(m_bvhRoot, node);
-			}
-		}
+     //           if (Collision::Intersects(a, b))
+     //           {
+					//m_currentCollisionPairs.emplace(a, b);
+     //           }
+     //       }
+     //   }
 
         // collision detection
-		// collectPairs(m_bvhRoot.get(), m_bvhRoot.get());
+		collectPairs(m_bvhRoot.get(), m_bvhRoot.get());
 	}
 
     void Physics::narrowPhase()
     {
 		// Narrow phase - precise collision checks for candidate pairs
-		LOG_INFO("Narrow Phase: %d candidate pairs", m_candidateCollisionPairs.size());
         for (const CollisionPair& pair : m_candidateCollisionPairs)
         {
             if (Collision::Intersects(pair.a, pair.b))

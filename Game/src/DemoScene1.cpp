@@ -3,6 +3,7 @@
 #include "DemoScene1.h"
 #include "CameraController.h"
 #include "PlayerController.h"
+#include "CubeController.h"
 
 namespace Scenes
 {
@@ -106,26 +107,36 @@ namespace Scenes
         directionalLight->transform.SetLocalPosition(Vector3(0.0f, 30.0f, 0.0f));
         directionalLight->transform.SetLocalRotation(Vector3(50.0f, 0.0f, 0.0f));
 
-        auto lightingCube = CreateGameObject<GameObject>("Cube");
+        auto lightingCube = CreateGameObject<GameObject>("CubeFR");
+      //  lightingCube->AddComponent<Cube::CubeController>();
         auto lightingCubeRenderer = lightingCube->AddComponent<MeshRenderer>();
         lightingCubeRenderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
         lightingCube->transform.SetLocalPosition(Vector3(15.0f, 10.0f, -15.0f));
         lightingCube->transform.SetLocalScale(Vector3(10.0f, 10.0f, 10.0f));
         auto cubeCollider = lightingCube->AddComponent<SphereCollider>();
 
-        auto lightingCube1 = CreateGameObject<GameObject>("Cube1");
+        auto lightingCube1 = CreateGameObject<GameObject>("CubeBL");
+     //   lightingCube1->AddComponent<Cube::CubeController>();
         auto lightingCubeRenderer1 = lightingCube1->AddComponent<MeshRenderer>();
         lightingCubeRenderer1->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
         lightingCube1->transform.SetLocalPosition(Vector3(-15.0f, 10.0f, 15.0f));
         lightingCube1->transform.SetLocalScale(Vector3(10.0f, 10.0f, 10.0f));
         auto cubeCollider1 = lightingCube1->AddComponent<BoxCollider>();
 
-        auto lightingCube2 = CreateGameObject<GameObject>("Cube2");
+        auto lightingCube2 = CreateGameObject<GameObject>("CubeBR");
+    //    lightingCube2->AddComponent<Cube::CubeController>();
         auto lightingCubeRenderer2 = lightingCube2->AddComponent<MeshRenderer>();
         lightingCubeRenderer2->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
-        lightingCube2->transform.SetLocalPosition(Vector3(15.0f, 10.0f, 15.0f));
+        lightingCube2->transform.SetLocalPosition(Vector3(15.0f, 30.0f, 20.0f));
         lightingCube2->transform.SetLocalScale(Vector3(10.0f, 10.0f, 10.0f));
         auto cubeCollider2 = lightingCube2->AddComponent<BoxCollider>();
 
+        auto lightingCube3 = CreateGameObject<GameObject>("CubeCenter");
+    //    lightingCube3->AddComponent<Cube::CubeController>();
+        auto lightingCubeRenderer3 = lightingCube3->AddComponent<MeshRenderer>();
+        lightingCubeRenderer3->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
+        lightingCube3->transform.SetLocalPosition(Vector3(0.0f, 30.0f, 0.0f));
+        lightingCube3->transform.SetLocalScale(Vector3(10.0f, 10.0f, 10.0f));
+        auto cubeCollider3 = lightingCube3->AddComponent<BoxCollider>();
 	}
 }

@@ -170,5 +170,11 @@ namespace Engine
 				std::abs(center.z - other.center.z) + other.extents.z <= extents.z
 				);
 		}
+
+		float SurfaceArea() const
+		{
+			const Vector3 size = extents * 2.0f;
+			return 2.0f * (size.x * size.y + size.x * size.z + size.y * size.z);
+		}
 	};
 }

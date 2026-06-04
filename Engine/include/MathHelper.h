@@ -5,7 +5,7 @@
 
 namespace Engine
 {
-	constexpr float PI = 3.141592654f;
+	inline constexpr float PI = 3.141592654f;
 	
 	struct Vector2
 	{

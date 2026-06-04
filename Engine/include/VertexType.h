@@ -7,7 +7,7 @@
 
 namespace Engine
 {
-	constexpr int  MaxWeight = 4;
+	inline constexpr int  MaxWeight = 4;
 
 	struct VertexP
 	{

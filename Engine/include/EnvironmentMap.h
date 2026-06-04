@@ -10,11 +10,11 @@ namespace Engine
 	class Texture2D;
 	class RenderTargetResource;
 
-	constexpr unsigned int EnvCubeMapSize = 1024;
-	constexpr unsigned int IrradianceMapSize = 32;
-	constexpr unsigned int PrefilteredEnvMapSize = 128;
-	constexpr unsigned int BrdfLUTSize = 512;
-	constexpr unsigned int MipLevels = 5;
+	inline constexpr unsigned int EnvCubeMapSize = 1024;
+	inline constexpr unsigned int IrradianceMapSize = 32;
+	inline constexpr unsigned int PrefilteredEnvMapSize = 128;
+	inline unsigned int BrdfLUTSize = 512;
+	inline constexpr unsigned int MipLevels = 5;
 
 	class EnvironmentMap
 	{

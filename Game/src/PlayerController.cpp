@@ -9,7 +9,7 @@ namespace Player
     }
     void PlayerController::OnTriggerStay(Collider* other)
     {
-        LOG_INFO("PlayerController: OnTriggerStay with %s", other->ownerGameObject->GetName().c_str());
+        // LOG_INFO("PlayerController: OnTriggerStay with %s", other->ownerGameObject->GetName().c_str());
     }
     void PlayerController::OnTriggerExit(Collider* other)
     {
@@ -21,7 +21,7 @@ namespace Player
     }
     void PlayerController::OnCollisionStay(Collider* other)
     {
-        LOG_INFO("PlayerController: OnCollisionStay with %s", other->ownerGameObject->GetName().c_str());
+        // LOG_INFO("PlayerController: OnCollisionStay with %s", other->ownerGameObject->GetName().c_str());
     }
     void PlayerController::OnCollisionExit(Collider* other)
     {

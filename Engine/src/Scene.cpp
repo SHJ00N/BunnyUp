@@ -29,7 +29,6 @@ namespace Engine
 
 	Scene::~Scene()
 	{
-		m_root.reset();
 	}
 
 	void Scene::SceneAwake()
@@ -47,6 +46,12 @@ namespace Engine
 		{
 			m_physicsSystem->Initialize(this);
 		}
+	}
+
+	void Scene::SceneExit()
+	{
+		m_physicsSystem->Shutdown();
+		m_root.reset();
 	}
 
 	void Scene::SceneUpdate(float dt)
@@ -250,7 +255,7 @@ namespace Engine
 	{
 		if(collider->bvhNode)
 		{
-			BVH::RemoveLeaf(m_physicsSystem->GetBVHRootPtr(), collider->bvhNode);
+			BVH::DestroyLeaf(m_physicsSystem->GetBVHRootPtr(), collider->bvhNode);
 		}
 
 		m_colliders.erase(

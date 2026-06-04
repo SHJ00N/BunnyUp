@@ -17,7 +17,7 @@ namespace Engine
 	struct AABB;
 	struct Frustum;
 	
-	constexpr UINT MaxDebugVertices = 262144;
+	inline constexpr UINT MaxDebugVertices = 262144;
 
 	struct DebugVertex
 	{

@@ -72,7 +72,13 @@ namespace Engine
 
 		std::unique_ptr<BVHNode> m_bvhRoot;
 		std::vector<CollisionPair> m_candidateCollisionPairs;
+		// bvh state member
+		float m_buildAreaRatio = 0.0f;
+		float m_buildArea = 0.0f;
+		// There are various policies for rebuilding the tree. Here, we use the area ratio and root bounds growth.
+		bool needRebuildBVH(int colliderCount);
 		// collision detection phases
+		void updateCollider(Scene* scene);
 		void broadPhase(Scene* scene);
 		void collectPairs(BVHNode* a, BVHNode* b);	// helper function for broad phase to collect potential collision pairs from BVH traversal
 		void narrowPhase();

@@ -24,7 +24,7 @@ namespace Engine
 		void SceneUpdate(float dt);
 		void SceneFixedUpdate(float fdt);
 		void SceneObjectDestroy();
-		virtual void SceneExit() { }
+		void SceneExit();
 
 		void Render(class ConstantBufferManager& cbManager);
 
