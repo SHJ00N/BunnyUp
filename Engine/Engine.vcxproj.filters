@@ -228,6 +228,12 @@
     <ClInclude Include="include\BVHNode.h">
       <Filter>헤더 파일\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Rigidbody.h">
+      <Filter>헤더 파일\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Contact.h">
+      <Filter>헤더 파일\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\D3DManager.cpp">
@@ -379,6 +385,9 @@
     </ClCompile>
     <ClCompile Include="src\BVHNode.cpp">
       <Filter>소스 파일\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rigidbody.cpp">
+      <Filter>소스 파일\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -16,3 +16,4 @@
 #include "MeshRenderer.h"
 #include "SkinnedRenderer.h"
 #include "Light.h"
+#include "Rigidbody.h"

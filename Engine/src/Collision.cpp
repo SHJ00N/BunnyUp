@@ -2,10 +2,11 @@
 #include "Log.h"
 
 #include <algorithm>
+#include <cmath>
 
 namespace Engine
 {
-	bool Collision::Intersects(Collider* colliderA, Collider* colliderB)
+	bool Collision::Intersects(Collider* colliderA, Collider* colliderB, Contact& contact)
 	{
         const ColliderType typeA = colliderA->GetColliderType();
         const ColliderType typeB = colliderB->GetColliderType();
@@ -13,29 +14,29 @@ namespace Engine
         // box to box
         if (typeA == ColliderType::OBB && typeB == ColliderType::OBB)
         {
-            return IntersectsBoxToBox(static_cast<BoxCollider*>(colliderA), static_cast<BoxCollider*>(colliderB));
+            return IntersectsBoxToBox(static_cast<BoxCollider*>(colliderA), static_cast<BoxCollider*>(colliderB), contact);
         }
 
         // box to sphere
         if (typeA == ColliderType::OBB && typeB == ColliderType::Sphere)
         {
-            return IntersectsBoxToSphere(static_cast<BoxCollider*>(colliderA), static_cast<SphereCollider*>(colliderB));
+            return IntersectsBoxToSphere(static_cast<BoxCollider*>(colliderA), static_cast<SphereCollider*>(colliderB), contact);
         }
         if (typeA == ColliderType::Sphere && typeB == ColliderType::OBB)
         {
-            return IntersectsBoxToSphere(static_cast<BoxCollider*>(colliderB), static_cast<SphereCollider*>(colliderA));
+            return IntersectsBoxToSphere(static_cast<BoxCollider*>(colliderB), static_cast<SphereCollider*>(colliderA), contact);
         }
 
         // sphere to sphere
         if (typeA == ColliderType::Sphere && typeB == ColliderType::Sphere)
         {
-            return IntersectsSphereToSphere(static_cast<SphereCollider*>(colliderA), static_cast<SphereCollider*>(colliderB));
+            return IntersectsSphereToSphere(static_cast<SphereCollider*>(colliderA), static_cast<SphereCollider*>(colliderB), contact);
         }
 
         return false;
 	}
 
-	bool Collision::IntersectsBoxToBox(BoxCollider* boxA, BoxCollider* boxB)
+	bool Collision::IntersectsBoxToBox(BoxCollider* boxA, BoxCollider* boxB, Contact& contact)
 	{
         // colliders world center
         const Vector3 centerA = boxA->GetWorldCenter();
@@ -73,6 +74,8 @@ namespace Engine
         };
 
         // Check intersects with Separating Axis Theorem
+        float minOverlap = FLT_MAX;
+        Vector3 bestAxis;
         for (Vector3 axis : axes)
         {
             // Ignores zero vector operations
@@ -87,16 +90,33 @@ namespace Engine
             float radiusA = std::abs(Dot(rightA, axis)) * extentsA.x + std::abs(Dot(upA, axis)) * extentsA.y + std::abs(Dot(forwardA, axis)) * extentsA.z;
             float radiusB = std::abs(Dot(rightB, axis)) * extentsB.x + std::abs(Dot(upB, axis)) * extentsB.y + std::abs(Dot(forwardB, axis)) * extentsB.z;
 
-            if (distance > radiusA + radiusB)
+            // check intersect
+            float overlap = radiusA + radiusB - distance;
+            if (overlap < 0.0f) return false;
+            // update physics info
+            if (overlap < minOverlap)
             {
-                return false;
+                minOverlap = overlap;
+                bestAxis = axis;
             }
         }
+
+        Vector3 centerDelta = centerB - centerA;
+
+        if (Dot(centerDelta, bestAxis) < 0.0f)
+        {
+            bestAxis = { -bestAxis.x, -bestAxis.y, -bestAxis.z };
+        }
+        contact.normal = bestAxis;
+        contact.penetration = minOverlap;
+
+        contact.a = boxA;
+        contact.b = boxB;
 
         return true;
 	}
 
-	bool Collision::IntersectsBoxToSphere(BoxCollider* box, SphereCollider* sphere)
+	bool Collision::IntersectsBoxToSphere(BoxCollider* box, SphereCollider* sphere, Contact& contact)
 	{
         const Vector3 boxCenter = box->GetWorldCenter();
         const Vector3 extents = box->GetWorldExtents();
@@ -124,10 +144,29 @@ namespace Engine
         // Closest point back to world
         const Vector3 closestPoint = boxCenter + right * closestX + up * closestY + forward * closestZ;
 
-        return LengthSq(sphereCenter - closestPoint) <= sphereRadius * sphereRadius;
+        Vector3 delta = sphereCenter - closestPoint;
+        float distanceSq = LengthSq(delta);
+        if (distanceSq > sphereRadius * sphereRadius) return false;
+
+        float distance = std::sqrt(distanceSq);
+        if (distance > 1e-6f)
+        {
+            contact.normal = delta / distance;
+            contact.penetration = sphereRadius - distance;
+        }
+        else
+        {
+            contact.normal = Normalize(sphereCenter - boxCenter);
+            contact.penetration = sphereRadius;
+        }
+
+        contact.a = box;
+        contact.b = sphere;
+
+        return true;
 	}
 
-	bool Collision::IntersectsSphereToSphere(SphereCollider* sphereA, SphereCollider* sphereB)
+	bool Collision::IntersectsSphereToSphere(SphereCollider* sphereA, SphereCollider* sphereB, Contact& contact)
 	{
         const Vector3 centerA = sphereA->GetWorldCenter();
         const Vector3 centerB = sphereB->GetWorldCenter();
@@ -135,8 +174,27 @@ namespace Engine
         const float radiusA = sphereA->GetWorldRadius();
         const float radiusB = sphereB->GetWorldRadius();
 
+        Vector3 delta = centerB - centerA;
+        float distanceSq = LengthSq(delta);
         const float radiusSum = radiusA + radiusB;
 
-        return LengthSq(centerB - centerA) <= radiusSum * radiusSum;
+        if (distanceSq > radiusSum * radiusSum) return false;
+
+        float distance = std::sqrt(distanceSq);
+        if (distance > 1e-6f)
+        {
+            contact.normal = delta / distance;
+            contact.penetration = radiusSum - distance;
+        }
+        else
+        {
+            contact.normal = Vector3(1, 0, 0);
+            contact.penetration = radiusSum;
+        }
+
+        contact.a = sphereA;
+        contact.b = sphereB;
+
+        return true;
 	}
 }

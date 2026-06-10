@@ -3,6 +3,7 @@
 #include "Collider.h"
 #include "BVHNode.h"
 #include "EventBus.h"
+#include "Contact.h"
 
 #include <unordered_set>
 #include <vector>
@@ -72,6 +73,8 @@ namespace Engine
 
 		std::unique_ptr<BVHNode> m_bvhRoot;
 		std::vector<CollisionPair> m_candidateCollisionPairs;
+
+		std::vector<Contact> m_contacts;	// contacted pairs
 		// bvh state member
 		float m_buildAreaRatio = 0.0f;
 		float m_buildArea = 0.0f;
@@ -82,9 +85,14 @@ namespace Engine
 		void broadPhase(Scene* scene);
 		void collectPairs(BVHNode* a, BVHNode* b);	// helper function for broad phase to collect potential collision pairs from BVH traversal
 		void narrowPhase();
-
 		// collision event processing
 		void processCollisionEvents();
+
+		// rigidbody process
+		void updateRigidbody(Scene* scene, float fdt);
+		void processCollisionReactions();
+		void resolvePenetration(const Contact& contact);
+		void resolveImpulse(const Contact& contact);
 
 		ListenerID m_objectDestroyedListenerID;
 	};
