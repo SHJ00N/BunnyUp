@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Bone.h"
 #include "Assimp_DX_helpers.h"
 

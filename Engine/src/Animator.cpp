@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Animator.h"
 #include "Animation.h"
 #include "SkinnedRenderer.h"
@@ -84,7 +85,7 @@ namespace Engine
         {
             if (m_CurrentTime >= m_CurrentAnimation->GetDuration())
             {
-                m_CurrentTime = min(m_CurrentTime, m_CurrentAnimation->GetDuration() - 0.0001f);
+                m_CurrentTime = std::min(m_CurrentTime, m_CurrentAnimation->GetDuration() - 0.0001f);
                 m_animationIsFinished = true;
             }
             else

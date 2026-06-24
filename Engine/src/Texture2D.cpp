@@ -1,7 +1,9 @@
+#include "pch.h"
 #include "Texture2D.h"
 #include "D3DManager.h"
 #include "stb_image.h"
 
+#include <WICTextureLoader.h>
 #include <filesystem>
 
 namespace Engine
@@ -26,7 +28,7 @@ namespace Engine
 			D3D11_BIND_SHADER_RESOURCE,  
 			0,
 			0, 
-			getLoaderFlags(type),
+			static_cast<DirectX::WIC_LOADER_FLAGS>(getLoaderFlags(type)),
 			nullptr, 
 			m_pShaderResourceView.GetAddressOf()
 		);
@@ -94,7 +96,7 @@ namespace Engine
 		D3DManager::GetInstance().GetDeviceContext()->PSSetShaderResources(slot, 1, m_pShaderResourceView.GetAddressOf());
 	}
 
-	DirectX::WIC_LOADER_FLAGS Texture2D::getLoaderFlags(TextureType type) const
+	uint32_t Texture2D::getLoaderFlags(TextureType type) const
 	{
 		switch (type)
 		{

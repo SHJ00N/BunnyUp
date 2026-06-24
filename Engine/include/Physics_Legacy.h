@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Collider.h"
+#include "Collider_Legacy.h"
 #include "BVHNode.h"
 #include "EventBus.h"
-#include "Contact.h"
+#include "Contact_Legacy.h"
 
 #include <unordered_set>
 #include <vector>
@@ -12,46 +12,6 @@
 namespace Engine
 {
 	using namespace BVH;
-	struct CollisionPair
-	{
-		Collider* a;
-		Collider* b;
-
-		CollisionPair() = default;
-
-		CollisionPair(Collider* colliderA, Collider* colliderB)
-		{
-			// Ensure consistent ordering (a < b) to avoid duplicate pairs
-			if (colliderA->GetColliderID() <colliderB->GetColliderID())
-			{
-				a = colliderA;
-				b = colliderB;
-			}
-			else
-			{
-				a = colliderB;
-				b = colliderA;
-			}
-		}
-
-		// internal equality operator used collider id  for CollisionPair, used for unordered_set
-		bool operator==(const CollisionPair& other) const
-		{
-			return a->GetColliderID() == other.a->GetColliderID() && b->GetColliderID() == other.b->GetColliderID();
-		}
-	};
-
-	// Custom hash function for CollisionPair to be used in unordered_set
-	struct CollisionPairHash
-	{
-		size_t operator()(const CollisionPair& pair) const
-		{
-			size_t h1 = std::hash<uint64_t>()(pair.a->GetColliderID());
-			size_t h2 = std::hash<uint64_t>()(pair.b->GetColliderID());
-
-			return h1 ^ (h2 << 1);
-		}
-	};
 
 	class Scene;
 	class Physics
@@ -74,7 +34,9 @@ namespace Engine
 		std::unique_ptr<BVHNode> m_bvhRoot;
 		std::vector<CollisionPair> m_candidateCollisionPairs;
 
+		std::vector<Contact> m_prevContacts;
 		std::vector<Contact> m_contacts;	// contacted pairs
+		std::vector<ContactConstraint> m_constraints;
 		// bvh state member
 		float m_buildAreaRatio = 0.0f;
 		float m_buildArea = 0.0f;
@@ -90,9 +52,14 @@ namespace Engine
 
 		// rigidbody process
 		void updateRigidbody(Scene* scene, float fdt);
-		void processCollisionReactions();
-		void resolvePenetration(const Contact& contact);
-		void resolveImpulse(const Contact& contact);
+		void updateContactImpulse();
+		void buildContactConstraints(float fdt);
+		void calculatePlaneSpace(const Vector3& n, Vector3& p, Vector3& q);
+		void warmStart(ContactConstraint& constraint);
+		void integrateTransform(Scene* scene, float fdt);
+		void solveConstraints();
+		void solveImpulse(ContactConstraint& constraint, float maxRambdaDt[4], float minRambdaDt[4]);
+		void solveFriction(ContactConstraint& constraint, float maxRambdaDt[4], float minRambdaDt[4]);
 
 		ListenerID m_objectDestroyedListenerID;
 	};

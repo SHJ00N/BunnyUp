@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cfloat>
+#include <cmath>
 #include <DirectXMath.h>
 
 namespace Engine
@@ -133,6 +134,57 @@ namespace Engine
 		const float& operator[](size_t index) const
 		{
 			return (&x)[index];
+		}
+	};
+
+	struct Matrix3x3
+	{
+		union
+		{
+			struct
+			{
+				float m00, m01, m02;
+				float m10, m11, m12;
+				float m20, m21, m22;
+			};
+			float m[3][3];
+		};
+
+		constexpr Matrix3x3() noexcept
+			: m00(0), m01(0), m02(0),
+			m10(0), m11(0), m12(0),
+			m20(0), m21(0), m22(0) {
+		}
+
+		constexpr Matrix3x3(float n) noexcept
+			: m00(n), m01(0), m02(0),
+			m10(0), m11(n), m12(0),
+			m20(0), m21(0), m22(n) {
+		}
+
+		Matrix3x3(const DirectX::XMFLOAT3X3& m) noexcept
+			: m00(m._11), m01(m._12), m02(m._13),
+			m10(m._21), m11(m._22), m12(m._23),
+			m20(m._31), m21(m._32), m22(m._33) {
+		}
+
+		// identity matrix
+		static Matrix3x3 Identity() noexcept
+		{
+			return Matrix3x3(1.0f);
+		}
+
+		// convert to XMMATRIX
+		DirectX::XMMATRIX ToSIMD() const noexcept
+		{
+			return DirectX::XMLoadFloat3x3(reinterpret_cast<const DirectX::XMFLOAT3X3*>(&m00));
+		}
+		// convert from XMMATRIX
+		static Matrix3x3 FromSIMD(DirectX::XMMATRIX m) noexcept
+		{
+			Matrix3x3 result;
+			DirectX::XMStoreFloat3x3(reinterpret_cast<DirectX::XMFLOAT3X3*>(&result.m00), m);
+			return result;
 		}
 	};
 
@@ -294,9 +346,31 @@ namespace Engine
 	inline float Radians(float degrees) noexcept { return degrees * (PI / 180.0f); }
 	inline float Degrees(float radians) noexcept { return radians * (180.0f / PI); }
 	inline Quaternion operator*(const Quaternion& a, const Quaternion& b) noexcept { return Quaternion::FromSIMD(DirectX::XMQuaternionMultiply(a.ToSIMD(), b.ToSIMD())); }
+	inline Quaternion operator*(const Quaternion& a, float scalar) noexcept { return Quaternion::FromSIMD(DirectX::XMVectorScale(a.ToSIMD(), scalar)); }
+	inline Quaternion operator*(float scalar, const Quaternion& a) noexcept { return Quaternion::FromSIMD(DirectX::XMVectorScale(a.ToSIMD(), scalar)); }
+	inline Quaternion operator+(const Quaternion& a, const Quaternion& b) noexcept { return Quaternion::FromSIMD(DirectX::XMVectorAdd(a.ToSIMD(), b.ToSIMD())); }
+	inline Quaternion& operator+=(Quaternion& a, const Quaternion& b) noexcept { a = a + b; return a; }
+
 
 	inline Quaternion AngleAxis(float angle, const Vector3& axis) noexcept { return Quaternion::FromSIMD(DirectX::XMQuaternionRotationAxis(axis.ToSIMD(), Radians(angle))); }
 	inline Quaternion RotationPitchYawRoll(float pitch, float yaw, float roll) noexcept { return Quaternion::FromSIMD(DirectX::XMQuaternionRotationRollPitchYaw(Radians(pitch), Radians(yaw), Radians(roll))); }
+	inline Vector3 QuaternionToEuler(const Quaternion& q)
+	{
+		DirectX::XMMATRIX m = DirectX::XMMatrixRotationQuaternion(q.ToSIMD());
+
+		float pitch;
+		float yaw;
+		float roll;
+
+		// DirectX RollPitchYaw 기준 추출
+		pitch = std::atan2(m.r[2].m128_f32[1], m.r[2].m128_f32[2]);
+
+		yaw = std::asin(-m.r[2].m128_f32[0]);
+
+		roll = std::atan2(m.r[1].m128_f32[0], m.r[0].m128_f32[0]);
+
+		return Vector3(Degrees(pitch), Degrees(yaw), Degrees(roll));
+	}
 
 	inline Quaternion Normalize(const Quaternion& q) noexcept
 	{
@@ -307,6 +381,15 @@ namespace Engine
 	}
 	inline Quaternion Slerp(const Quaternion& a, const Quaternion& b, float t) noexcept { return Quaternion::FromSIMD(DirectX::XMQuaternionSlerp(a.ToSIMD(), b.ToSIMD(), t)); }
 	inline Quaternion Inverse(const Quaternion& q) noexcept { return Quaternion::FromSIMD(DirectX::XMQuaternionInverse(q.ToSIMD())); }
+
+	// Matrix3x3
+	inline Vector3 operator*(const Matrix3x3& m, const Vector3& v) noexcept { return Vector3::FromSIMD(DirectX::XMVector3Transform(v.ToSIMD(), m.ToSIMD())); }
+	inline Vector3 operator*(const Vector3& v, const Matrix3x3& m) noexcept { return Vector3::FromSIMD(DirectX::XMVector3Transform(v.ToSIMD(), m.ToSIMD())); }
+	inline Matrix3x3 operator*(const Matrix3x3& m, float scalar) noexcept { return Matrix3x3::FromSIMD(m.ToSIMD() * scalar); }
+	inline Matrix3x3 operator*(const Matrix3x3& a, const Matrix3x3& b) noexcept { return Matrix3x3::FromSIMD(DirectX::XMMatrixMultiply(a.ToSIMD(), b.ToSIMD())); }
+
+	inline Matrix3x3 Transpose(const Matrix3x3& m) noexcept { return Matrix3x3::FromSIMD(DirectX::XMMatrixTranspose(m.ToSIMD())); }
+	inline Matrix3x3 Inverse(const Matrix3x3& m) noexcept { return Matrix3x3::FromSIMD(DirectX::XMMatrixInverse(nullptr, m.ToSIMD())); }
 
 	// Matrix4x4
 	inline Vector3 operator*(const Matrix4x4& m, const Vector3& v) noexcept { return Vector3::FromSIMD(DirectX::XMVector3Transform(v.ToSIMD(), m.ToSIMD())); }

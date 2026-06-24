@@ -27,6 +27,7 @@ namespace Engine
 		// virtual functions
 		virtual void BuildDebugRender(DebugRenderer* renderer) const = 0;
 		virtual AABB GetBounds() const = 0;
+		virtual Matrix3x3 GetInverseInertia(float mass) const = 0;
 
 		ColliderType GetColliderType() const { return m_type; }
 		// set up trigger
@@ -59,6 +60,7 @@ namespace Engine
 		AABB GetBounds() const override;
 		void BuildDebugRender(DebugRenderer* renderer) const override;
 		void OnImGui() override;
+		Matrix3x3 GetInverseInertia(float mass) const override;
 
 		// utility
 		Vector3 GetWorldAABBExtents() const;
@@ -75,6 +77,7 @@ namespace Engine
 		AABB GetBounds() const override;
 		void BuildDebugRender(DebugRenderer* renderer) const override;
 		void OnImGui() override;
+		Matrix3x3 GetInverseInertia(float mass) const override;
 
 		// utility
 		float GetWorldRadius() const;

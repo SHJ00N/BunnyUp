@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Scene.h"
 #include "ConstantBufferManager.h"
 #include "RendererComponent.h"
@@ -6,15 +7,17 @@
 #include "EditorCameraController.h"
 #include "Light.h"
 #include "Frustum.h"
-#include "Collider.h"
+#include "Collider_Legacy.h"
 #include "EventBus.h"
+#include "PhysicsSystem.h"
 
 namespace Engine
 {
 	Scene::Scene()
 	{
 		// Initialize physics system
-		m_physicsSystem = std::make_unique<Physics>();
+		m_physicsSystem = std::make_unique<PhysicsSystem>();
+		m_physicsSystem->Initialize();
 
 		// Create root GameObject
 		m_root = std::make_unique<GameObject>("Root");
@@ -40,18 +43,12 @@ namespace Engine
 	void Scene::SceneStart()
 	{
 		traverseStart(m_root.get());
-
-		// Initialize physics system after all colliders have been registered
-		if (m_physicsSystem && !m_physicsSystem->IsInitialized())
-		{
-			m_physicsSystem->Initialize(this);
-		}
 	}
 
 	void Scene::SceneExit()
 	{
-		m_physicsSystem->Shutdown();
 		m_root.reset();
+		m_physicsSystem->Shutdown();
 	}
 
 	void Scene::SceneUpdate(float dt)
@@ -63,7 +60,7 @@ namespace Engine
 	{
 		traverseFixedUpdate(m_root.get(), fdt);
 		// Update physics system
-		m_physicsSystem->Update(this, fdt);
+		m_physicsSystem->Update(fdt);
 	}
 
 	void Scene::traverseAwake(GameObject* node)
@@ -253,10 +250,11 @@ namespace Engine
 
 	void Scene::UnregisterCollider(Collider* collider)
 	{
-		if(collider->bvhNode)
-		{
-			BVH::DestroyLeaf(m_physicsSystem->GetBVHRootPtr(), collider->bvhNode);
-		}
+		// legacy collider code
+		//if(collider->bvhNode)
+		//{
+		//	BVH::DestroyLeaf(m_physicsSystem->GetBVHRootPtr(), collider->bvhNode);
+		//}
 
 		m_colliders.erase(
 			std::remove(m_colliders.begin(), m_colliders.end(), collider),

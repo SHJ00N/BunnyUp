@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Camera.h"
 #include "ConstantBufferManager.h"
 #include "D3DManager.h"

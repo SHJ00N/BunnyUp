@@ -1,9 +1,12 @@
+#include "pch.h"
+#include "Log.h"
 #include "Transform.h"
 #include "GameObject.h"
+#include "Rigidbody_Legacy.h"
 
 namespace Engine
 {
-	Transform::Transform() : owner(nullptr), parentTransform(nullptr), m_position(0, 0, 0), m_rotation(0, 0, 0), m_scale(1.0f, 1.0f, 1.0f), m_worldMatrix(Matrix4x4::Identity()), m_isDirty(true)
+	Transform::Transform() : owner(nullptr), parentTransform(nullptr), m_position(0, 0, 0), m_scale(1.0f, 1.0f, 1.0f), m_worldMatrix(Matrix4x4::Identity()), m_isDirty(true)
 	{
 	}
 
@@ -52,6 +55,39 @@ namespace Engine
 		};
 	}
 
+	const Matrix3x3 Transform::GetRotationMatrix() const
+	{
+		Matrix3x3 result;
+
+		Vector3 right = GetRight();
+		Vector3 up = GetUp();
+		Vector3 forward = GetForward();
+
+		result.m[0][0] = right.x;
+		result.m[0][1] = right.y;
+		result.m[0][2] = right.z;
+
+		result.m[1][0] = up.x;
+		result.m[1][1] = up.y;
+		result.m[1][2] = up.z;
+
+		result.m[2][0] = forward.x;
+		result.m[2][1] = forward.y;
+		result.m[2][2] = forward.z;
+
+		return result;
+	}
+
+	const Quaternion Transform::GetWorldRotationQuaternion() const
+	{
+		if (parentTransform)
+		{
+			return Normalize(m_quaternionRotation * parentTransform->GetWorldRotationQuaternion());
+		}
+
+		return m_quaternionRotation;
+	}
+
 	void Transform::updateWorldMatrix() const
 	{
 		if (parentTransform)
@@ -66,12 +102,10 @@ namespace Engine
 	{
 		// translation
 		Matrix4x4 translation = Translation(m_position);
-		
+
 		// rotation
-		Matrix4x4 rotX = Rotation(AngleAxis(m_rotation.x, Vector3(1, 0, 0)));
-		Matrix4x4 rotY = Rotation(AngleAxis(m_rotation.y, Vector3(0, 1, 0)));
-		Matrix4x4 rotZ = Rotation(AngleAxis(m_rotation.z, Vector3(0, 0, 1)));
-		Matrix4x4 rotation = rotZ * rotX * rotY;
+		Matrix4x4 rotation = Rotation(m_quaternionRotation);
+
 		// scaling
 		Matrix4x4 scaling = Scaling(m_scale);
 
@@ -83,7 +117,7 @@ namespace Engine
 	{
 		m_position = position;
 		SetDirty();
-		
+
 		// Propagate dirty flag to children
 		if (owner)
 		{
@@ -93,9 +127,21 @@ namespace Engine
 
 	void Transform::SetLocalRotation(const Vector3& rotation)
 	{
-		m_rotation = rotation;
+		m_quaternionRotation = RotationPitchYawRoll(rotation.x, rotation.y, rotation.z);
 		SetDirty();
-		
+
+		// Propagate dirty flag to children
+		if (owner)
+		{
+			owner->PropagateTransformDirtyFlag();
+		}
+	}
+
+	void Transform::SetLocalRotation(const Quaternion& rotation)
+	{
+		m_quaternionRotation = Normalize(rotation);
+		SetDirty();
+
 		// Propagate dirty flag to children
 		if (owner)
 		{
@@ -112,6 +158,12 @@ namespace Engine
 		if (owner)
 		{
 			owner->PropagateTransformDirtyFlag();
+
+			auto rigidbody = owner->GetComponent<Rigidbody>();
+			if (rigidbody)
+			{
+				rigidbody->SetDirty();
+			}
 		}
 	}
 }

@@ -25,18 +25,10 @@ namespace Scenes
 		bunny->transform.SetLocalScale(Vector3(0.1f, 0.1f, 0.1f));
 		bunny->transform.SetLocalRotation(Vector3(0.0f, 180.0f, 0.0f));
 		bunny->AddComponent<SkinnedRenderer>()->SetModel(ResourceManager::GetInstance().GetModel("Chibi_Rabbit"));
-        auto bunnyRigidbody = bunny->AddComponent<Rigidbody>();
-        bunnyRigidbody->type = RigidbodyType::Dynamic;
-        bunnyRigidbody->mass = 10.0f;
-        // bunnyRigidbody->velocity = { 5.0f, 0.0f, 0.0f };
 
-        //auto bunnyCollider = bunny->AddComponent<BoxCollider>();
-        //bunnyCollider->center = { 0.0f, 100.0f, 0.0f };
-        //bunnyCollider->extents = { 100.0f, 100.0f, 100.0f };
+        auto bunnyRigidbody = bunny->AddComponent<Rp3dRigidbody>(1.0f, BodyType::DYNAMIC, true);
+        auto bunnyCollider = bunny->AddComponent<Rp3dBoxCollider>();
 
-        auto bunnyCollider = bunny->AddComponent<SphereCollider>();
-        bunnyCollider->center = { 0.0f, 100.0f, 0.0f };
-        bunnyCollider->radius = 100.0f;
 
 		auto animator = bunny->AddComponent<Animator>();
 		animator->Awake();
@@ -67,13 +59,13 @@ namespace Scenes
         floorRenderer->GetMaterial(0)->SetTexture(0, ResourceManager::GetInstance().GetTexture("T_Snow_Ground"));
         floorRenderer->GetMaterial(0)->SetSampler(0, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
 
-        auto floorCollider = floor->AddComponent<BoxCollider>();
-        floorCollider->extents.z += 30.0f;
-        auto floorRigidbody = floor->AddComponent<Rigidbody>();
-        floorRigidbody->type = RigidbodyType::Static;
         floor->transform.SetLocalRotation(Vector3(90.0f, 0.0f, 0.0f));
-        floor->transform.SetLocalScale(Vector3(100.0f, 100.0f, 1.0f));
+        floor->transform.SetLocalScale(Vector3(500.0f, 500.0f, 1.0f));
         floor->transform.SetLocalPosition(Vector3(0.0f, -50.0f, 0.0f));
+
+        auto floorRigidbody = floor->AddComponent<Rp3dRigidbody>(1.0f, BodyType::STATIC, false);
+        auto floorCollider = floor->AddComponent<Rp3dBoxCollider>();
+        floorCollider->SetSize(Vector3(500.0f, 500.0f, 10.0f));
 
         //auto cube1 = CreateGameObject<GameObject>("Cube1");
         //auto cube1Renderer = cube1->AddComponent<MeshRenderer>();
@@ -122,10 +114,6 @@ namespace Scenes
         lightingCubeRenderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
         lightingCube->transform.SetLocalPosition(Vector3(15.0f, 10.0f, -15.0f));
         lightingCube->transform.SetLocalScale(Vector3(10.0f, 10.0f, 10.0f));
-        auto cubeCollider = lightingCube->AddComponent<SphereCollider>();
-        auto cubeRigidbody = lightingCube->AddComponent<Rigidbody>();
-        cubeRigidbody->type = RigidbodyType::Dynamic;
-        // cubeRigidbody->velocity = { -5.0f, 0.0f, 0.0f };
 
         auto lightingCube1 = CreateGameObject<GameObject>("CubeBL");
         lightingCube1->AddComponent<Cube::CubeController>();
@@ -133,10 +121,7 @@ namespace Scenes
         lightingCubeRenderer1->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
         lightingCube1->transform.SetLocalPosition(Vector3(-15.0f, 10.0f, 15.0f));
         lightingCube1->transform.SetLocalScale(Vector3(10.0f, 10.0f, 10.0f));
-        auto cubeCollider1 = lightingCube1->AddComponent<BoxCollider>();
-        cubeCollider1->extents = { 1.0f, 1.0f, 1.0f };
-        auto cubeRigidbody1 = lightingCube1->AddComponent<Rigidbody>();
-        cubeRigidbody1->type = RigidbodyType::Dynamic;
+        lightingCube1->transform.SetLocalRotation(Vector3(45.0f, 0.0f, 45.0f));
 
         auto lightingCube2 = CreateGameObject<GameObject>("CubeBR");
         lightingCube2->AddComponent<Cube::CubeController>();
@@ -144,8 +129,6 @@ namespace Scenes
         lightingCubeRenderer2->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
         lightingCube2->transform.SetLocalPosition(Vector3(15.0f, 30.0f, 20.0f));
         lightingCube2->transform.SetLocalScale(Vector3(10.0f, 10.0f, 10.0f));
-        auto cubeCollider2 = lightingCube2->AddComponent<BoxCollider>();
-        cubeCollider2->extents = { 0.5f, 0.5f, 0.5f };
 
         auto lightingCube3 = CreateGameObject<GameObject>("CubeCenter");
         lightingCube3->AddComponent<Cube::CubeController>();
@@ -153,7 +136,5 @@ namespace Scenes
         lightingCubeRenderer3->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
         lightingCube3->transform.SetLocalPosition(Vector3(0.0f, 30.0f, 0.0f));
         lightingCube3->transform.SetLocalScale(Vector3(10.0f, 10.0f, 10.0f));
-        auto cubeCollider3 = lightingCube3->AddComponent<BoxCollider>();
-        cubeCollider3->extents = { 0.75f, 0.75f, 0.75f };
 	}
 }

@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "EnvironmentMap.h"
 #include "Texture2D.h"
 #include "RenderTargetResource.h"

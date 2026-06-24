@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "SamplerStateManager.h"
 #include "Log.h"
 

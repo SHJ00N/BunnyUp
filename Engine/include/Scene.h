@@ -2,7 +2,6 @@
 
 #include "GameObject.h"
 #include "ConstantBuffer.h"
-#include "Physics.h"
 
 #include <memory>
 
@@ -12,6 +11,7 @@ namespace Engine
 	class Light;
 	class Collider;
 	class EnvironmentMap;
+	class PhysicsSystem;
 
 	class Scene
 	{
@@ -77,7 +77,7 @@ namespace Engine
 		void SetEnvironmentMap(std::shared_ptr<EnvironmentMap> envMap) { m_environmentMap = envMap; }
 		std::shared_ptr<EnvironmentMap> GetEnvironmentMap() const { return m_environmentMap; }
 
-		Physics* GetPhysicsSystem() { return m_physicsSystem.get(); }
+		PhysicsSystem* GetPhysicsSystem() { return m_physicsSystem.get(); }
 
 	protected:
 		virtual void SceneEnter() { }
@@ -101,7 +101,7 @@ namespace Engine
 		std::vector<GameObject*> destroyList;
 
 		// physics system
-		std::unique_ptr<Physics> m_physicsSystem;
+		std::unique_ptr<PhysicsSystem> m_physicsSystem;
 
 		// Helper functions for traversing the scene graph
 		void traverseAwake(GameObject* node);

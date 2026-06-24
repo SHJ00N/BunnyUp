@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "RenderStateManager.h"
 #include "D3DManager.h"
 

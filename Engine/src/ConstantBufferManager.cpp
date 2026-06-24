@@ -1,9 +1,8 @@
+#include "pch.h"
 #include "ConstantBufferManager.h"
 #include "MathHelper.h"
 #include "D3DManager.h"
 #include "ResourceManager.h"
-
-#include <cmath>
 
 namespace Engine
 {

@@ -2,7 +2,6 @@
 
 #include <d3d11.h>
 #include <wrl/client.h>
-#include <WICTextureLoader.h>
 #include <string>
 
 namespace Engine
@@ -30,6 +29,6 @@ namespace Engine
 		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_pShaderResourceView;
 		std::string m_name;
 
-		DirectX::WIC_LOADER_FLAGS getLoaderFlags(TextureType type) const;
+		uint32_t getLoaderFlags(TextureType type) const;
 	};
 }

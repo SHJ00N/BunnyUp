@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "RenderGraph.h"
 #include "RenderTargetResource.h"
 

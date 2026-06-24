@@ -1,8 +1,11 @@
-#include "Collider.h"
+#include "pch.h"
+#include "Collider_Legacy.h"
 #include "Scene.h"
 #include "DebugRenderer.h"
 #include "GameObject.h"
 #include "ImGuiClass.h"
+
+#include <algorithm>
 
 namespace Engine
 {
@@ -58,9 +61,41 @@ namespace Engine
 
 	AABB BoxCollider::GetBounds() const
 	{
-		const auto& worldExtents = GetWorldExtents();
+		const Vector3 extents = GetWorldExtents();
+		const auto& rotation = ownerGameObject->transform.GetRotationMatrix();
 
-		return AABB(GetWorldCenter(), worldExtents.x, worldExtents.y, worldExtents.z);
+		Matrix3x3 absR;
+		for (int r = 0; r < 3; r++)
+		{
+			for (int c = 0; c < 3; c++)
+			{
+				absR.m[r][c] = std::abs(rotation.m[r][c]);
+			}
+		}
+
+		Vector3 aabbExtents = extents * absR;
+
+		return AABB(GetWorldCenter(), aabbExtents.x, aabbExtents.y, aabbExtents.z);
+	}
+
+	Matrix3x3 BoxCollider::GetInverseInertia(float mass) const
+	{
+		float w = extents.x * 2.0f;
+		float h = extents.y * 2.0f;
+		float d = extents.z * 2.0f;
+		float ww = w * w;
+		float hh = h * h;
+		float dd = d * d;
+		float MassDiv12 = 1.0f / 12.0f * mass;
+
+		Vector3 inertiaLocal = { MassDiv12 * (hh + dd), MassDiv12 * (ww + dd), MassDiv12 * (ww + hh) };
+
+		Matrix3x3 result{ };
+		result.m[0][0] = 1.0f / inertiaLocal.x;
+		result.m[1][1] = 1.0f / inertiaLocal.y;
+		result.m[2][2] = 1.0f / inertiaLocal.z;
+
+		return result;
 	}
 
 	void BoxCollider::BuildDebugRender(DebugRenderer* renderer) const
@@ -82,7 +117,7 @@ namespace Engine
 	float SphereCollider::GetWorldRadius() const
 	{
 		const Vector3 scale = ownerGameObject->transform.GetLocalScale();
-		const float maxScale = max(scale.x, max(scale.y, scale.z));
+		const float maxScale = std::max(scale.x, std::max(scale.y, scale.z));
 
 		return radius * maxScale;
 	}
@@ -97,6 +132,18 @@ namespace Engine
 	void SphereCollider::BuildDebugRender(DebugRenderer* renderer) const
 	{
 		renderer->AddSphere(this->GetWorldCenter(), radius, ownerGameObject->transform, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
+	}
+
+	Matrix3x3 SphereCollider::GetInverseInertia(float mass) const
+	{
+		float i = (2.0f / 5.0f) * mass * radius * radius;
+
+		Matrix3x3 result{ };
+		result.m[0][0] = 1.0f / i;
+		result.m[1][1] = 1.0f / i;
+		result.m[2][2] = 1.0f / i;
+
+		return result;
 	}
 
 	void SphereCollider::OnImGui()

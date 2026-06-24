@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "DebugRenderer.h"
 #include "GameObject.h"
 #include "RendererComponent.h"
@@ -9,7 +10,7 @@
 #include "VertexType.h"
 #include "ResourceManager.h"
 #include "Frustum.h"
-#include "Collider.h"
+#include "Collider_Legacy.h"
 
 namespace Engine
 {
@@ -67,9 +68,6 @@ namespace Engine
         {
             collider->BuildDebugRender(this);
         }
-
-		// render BVH
-		traverseBVHNode(scene->GetPhysicsSystem()->GetBVHRoot());
 
         // render debug vertices
         // -----------------------------------------------------------------------------------
@@ -250,7 +248,7 @@ namespace Engine
         constexpr int segments = 16;
         constexpr float PI = 3.14159265359f;
         const auto& scale = transform.GetLocalScale();
-        float uniformScale = max(scale.x, max(scale.y, scale.z));
+        float uniformScale = std::max(scale.x, std::max(scale.y, scale.z));
         radius *= uniformScale;
 
         for (int x = 0; x < segments; ++x)

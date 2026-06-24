@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "D3DManager.h"
 
 #include <dxgi1_3.h>

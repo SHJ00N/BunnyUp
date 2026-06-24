@@ -1,5 +1,7 @@
 #pragma once
 
+#include "pch.h"
+
 // Core systems
 #include "Log.h"
 #include "GameObject.h"
@@ -12,8 +14,8 @@
 #include "Component.h"
 #include "Animator.h"
 #include "Camera.h"
-#include "Collider.h"
 #include "MeshRenderer.h"
 #include "SkinnedRenderer.h"
 #include "Light.h"
-#include "Rigidbody.h"
+#include "Rp3dRigidbody.h"
+#include "Rp3dCollider.h"

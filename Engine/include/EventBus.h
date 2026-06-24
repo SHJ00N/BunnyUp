@@ -22,8 +22,20 @@ namespace Engine
 	class GameObject;
 	struct ObjectDestroyedEvent : public IEvent
 	{
-		GameObject* object;
+		GameObject* object = nullptr;
 		ObjectDestroyedEvent(GameObject* obj) : object(obj) { }
+	};
+
+	class Rp3dRigidbody;
+	struct RigidbodyCreateEvent : public IEvent
+	{
+		Rp3dRigidbody* body = nullptr;
+		RigidbodyCreateEvent(Rp3dRigidbody* body) : body(body) { }
+	};
+	struct RigidbodyDestroyEvent : public IEvent
+	{
+		Rp3dRigidbody* body = nullptr;
+		RigidbodyDestroyEvent(Rp3dRigidbody* body) : body(body) {}
 	};
 
 	class EventBus : public Singleton<EventBus>

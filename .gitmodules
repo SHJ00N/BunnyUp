@@ -1,3 +1,6 @@
 [submodule "external/DirectXTK"]
 	path = external/DirectXTK
 	url = https://github.com/microsoft/DirectXTK
+[submodule "external/ReactPhysics3D"]
+	path = external/ReactPhysics3D
+	url = https://github.com/DanielChappuis/reactphysics3d.git

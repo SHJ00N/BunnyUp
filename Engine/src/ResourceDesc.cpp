@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "ResourceDesc.h"
 
 namespace Engine

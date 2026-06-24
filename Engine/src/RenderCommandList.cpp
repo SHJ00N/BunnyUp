@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "RenderCommandList.h"
 #include "ResourceManager.h"
 

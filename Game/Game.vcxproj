@@ -136,14 +136,24 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\ReactPhysics3D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Engine.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;$(ProjectDir)lib\debug\assimp-vc143-mt.lib;$(ProjectDir)lib\debug\reactphysics3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Project\BunnyUp\Engine\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -154,14 +164,20 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\ReactPhysics3D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Engine.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;$(ProjectDir)lib\release\assimp-vc143-mt.lib;$(ProjectDir)lib\release\reactphysics3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Project\BunnyUp\Engine\build\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -170,14 +186,24 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\ReactPhysics3D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Engine.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;$(ProjectDir)lib\debug\assimp-vc143-mt.lib;$(ProjectDir)lib\debug\reactphysics3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Project\BunnyUp\Engine\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -188,14 +214,20 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\ReactPhysics3D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Engine.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;$(ProjectDir)lib\release\assimp-vc143-mt.lib;$(ProjectDir)lib\release\reactphysics3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Project\BunnyUp\Engine\build\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

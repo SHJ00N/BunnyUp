@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "SkinnedRenderer.h"
 #include "ConstantBufferManager.h"
 #include "Animator.h"

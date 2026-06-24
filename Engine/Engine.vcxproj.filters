@@ -55,6 +55,12 @@
     <Filter Include="헤더 파일\Physics">
       <UniqueIdentifier>{15516dbe-209b-4575-8fec-5c377cba0c8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\Legacy">
+      <UniqueIdentifier>{02408044-e563-44eb-b87e-3e96250d0b59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Legacy">
+      <UniqueIdentifier>{0c5fdcd9-fa33-4c60-b46e-f49869b5114b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\System.h">
@@ -210,28 +216,43 @@
     <ClInclude Include="include\DebugRenderer.h">
       <Filter>헤더 파일\RenderPipeline</Filter>
     </ClInclude>
-    <ClInclude Include="include\Collider.h">
-      <Filter>헤더 파일\Components</Filter>
-    </ClInclude>
     <ClInclude Include="include\EngineSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="include\Engine.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="include\Collision.h">
-      <Filter>헤더 파일\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Physics.h">
-      <Filter>헤더 파일\Physics</Filter>
+    <ClInclude Include="include\Physics_Legacy.h">
+      <Filter>헤더 파일\Legacy</Filter>
     </ClInclude>
     <ClInclude Include="include\BVHNode.h">
+      <Filter>헤더 파일\Legacy</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Collision_Legacy.h">
+      <Filter>헤더 파일\Legacy</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Contact_Legacy.h">
+      <Filter>헤더 파일\Legacy</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Collider_Legacy.h">
+      <Filter>헤더 파일\Legacy</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rigidbody_Legacy.h">
+      <Filter>헤더 파일\Legacy</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PhysicsSystem.h">
       <Filter>헤더 파일\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Rigidbody.h">
-      <Filter>헤더 파일\Components</Filter>
+    <ClInclude Include="include\pch.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="include\Contact.h">
+    <ClInclude Include="include\RenderGraph.h">
+      <Filter>헤더 파일\RenderPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rp3dRigidbody.h">
+      <Filter>헤더 파일\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rp3dCollider.h">
       <Filter>헤더 파일\Physics</Filter>
     </ClInclude>
   </ItemGroup>
@@ -335,9 +356,6 @@
     <ClCompile Include="src\RenderPipeline.cpp">
       <Filter>소스 파일\RenderPipeline</Filter>
     </ClCompile>
-    <ClCompile Include="include\RenderGraph.h">
-      <Filter>헤더 파일\RenderPipeline</Filter>
-    </ClCompile>
     <ClCompile Include="src\RenderCommandList.cpp">
       <Filter>소스 파일\RenderPipeline</Filter>
     </ClCompile>
@@ -368,26 +386,38 @@
     <ClCompile Include="src\EditorCameraController.cpp">
       <Filter>소스 파일\Components\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="src\Collider.cpp">
-      <Filter>소스 파일\Components</Filter>
-    </ClCompile>
     <ClCompile Include="src\MeshRenderer.cpp">
       <Filter>소스 파일\Components\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\SkinnedRenderer.cpp">
       <Filter>소스 파일\Components\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Collision.cpp">
-      <Filter>소스 파일\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics.cpp">
-      <Filter>소스 파일\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="src\BVHNode.cpp">
+      <Filter>소스 파일\Legacy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Collision_Legacy.cpp">
+      <Filter>소스 파일\Legacy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics_Legacy.cpp">
+      <Filter>소스 파일\Legacy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rigidbody_Legacy.cpp">
+      <Filter>소스 파일\Legacy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Collider_Legacy.cpp">
+      <Filter>소스 파일\Legacy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pch.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsSystem.cpp">
       <Filter>소스 파일\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Rigidbody.cpp">
-      <Filter>소스 파일\Components</Filter>
+    <ClCompile Include="src\Rp3dRigidbody.cpp">
+      <Filter>소스 파일\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rp3dCollider.cpp">
+      <Filter>소스 파일\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
