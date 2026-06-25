@@ -255,6 +255,9 @@
     <ClInclude Include="include\Rp3dCollider.h">
       <Filter>헤더 파일\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="include\RandomClass.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\D3DManager.cpp">
@@ -421,37 +424,37 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="BasicShader.hlsl">
+    <FxCompile Include="shaders\BasicShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="TextureShader.hlsl">
+    <FxCompile Include="shaders\BrdfShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="SkinningShader.hlsl">
+    <FxCompile Include="shaders\DebugShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="PBR_ToonShader.hlsl">
+    <FxCompile Include="shaders\EnvironmentCubeShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="PostProcessShader.hlsl">
+    <FxCompile Include="shaders\IrradianceMapShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="PrefilteredEnvMapShader.hlsl">
+    <FxCompile Include="shaders\PBR_ToonShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="EnvironmentCubeShader.hlsl">
+    <FxCompile Include="shaders\PostProcessShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="IrradianceMapShader.hlsl">
+    <FxCompile Include="shaders\PrefilteredEnvMapShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="SkyboxShader.hlsl">
+    <FxCompile Include="shaders\SkinningShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="BrdfShader.hlsl">
+    <FxCompile Include="shaders\SkyboxShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="DebugShader.hlsl">
+    <FxCompile Include="shaders\TextureShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
   </ItemGroup>

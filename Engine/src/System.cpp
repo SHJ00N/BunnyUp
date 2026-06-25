@@ -13,6 +13,7 @@
 #include "InputManager.h"
 #include "ConstantBufferManager.h"
 #include "DebugRenderer.h"
+#include "RandomClass.h"
 
 extern void LoadGameResources();
 extern void RegistractionGameScenes();
@@ -26,7 +27,9 @@ namespace Engine
 	HRESULT System::Initialize()
 	{
 		HRESULT hr = S_OK;
-		
+
+		Random::Init();
+
 		// Create system instances
 		LogManager::CreateInstance();
 		EventBus::CreateInstance();

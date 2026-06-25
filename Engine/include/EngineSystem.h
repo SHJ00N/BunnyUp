@@ -10,6 +10,8 @@
 #include "MathHelper.h"
 #include "SamplerStateManager.h"
 #include "InputManager.h"
+#include "TimeClass.h"
+#include "RandomClass.h"
 
 // Component system
 #include "Component.h"

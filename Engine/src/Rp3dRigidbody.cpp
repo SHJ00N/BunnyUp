@@ -90,6 +90,14 @@ namespace Engine
 		m_body->applyLocalForceAtLocalPosition(rp3d::Vector3(force.x, force.y, force.z), rp3d::Vector3(pos.x, pos.y, pos.z));
 	}
 
+	void Rp3dRigidbody::AddImpulse(const Vector3& force)
+	{
+		auto linear = m_body->getLinearVelocity();
+		linear += rp3d::Vector3(force.x, force.y, force.z);
+
+		m_body->setLinearVelocity(linear);
+	}
+
 	void Rp3dRigidbody::OnImGui()
 	{
 		const char* rigidbodyTypes[] =

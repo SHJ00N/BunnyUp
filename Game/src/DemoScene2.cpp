@@ -27,7 +27,7 @@ namespace Scenes
 
         floor->transform.SetLocalRotation(Vector3(90.0f, 0.0f, 0.0f));
         floor->transform.SetLocalScale(Vector3(500.0f, 500.0f, 1.0f));
-        floor->transform.SetLocalPosition(Vector3(0.0f, -50.0f, 0.0f));
+        floor->transform.SetLocalPosition(Vector3(0.0f, -100.0f, 0.0f));
 
         auto floorRigidbody = floor->AddComponent<Rp3dRigidbody>(1.0f, BodyType::STATIC, false);
         auto floorCollider = floor->AddComponent<Rp3dBoxCollider>();
@@ -35,5 +35,6 @@ namespace Scenes
 
         auto cubeGenerator = CreateGameObject<GameObject>("CubeGenerator");
         cubeGenerator->AddComponent<Cube::CubeGenerator>();
+        cubeGenerator->transform.SetLocalPosition(Vector3(0.0f, 50.0f, 0.0f));
 	}
 }

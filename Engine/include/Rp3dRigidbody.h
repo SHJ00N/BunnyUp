@@ -44,6 +44,7 @@ namespace Engine
 		// physics utility
 		void AddForce(const Vector3& force);
 		void AddForce(const Vector3& force, const Vector3& pos);
+		void AddImpulse(const Vector3& force);
 
 	protected:
 		void OnAwake() override;	// initialized rigidbody

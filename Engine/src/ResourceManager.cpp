@@ -21,21 +21,21 @@ namespace Engine
 		// Load default shader
 		// ---------------------------------------------------------------------
 		// mesh shader
-		LoadShader<VertexPNUT>("Default_shader", "C:\\Project\\BunnyUp\\Engine\\BasicShader.hlsl");
-		LoadShader<VertexPNUT>("Textured_shader", "C:\\Project\\BunnyUp\\Engine\\TextureShader.hlsl");
-		LoadShader<VertexSkin>("Skinning_shader", "C:\\Project\\BunnyUp\\Engine\\SkinningShader.hlsl");
+		LoadShader<VertexPNUT>("Default_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\BasicShader.hlsl");
+		LoadShader<VertexPNUT>("Textured_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\TextureShader.hlsl");
+		LoadShader<VertexSkin>("Skinning_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\SkinningShader.hlsl");
 		// render target shader
-		LoadShader<VertexPU>("PBR_shader", "C:\\Project\\BunnyUp\\Engine\\PBR_ToonShader.hlsl");
-		LoadShader<VertexPU>("PostProcess_shader", "C:\\Project\\BunnyUp\\Engine\\PostProcessShader.hlsl");
-		LoadShader<VertexPU>("Skybox_shader", "C:\\Project\\BunnyUp\\Engine\\SkyboxShader.hlsl");
+		LoadShader<VertexPU>("PBR_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\PBR_ToonShader.hlsl");
+		LoadShader<VertexPU>("PostProcess_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\PostProcessShader.hlsl");
+		LoadShader<VertexPU>("Skybox_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\SkyboxShader.hlsl");
 		// IBL shader
-		LoadShader<VertexPNUT>("EnvCubeMap_shader", "C:\\Project\\BunnyUp\\Engine\\EnvironmentCubeShader.hlsl");
-		LoadShader<VertexPNUT>("IrradianceMap_shader", "C:\\Project\\BunnyUp\\Engine\\IrradianceMapShader.hlsl");
-		LoadShader<VertexPNUT>("PrefilteredEnvMap_shader", "C:\\Project\\BunnyUp\\Engine\\PrefilteredEnvMapShader.hlsl");
-		LoadShader<VertexPU>("Brdf_shader", "C:\\Project\\BunnyUp\\Engine\\BrdfShader.hlsl");
+		LoadShader<VertexPNUT>("EnvCubeMap_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\EnvironmentCubeShader.hlsl");
+		LoadShader<VertexPNUT>("IrradianceMap_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\IrradianceMapShader.hlsl");
+		LoadShader<VertexPNUT>("PrefilteredEnvMap_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\PrefilteredEnvMapShader.hlsl");
+		LoadShader<VertexPU>("Brdf_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\BrdfShader.hlsl");
 
 		// Debug shader
-		LoadShader<VertexPC>("Debug_shader", "C:\\Project\\BunnyUp\\Engine\\DebugShader.hlsl");
+		LoadShader<VertexPC>("Debug_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\DebugShader.hlsl");
 
 		// Create primitive meshes
 		auto quadData = PrimitiveMeshFactory::CreateQuad();

@@ -27,7 +27,7 @@ namespace Engine
 		auto editorCamera = CreateGameObject<GameObject>("EditorCamera");
 		editorCamera->AddComponent<Camera>();
 		editorCamera->AddComponent<EditorCameraController>();
-		editorCamera->transform.SetLocalPosition(Vector3(0.0f, 25.0f, -60.0f));
+		editorCamera->transform.SetLocalPosition(Vector3(0.0f, 100.0f, -150.0f));
 	}
 
 	Scene::~Scene()

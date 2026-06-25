@@ -39,6 +39,7 @@
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\PhysicsSystem.h" />
     <ClInclude Include="include\Physics_Legacy.h" />
+    <ClInclude Include="include\RandomClass.h" />
     <ClInclude Include="include\RenderCommandList.h" />
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\ConstantBuffer.h" />
@@ -376,35 +377,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="BasicShader.hlsl">
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VSMain</EntryPointName>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">VSMain</EntryPointName>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSMain</EntryPointName>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VSMain</EntryPointName>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="BrdfShader.hlsl" />
-    <FxCompile Include="DebugShader.hlsl" />
-    <FxCompile Include="EnvironmentCubeShader.hlsl" />
-    <FxCompile Include="IrradianceMapShader.hlsl" />
-    <FxCompile Include="PBR_ToonShader.hlsl" />
-    <FxCompile Include="PostProcessShader.hlsl" />
-    <FxCompile Include="PrefilteredEnvMapShader.hlsl" />
-    <FxCompile Include="SkinningShader.hlsl" />
-    <FxCompile Include="SkyboxShader.hlsl" />
-    <FxCompile Include="TextureShader.hlsl">
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VSMain</EntryPointName>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">VSMain</EntryPointName>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSMain</EntryPointName>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VSMain</EntryPointName>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-    </FxCompile>
+    <FxCompile Include="shaders\BasicShader.hlsl" />
+    <FxCompile Include="shaders\BrdfShader.hlsl" />
+    <FxCompile Include="shaders\DebugShader.hlsl" />
+    <FxCompile Include="shaders\EnvironmentCubeShader.hlsl" />
+    <FxCompile Include="shaders\IrradianceMapShader.hlsl" />
+    <FxCompile Include="shaders\PBR_ToonShader.hlsl" />
+    <FxCompile Include="shaders\PostProcessShader.hlsl" />
+    <FxCompile Include="shaders\PrefilteredEnvMapShader.hlsl" />
+    <FxCompile Include="shaders\SkinningShader.hlsl" />
+    <FxCompile Include="shaders\SkyboxShader.hlsl" />
+    <FxCompile Include="shaders\TextureShader.hlsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
