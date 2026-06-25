@@ -2,10 +2,12 @@
 #include "PhysicsSystem.h"
 #include "Rp3dRigidbody.h"
 #include "Log.h"
+#include "MathHelper.h"
+#include "DebugRenderer.h"
 
 namespace Engine
 {
-	PhysicsSystem::PhysicsSystem() : m_world(nullptr)
+	PhysicsSystem::PhysicsSystem() : m_world(nullptr), DebugRenderEnabled(false)
 	{
 	}
 
@@ -53,7 +55,7 @@ namespace Engine
 		// Change the number of iterations of the position solver. default value is 5
 		m_world->setNbIterationsPositionSolver(5);
 		// Set state the sleeping technique. default is true
-		m_world->enableSleeping(false);
+		m_world->enableSleeping(true);
 	}
 
 	void PhysicsSystem::Shutdown()
@@ -76,7 +78,7 @@ namespace Engine
 		for (auto body : m_bodies)
 		{
 			auto rigidbody = body.second;
-			if (rigidbody && rigidbody->GetType() != BodyType::STATIC)
+			if (rigidbody && rigidbody->GetType() == BodyType::KINEMATIC)
 			{
 				body.second->SyncTransformToPhysics();
 			}
@@ -92,6 +94,77 @@ namespace Engine
 			{
 				body.second->SyncPhysicsToTransform();
 			}
+		}
+	}
+
+	void PhysicsSystem::SetDebugDraw(bool value)
+	{
+		if (!m_world) return;
+
+		DebugRenderEnabled = value;
+		m_world->setIsDebugRenderingEnabled(value);
+		rp3d::DebugRenderer& debugRenderer = m_world->getDebugRenderer();
+		debugRenderer.setIsDebugItemDisplayed(rp3d::DebugRenderer::DebugItem::COLLISION_SHAPE, value);
+		debugRenderer.setIsDebugItemDisplayed(rp3d::DebugRenderer::DebugItem::COLLIDER_BROADPHASE_AABB, value);
+	}
+
+	void PhysicsSystem::DrawDebug()
+	{
+		if (!m_world || !DebugRenderEnabled) return;
+
+		const auto& debugRenderer = m_world->getDebugRenderer();
+
+		const auto& lines = debugRenderer.getLines();
+		for (const auto& line : lines)
+		{
+			uint32_t color1 = line.color1;
+			float r1 = ((color1 >> 24) & 0xFF) / 255.0f;
+			float g1 = ((color1 >> 16) & 0xFF) / 255.0f;
+			float b1 = ((color1 >> 8) & 0xFF) / 255.0f;
+			float a1 = ((color1 >> 0) & 0xFF) / 255.0f;
+
+			uint32_t color2 = line.color2;
+			float r2 = ((color2 >> 24) & 0xFF) / 255.0f;
+			float g2 = ((color2 >> 16) & 0xFF) / 255.0f;
+			float b2 = ((color2 >> 8) & 0xFF) / 255.0f;
+			float a2 = ((color2 >> 0) & 0xFF) / 255.0f;
+
+
+			DebugRenderer::GetInstance().AddLine(
+				Vector3(line.point1.x, line.point1.y, line.point1.z),
+				Vector3(line.point2.x, line.point2.y, line.point2.z),
+				Vector4(r1, g1, b1, a1),
+				Vector4(r2, g2, b2, a2));
+		}
+
+		const auto& triangles = debugRenderer.getTriangles();
+		for (const auto& triangle : triangles)
+		{
+			uint32_t color1 = triangle.color1;
+			float r1 = ((color1 >> 24) & 0xFF) / 255.0f;
+			float g1 = ((color1 >> 16) & 0xFF) / 255.0f;
+			float b1 = ((color1 >> 8) & 0xFF) / 255.0f;
+			float a1 = ((color1 >> 0) & 0xFF) / 255.0f;
+
+			uint32_t color2 = triangle.color2;
+			float r2 = ((color2 >> 24) & 0xFF) / 255.0f;
+			float g2 = ((color2 >> 16) & 0xFF) / 255.0f;
+			float b2 = ((color2 >> 8) & 0xFF) / 255.0f;
+			float a2 = ((color2 >> 0) & 0xFF) / 255.0f;
+
+			uint32_t color3 = triangle.color3;
+			float r3 = ((color3 >> 24) & 0xFF) / 255.0f;
+			float g3 = ((color3 >> 16) & 0xFF) / 255.0f;
+			float b3 = ((color3 >> 8) & 0xFF) / 255.0f;
+			float a3 = ((color3 >> 0) & 0xFF) / 255.0f;
+
+			DebugRenderer::GetInstance().AddTriangle(
+				Vector3(triangle.point1.x, triangle.point1.y, triangle.point1.z),
+				Vector3(triangle.point2.x, triangle.point2.y, triangle.point2.z),
+				Vector3(triangle.point3.x, triangle.point3.y, triangle.point3.z),
+				Vector4(r1, g1, b1, 0.2f),
+				Vector4(r2, g2, b2, 0.2f),
+				Vector4(r3, g3, b3, 0.2f));
 		}
 	}
 }

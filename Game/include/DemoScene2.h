@@ -11,7 +11,7 @@ namespace Scenes
 		DemoScene2();
 		~DemoScene2();
 
-	protected:
-		void SceneEnter() override;
+    protected:
+        void SceneEnter() override;
 	};
 }

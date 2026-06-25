@@ -11,6 +11,7 @@
 #include "ResourceManager.h"
 #include "Frustum.h"
 #include "Collider_Legacy.h"
+#include "PhysicsSystem.h"
 
 namespace Engine
 {
@@ -60,14 +61,17 @@ namespace Engine
         for (auto camera : scene->GetCameras())
         {
             if (scene->GetMainCamera() == camera || !camera->frustumVisible) continue;
-            addFrustum(createFrustumFromCamera(*camera), Vector4(1.0f, 1.0f, 0.0f, 0.2f));
+            AddFrustum(createFrustumFromCamera(*camera), Vector4(1.0f, 1.0f, 0.0f, 0.2f));
         }
 
         // render collider
-        for (auto collider : scene->GetColliders())
-        {
-            collider->BuildDebugRender(this);
-        }
+        //for (auto collider : scene->GetColliders())
+        //{
+        //    collider->BuildDebugRender(this);
+        //}
+
+        // render physics
+        scene->GetPhysicsSystem()->DrawDebug();
 
         // render debug vertices
         // -----------------------------------------------------------------------------------
@@ -100,7 +104,7 @@ namespace Engine
 
             if (bounds)
             {
-                addAABB(bounds, renderable->ownerGameObject->transform, Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+                AddAABB(bounds, renderable->ownerGameObject->transform, Vector4(1.0f, 1.0f, 0.0f, 1.0f));
             }
         }
 
@@ -114,7 +118,7 @@ namespace Engine
     {
         if (node == nullptr) return;
 
-		addAABB(&node->bounds, Transform(), Vector4(1.0f, 0.0f, 1.0f, 1.0f));
+		AddAABB(&node->bounds, Transform(), Vector4(1.0f, 0.0f, 1.0f, 1.0f));
         if (!node->IsLeaf())
         {
             traverseBVHNode(node->left.get());
@@ -122,7 +126,7 @@ namespace Engine
 		}
     }
 
-    void DebugRenderer::addLine(const Vector3& p0, const Vector3& p1, const Vector4& color)
+    void DebugRenderer::AddLine(const Vector3& p0, const Vector3& p1, const Vector4& color)
     {
         DebugVertex v0;
         v0.position = p0;
@@ -136,7 +140,21 @@ namespace Engine
         m_lineVertices.push_back(v1);
     }
 
-    void DebugRenderer::addTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector4& color)
+    void DebugRenderer::AddLine(const Vector3& p0, const Vector3& p1, const Vector4& color0, const Vector4& color1)
+    {
+        DebugVertex v0;
+        v0.position = p0;
+        v0.color = color0;
+
+        DebugVertex v1;
+        v1.position = p1;
+        v1.color = color1;
+
+        m_lineVertices.push_back(v0);
+        m_lineVertices.push_back(v1);
+    }
+
+    void DebugRenderer::AddTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector4& color)
     {
         DebugVertex v0;
         v0.position = p0;
@@ -155,7 +173,26 @@ namespace Engine
         m_triangleVertices.push_back(v2);
     }
 
-    void DebugRenderer::addAABB(const AABB* bound, const Transform& transform, const Vector4& color)
+    void DebugRenderer::AddTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector4& color0, const Vector4& color1, const Vector4& color2)
+    {
+        DebugVertex v0;
+        v0.position = p0;
+        v0.color = color0;
+
+        DebugVertex v1;
+        v1.position = p1;
+        v1.color = color1;
+
+        DebugVertex v2;
+        v2.position = p2;
+        v2.color = color2;
+
+        m_triangleVertices.push_back(v0);
+        m_triangleVertices.push_back(v1);
+        m_triangleVertices.push_back(v2);
+    }
+
+    void DebugRenderer::AddAABB(const AABB* bound, const Transform& transform, const Vector4& color)
     {
         const auto vertices = bound->GetVertices();    // get vertices
         const auto& worldMatrix = transform.GetWorldMatrix();   // world matrix
@@ -171,11 +208,11 @@ namespace Engine
         {
             const auto& p0 = vertices[edges[i]] * worldMatrix;
             const auto& p1 = vertices[edges[i + 1]] * worldMatrix;
-            addLine(p0, p1, color);
+            AddLine(p0, p1, color);
         }
     }
 
-    void DebugRenderer::addFrustum(const Frustum& frustum, const Vector4& color)
+    void DebugRenderer::AddFrustum(const Frustum& frustum, const Vector4& color)
     {
         const auto corners = frustum.GetCorners();
 
@@ -192,28 +229,28 @@ namespace Engine
         Vector3 f3 = corners[7];
 
         // Near
-        addTriangle(n0, n1, n2, color);
-        addTriangle(n2, n1, n3, color);
+        AddTriangle(n0, n1, n2, color);
+        AddTriangle(n2, n1, n3, color);
 
         // Far
-        addTriangle(f0, f2, f1, color);
-        addTriangle(f2, f3, f1, color);
+        AddTriangle(f0, f2, f1, color);
+        AddTriangle(f2, f3, f1, color);
 
         // Left
-        addTriangle(n0, n2, f0, color);
-        addTriangle(f0, n2, f2, color);
+        AddTriangle(n0, n2, f0, color);
+        AddTriangle(f0, n2, f2, color);
 
         // Right
-        addTriangle(n1, f1, n3, color);
-        addTriangle(f1, f3, n3, color);
+        AddTriangle(n1, f1, n3, color);
+        AddTriangle(f1, f3, n3, color);
 
         // Top
-        addTriangle(n0, f0, n1, color);
-        addTriangle(f0, f1, n1, color);
+        AddTriangle(n0, f0, n1, color);
+        AddTriangle(f0, f1, n1, color);
 
         // Bottom
-        addTriangle(n2, n3, f2, color);
-        addTriangle(f2, n3, f3, color);
+        AddTriangle(n2, n3, f2, color);
+        AddTriangle(f2, n3, f3, color);
 
         static constexpr uint32_t edges[] =
         {
@@ -232,7 +269,7 @@ namespace Engine
         {
             const auto& p0 = verts[edges[i]];
             const auto& p1 = verts[edges[i + 1]];
-            addLine(p0, p1, Vector4(color.x, color.y, color.z, 1.0f));
+            AddLine(p0, p1, Vector4(color.x, color.y, color.z, 1.0f));
         }
     }
 
@@ -240,7 +277,7 @@ namespace Engine
     {
         AABB aabb(center, extents.x, extents.y, extents.z);
 
-        addAABB(&aabb, transform, color);
+        AddAABB(&aabb, transform, color);
     }
 
     void DebugRenderer::AddSphere(const Vector3& center, float radius, const Transform& transform, const Vector4& color)
@@ -287,10 +324,10 @@ namespace Engine
                 p10 += center;
 
                 // latitude line
-                addLine(p00, p01, color);
+                AddLine(p00, p01, color);
 
                 // longitude line
-                addLine(p00, p10, color);
+                AddLine(p00, p10, color);
             }
         }
     }

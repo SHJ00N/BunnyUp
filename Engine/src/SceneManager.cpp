@@ -38,7 +38,8 @@ namespace Engine
 
 		if (m_currentScene)
 		{
-			m_currentScene->SceneAwake(); // scene initialize
+			// scene initialize
+			m_currentScene->SceneAwake();
 			EventBus::GetInstance().Publish<SceneChangedEvent>(SceneChangedEvent{});
 		}
 	}
@@ -54,6 +55,8 @@ namespace Engine
 		{
 			m_currentScene->SceneStart();
 			m_currentScene->SceneUpdate(dt);
+
+			m_currentScene->FlushCreateObjectRequest();
 		}
 	}
 

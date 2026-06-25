@@ -34,6 +34,7 @@ namespace Engine
 		m_body->setMass(m_mass);
 		m_body->setType(static_cast<rp3d::BodyType>(m_type));
 		m_body->enableGravity(useGravity);
+		m_body->setIsDebugEnabled(true);
 
 		EventBus::GetInstance().Publish< RigidbodyCreateEvent>(RigidbodyCreateEvent{ this });
 	}
@@ -59,9 +60,9 @@ namespace Engine
 
 	void Rp3dRigidbody::SyncPhysicsToTransform()
 	{
-		const auto rp3dTransform = m_body->getTransform();
-		const auto rp3dPosition = rp3dTransform.getPosition();
-		const auto rp3dRotation = rp3dTransform.getOrientation();
+		const auto& rp3dTransform = m_body->getTransform();
+		const auto& rp3dPosition = rp3dTransform.getPosition();
+		const auto& rp3dRotation = rp3dTransform.getOrientation();
 
 		ownerGameObject->transform.SetLocalPosition(Vector3(rp3dPosition.x, rp3dPosition.y, rp3dPosition.z));
 		ownerGameObject->transform.SetLocalRotation(Quaternion(rp3dRotation.x, rp3dRotation.y, rp3dRotation.z, rp3dRotation.w));
@@ -77,6 +78,16 @@ namespace Engine
 	{
 		m_type = type;
 		m_body->setType(static_cast<rp3d::BodyType>(type));
+	}
+
+	void Rp3dRigidbody::AddForce(const Vector3& force)
+	{
+		m_body->applyLocalForceAtCenterOfMass(rp3d::Vector3(force.x, force.y, force.z));
+	}
+
+	void Rp3dRigidbody::AddForce(const Vector3& force, const Vector3& pos)
+	{
+		m_body->applyLocalForceAtLocalPosition(rp3d::Vector3(force.x, force.y, force.z), rp3d::Vector3(pos.x, pos.y, pos.z));
 	}
 
 	void Rp3dRigidbody::OnImGui()
@@ -101,5 +112,13 @@ namespace Engine
 		{
 			SetGravity(useGravity);
 		}
+
+		const auto& rp3dLinear = m_body->getLinearVelocity();
+		Vector3 liner = { rp3dLinear.x, rp3dLinear.y, rp3dLinear.z };
+		ImGui::DragFloat3("Linear", &liner.x, 0.01f);
+
+		const auto& rp3dAngular = m_body->getAngularVelocity();
+		Vector3 angular = { rp3dAngular.x, rp3dAngular.y, rp3dAngular.z };
+		ImGui::DragFloat3("Angular", &angular.x, 0.01f);
 	}
 }

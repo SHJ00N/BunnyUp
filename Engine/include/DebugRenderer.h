@@ -4,6 +4,7 @@
 #include <wrl/client.h>
 #include <vector>
 
+#include "Singleton.h"
 #include "MathHelper.h"
 #include "BVHNode.h"
 
@@ -25,7 +26,7 @@ namespace Engine
 		Vector4 color;
 	};
 
-	class DebugRenderer
+	class DebugRenderer : public Singleton<DebugRenderer>
 	{
 	public:
 		HRESULT Initialize(D3DManager* d3dManager, ConstantBufferManager* cbManager);
@@ -33,6 +34,13 @@ namespace Engine
 
 		void AddBox(const Vector3& center, const Vector3& extents, const Transform& transform, const Vector4& color);
 		void AddSphere(const Vector3& center, float radius, const Transform& transform, const Vector4& color);
+
+		void AddLine(const Vector3& p0, const Vector3& p1, const Vector4& color);
+		void AddLine(const Vector3& p0, const Vector3& p1, const Vector4& color0, const Vector4& color1);
+		void AddTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector4& color);
+		void AddTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector4& color0, const Vector4& color1, const Vector4& color2);
+		void AddAABB(const AABB* bound, const Transform& transform, const Vector4& color);
+		void AddFrustum(const Frustum& frustum, const Vector4& color);
 	private:
 		// manager instances
 		D3DManager* m_d3dManager;
@@ -48,10 +56,6 @@ namespace Engine
 		// add vertices
 		void traverseObject(GameObject* node);
 		void traverseBVHNode(const BVH::BVHNode* node);
-		void addLine(const Vector3& p0, const Vector3& p1, const Vector4& color);
-		void addTriangle(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector4& color);
-		void addAABB(const AABB* bound, const Transform& transform, const Vector4& color);
-		void addFrustum(const Frustum& frustum, const Vector4& color);
 		
 		// flush
 		void flushLine();

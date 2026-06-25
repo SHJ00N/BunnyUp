@@ -26,6 +26,9 @@ namespace Engine
 		void SceneObjectDestroy();
 		void SceneExit();
 
+
+		void FlushCreateObjectRequest();
+
 		void Render(class ConstantBufferManager& cbManager);
 
 		GameObject* GetRoot() { return m_root.get(); }
@@ -45,7 +48,8 @@ namespace Engine
 			T* ptr = object.get(); 
 			
 			// Set parent-child relationship
-			m_root->AddChild(std::move(object));
+			// m_root->AddChild(std::move(object));
+			m_requstedCreateObject.emplace_back(std::move(object));
 			return ptr;
 		}
 
@@ -80,11 +84,12 @@ namespace Engine
 		PhysicsSystem* GetPhysicsSystem() { return m_physicsSystem.get(); }
 
 	protected:
-		virtual void SceneEnter() { }
+		virtual void SceneEnter() = 0;
 
 	private:
 		// scene graph root
 		std::unique_ptr<GameObject> m_root;
+		std::vector<std::unique_ptr<GameObject>> m_requstedCreateObject;
 		// cameras in the scene
 		std::vector<Camera*> m_cameras;
 		Camera* m_mainCamera = nullptr;

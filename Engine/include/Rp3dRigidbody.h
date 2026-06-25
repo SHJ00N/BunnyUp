@@ -6,6 +6,7 @@
 #pragma once
 
 #include "Component.h"
+#include "MathHelper.h"
 
 #include <reactphysics3d/reactphysics3d.h>
 
@@ -30,7 +31,6 @@ namespace Engine
 		//void FixedUpdate(float fdt) override;
 		void OnImGui() override;
 
-
 		// synchronizing game object transform and rp3d rigidBody transform
 		void SyncTransformToPhysics();
 		void SyncPhysicsToTransform();
@@ -40,6 +40,10 @@ namespace Engine
 		const uint64_t GetId() const { return id; }
 		BodyType GetType() const { return m_type; }
 		rp3d::RigidBody* GetRigidBody() const { return m_body; }
+
+		// physics utility
+		void AddForce(const Vector3& force);
+		void AddForce(const Vector3& force, const Vector3& pos);
 
 	protected:
 		void OnAwake() override;	// initialized rigidbody

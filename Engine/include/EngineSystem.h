@@ -9,6 +9,7 @@
 #include "ResourceManager.h"
 #include "MathHelper.h"
 #include "SamplerStateManager.h"
+#include "InputManager.h"
 
 // Component system
 #include "Component.h"

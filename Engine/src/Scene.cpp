@@ -37,7 +37,7 @@ namespace Engine
 	void Scene::SceneAwake()
 	{
 		SceneEnter();
-		traverseAwake(m_root.get());
+		FlushCreateObjectRequest();
 	}
 
 	void Scene::SceneStart()
@@ -83,7 +83,7 @@ namespace Engine
 
 	void Scene::traverseUpdate(GameObject* node, float dt)
 	{
-		if (node->IsDestroyed())
+		if (!node || node->IsDestroyed())
 		{
 			return;
 		}
@@ -97,7 +97,7 @@ namespace Engine
 
 	void Scene::traverseFixedUpdate(GameObject* node, float fdt)
 	{
-		if(node->IsDestroyed())
+		if(!node || node->IsDestroyed())
 		{
 			return;
 		}
@@ -138,11 +138,22 @@ namespace Engine
 		}
 	}
 
+	void Scene::FlushCreateObjectRequest()
+	{
+		for (auto& obj : m_requstedCreateObject)
+		{
+			m_root->AddChild(std::move(obj));
+		}
+
+		traverseAwake(m_root.get());
+		m_requstedCreateObject.clear();
+	}
+
 	void Scene::Render(ConstantBufferManager& cbManager)
 	{
 		if (!m_mainCamera)
 		{
-			LOG_WARNING("Main camera does not exist");
+			// LOG_WARNING("Main camera does not exist");
 			return;
 		}
 

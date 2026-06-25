@@ -5,12 +5,22 @@
 #include "Scene.h"
 #include "PhysicsSystem.h"
 #include "Log.h"
+#include "ImGuiClass.h"
 
 namespace Engine
 {
 	// --------------------------------------------------------------------------------
 	//									Base Collider
 	// --------------------------------------------------------------------------------
+	Rp3dCollider::Rp3dCollider()
+	{
+	}
+
+	Rp3dCollider::Rp3dCollider(const Vector3& position, const Quaternion& rotation, float friction, float bounciness, bool trigger)
+		: m_center(position), m_rotation(rotation), m_friction(friction), m_bounciness(bounciness), m_isTrigger(trigger)
+	{
+	}
+
 	void Rp3dCollider::OnDestroy()
 	{
 		if (m_rigidbody && m_rigidbody->GetRigidBody() && m_collider)
@@ -71,17 +81,54 @@ namespace Engine
 
 	void Rp3dCollider::OnImGui()
 	{
+		if (ImGui::DragFloat3("Center", &m_center.x, 0.01f))
+		{
+			SetLocalPosition(m_center);
+		}
 
+		ImGui::DragFloat3("Rotation", &m_rotation.x, 0.01f);
+
+		if (ImGui::DragFloat("Friction", &m_friction, 0.01f, 0.0f, 1.0f))
+		{
+			SetFriction(m_friction);
+		}
+
+		if (ImGui::DragFloat("Bounciness", &m_bounciness, 0.01f, 0.0f, 1.0f))
+		{
+			SetBounciness(m_bounciness);
+		}
+
+		if (ImGui::Checkbox("Trigger", &m_isTrigger))
+		{
+			SetTrigger(m_isTrigger);
+		}
 	}
 
 	// --------------------------------------------------------------------------------
 	//									Box Collider
 	// --------------------------------------------------------------------------------
+	Rp3dBoxCollider::Rp3dBoxCollider()
+	{
+	}
+
+	Rp3dBoxCollider::Rp3dBoxCollider(const Vector3& size)
+		: m_size(size)
+	{
+	}
+
+	Rp3dBoxCollider::Rp3dBoxCollider(const Vector3& pos, const Quaternion& rot, const Vector3& size, float friction, float bounce, bool trigger)
+		: Rp3dCollider(pos, rot, friction, bounce, trigger), m_size(size)
+	{
+	}
+
 	void Rp3dBoxCollider::OnStart()
 	{
 		auto& common = ownerGameObject->scene->GetPhysicsSystem()->GetPhysicsCommon();
 		auto* body = ownerGameObject->GetComponent<Rp3dRigidbody>();
-		if (!body || !body->GetRigidBody()) return;
+		if (!body || !body->GetRigidBody())
+		{
+			return;
+		}
 		m_rigidbody = body;
 
 		m_shape = common.createBoxShape(rp3d::Vector3(m_size.x * 0.5f, m_size.y * 0.5f, m_size.z * 0.5f));
@@ -120,12 +167,31 @@ namespace Engine
 
 	void Rp3dBoxCollider::OnImGui()
 	{
+		Rp3dCollider::OnImGui();
 
+		if (ImGui::DragFloat3("Size", &m_size.x, 0.01f, 0.2f, 10000.0f))
+		{
+			SetSize(m_size);
+		}
 	}
 
 	// --------------------------------------------------------------------------------
 	//									Sphere Collider
 	// --------------------------------------------------------------------------------
+	Rp3dSphereCollider::Rp3dSphereCollider()
+	{
+	}
+
+	Rp3dSphereCollider::Rp3dSphereCollider(float radius)
+		: m_radius(radius)
+	{
+	}
+
+	Rp3dSphereCollider::Rp3dSphereCollider(const Vector3& pos, const Quaternion& rot, float radius, float friction, float bounce, bool trigger)
+		: Rp3dCollider(pos, rot, friction, bounce, trigger), m_radius(radius)
+	{
+	}
+
 	void Rp3dSphereCollider::OnStart()
 	{
 		auto& common = ownerGameObject->scene->GetPhysicsSystem()->GetPhysicsCommon();
@@ -170,12 +236,31 @@ namespace Engine
 
 	void Rp3dSphereCollider::OnImGui()
 	{
+		Rp3dCollider::OnImGui();
 
+		if (ImGui::DragFloat("Radius", &m_radius, 0.1f, 0.1f, 10000.0f))
+		{
+			SetRadius(m_radius);
+		}
 	}
 
 	// --------------------------------------------------------------------------------
 	//									Capsule Collider
 	// --------------------------------------------------------------------------------
+	Rp3dCapsuleCollider::Rp3dCapsuleCollider()
+	{
+	}
+
+	Rp3dCapsuleCollider::Rp3dCapsuleCollider(float radius, float height)
+		: m_radius(radius), m_height(height)
+	{
+	}
+
+	Rp3dCapsuleCollider::Rp3dCapsuleCollider(const Vector3& pos, const Quaternion& rot, float radius, float height, float friction, float bounce, bool trigger)
+		: Rp3dCollider(pos, rot, friction, bounce, trigger), m_radius(radius), m_height(height)
+	{
+	}
+
 	void Rp3dCapsuleCollider::OnStart()
 	{
 		auto& common = ownerGameObject->scene->GetPhysicsSystem()->GetPhysicsCommon();
@@ -230,6 +315,16 @@ namespace Engine
 
 	void Rp3dCapsuleCollider::OnImGui()
 	{
+		Rp3dCollider::OnImGui();
 
+		if (ImGui::DragFloat("Radius", &m_radius, 0.1f, 0.1f, 10000.0f))
+		{
+			SetRadius(m_radius);
+		}
+
+		if (ImGui::DragFloat("Height", &m_height, 0.1f, 0.1f, 10000.0f))
+		{
+			SetHeight(m_height);
+		}
 	}
 }

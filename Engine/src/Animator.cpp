@@ -12,7 +12,7 @@ namespace Engine
     }
 
 #pragma region override
-    void Animator::OnAwake()
+    void Animator::OnStart()
     {
         auto renderer = ownerGameObject->GetComponent<SkinnedRenderer>();
         if (renderer)

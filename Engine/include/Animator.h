@@ -37,7 +37,7 @@ namespace Engine
         void Update(float dt) override;
         void OnImGui() override;
     protected:
-        void OnAwake() override;
+        void OnStart() override;
 
     private:
         Model* m_model = nullptr;

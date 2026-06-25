@@ -17,6 +17,7 @@ namespace Engine
 	class PhysicsSystem
 	{
 	public:
+		bool DebugRenderEnabled;
 		PhysicsSystem();
 		~PhysicsSystem();
 
@@ -30,6 +31,9 @@ namespace Engine
 		// getter
 		rp3d::PhysicsCommon& GetPhysicsCommon() { return m_common; }
 		rp3d::PhysicsWorld* GetPhysicsWorld() const { return m_world; }
+
+		void SetDebugDraw(bool value);
+		void DrawDebug();
 	private:
 		rp3d::PhysicsCommon m_common;
 		rp3d::PhysicsWorld* m_world;

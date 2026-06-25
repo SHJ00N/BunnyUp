@@ -1,9 +1,11 @@
+#include "pch.h"
 #include "ImGuiClass.h"
 #include "Log.h"
 #include "ConstantBufferManager.h"
 #include "SceneManager.h"
 #include "Camera.h"
 #include "TimeClass.h"
+#include "PhysicsSystem.h"
 
 namespace Engine
 {
@@ -269,7 +271,18 @@ namespace Engine
 
 			ImGui::EndCombo();
 		}
+		ImGui::End();
 
+		// physics debug rendering
+		// -------------------------------------------------------------------------------------------------------------
+		ImGui::Begin("Physics Render", nullptr,
+			ImGuiWindowFlags_NoTitleBar |
+			ImGuiWindowFlags_NoScrollbar);
+		bool isEnabled = scene->GetPhysicsSystem()->DebugRenderEnabled;
+		if (ImGui::Checkbox("Physics Render", &isEnabled))
+		{
+			scene->GetPhysicsSystem()->SetDebugDraw(isEnabled);
+		}
 		ImGui::End();
 	}
 

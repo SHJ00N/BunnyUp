@@ -12,6 +12,7 @@
 #include "EventBus.h"
 #include "InputManager.h"
 #include "ConstantBufferManager.h"
+#include "DebugRenderer.h"
 
 extern void LoadGameResources();
 extern void RegistractionGameScenes();
@@ -77,9 +78,10 @@ namespace Engine
 		// Initialize RenderPipline instance
 		m_pRenderPipeline = std::make_unique<RenderPipeline>();
 		m_pRenderPipeline->Initialize(&ConstantBufferManager::GetInstance());
+
 		// Initialize DebugRenderer instance
-		m_pDebugRenderer = std::make_unique<DebugRenderer>();
-		hr = m_pDebugRenderer->Initialize(&D3DManager::GetInstance(), &ConstantBufferManager::GetInstance());
+		DebugRenderer::CreateInstance();
+		hr = DebugRenderer::GetInstance().Initialize(&D3DManager::GetInstance(), &ConstantBufferManager::GetInstance());
 		if (FAILED(hr))
 		{
 			return hr;
@@ -182,7 +184,7 @@ namespace Engine
 		// Render the UI
 		if (InputManager::GetInstance().IsEditorMode())
 		{
-			m_pDebugRenderer->Render(SceneManager::GetInstance().GetCurrentScene());
+			DebugRenderer::GetInstance().Render(SceneManager::GetInstance().GetCurrentScene());
 			m_pImGuiClass->RenderUI();
 			m_pImGuiClass->EndFrame();
 		}
@@ -205,6 +207,7 @@ namespace Engine
 		RenderStateManager::DestroyInstance();
 		SamplerStateManager::DestroyInstance();
 		InputManager::DestroyInstance();
+		DebugRenderer::DestroyInstance();
 		ConstantBufferManager::DestroyInstance();
 
 		// Shutdown direct3D and related resources

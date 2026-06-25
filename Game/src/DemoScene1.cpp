@@ -28,16 +28,17 @@ namespace Scenes
 
         auto bunnyRigidbody = bunny->AddComponent<Rp3dRigidbody>(1.0f, BodyType::DYNAMIC, true);
         auto bunnyCollider = bunny->AddComponent<Rp3dBoxCollider>();
-
+        bunnyCollider->SetSize(Vector3(7.0f, 16.0f, 7.0f));
+        bunnyCollider->SetLocalPosition(Vector3(0.0f, 8.0f, 0.0f));
+        bunnyCollider->SetFriction(1.0f);
+        bunnyCollider->SetBounciness(0.01f);
 
 		auto animator = bunny->AddComponent<Animator>();
-		animator->Awake();
 
 		animator->RegistAnimation("IdleA", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_IdleA").get());
 		animator->RegistAnimation("IdleC", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_IdleC").get());
         animator->RegistAnimation("Walk", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Walk").get());
 		animator->RegistAnimation("Run", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Run").get());
-		animator->PlayAnimation("IdleA");
 
 		//auto camera1 = CreateGameObject<GameObject>("Camera1");
 		//camera1->AddComponent<Camera>();
@@ -65,7 +66,7 @@ namespace Scenes
 
         auto floorRigidbody = floor->AddComponent<Rp3dRigidbody>(1.0f, BodyType::STATIC, false);
         auto floorCollider = floor->AddComponent<Rp3dBoxCollider>();
-        floorCollider->SetSize(Vector3(500.0f, 500.0f, 10.0f));
+        floorCollider->SetSize(Vector3(500.0f, 500.0f, 1.0f));
 
         //auto cube1 = CreateGameObject<GameObject>("Cube1");
         //auto cube1Renderer = cube1->AddComponent<MeshRenderer>();

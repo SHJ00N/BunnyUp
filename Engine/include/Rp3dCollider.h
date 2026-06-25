@@ -16,6 +16,8 @@ namespace Engine
 	class Rp3dCollider : public Component
 	{
 	public:
+		Rp3dCollider();
+		Rp3dCollider(const Vector3& position, const Quaternion& rotation, float friction, float bounciness, bool trigger);
 		~Rp3dCollider() = default;
 
 		// override
@@ -40,8 +42,8 @@ namespace Engine
 		Quaternion m_rotation = Quaternion::Identity();
 
 		// rp3d collider material
-		float m_friction = 0.1f;
-		float m_bounciness = 0.0f;
+		float m_friction = 1.0f;
+		float m_bounciness = 0.01f;
 		
 		bool m_isTrigger = false;
 
@@ -52,6 +54,9 @@ namespace Engine
 	class Rp3dBoxCollider : public Rp3dCollider
 	{
 	public:
+		Rp3dBoxCollider();
+		Rp3dBoxCollider(const Vector3& size);
+		Rp3dBoxCollider(const Vector3& pos, const Quaternion& rot, const Vector3& size, float friction, float bounce, bool trigger);
 		// override
 		void OnImGui() override;
 
@@ -69,6 +74,10 @@ namespace Engine
 	class Rp3dSphereCollider : public Rp3dCollider
 	{
 	public:
+		Rp3dSphereCollider();
+		Rp3dSphereCollider(float radius);
+		Rp3dSphereCollider(const Vector3& pos, const Quaternion& rot, float radius, float friction, float bounce, bool trigger);
+
 		// override
 		void OnImGui() override;
 
@@ -86,6 +95,9 @@ namespace Engine
 	class Rp3dCapsuleCollider : public Rp3dCollider
 	{
 	public:
+		Rp3dCapsuleCollider();
+		Rp3dCapsuleCollider(float radius, float height);
+		Rp3dCapsuleCollider(const Vector3& pos, const Quaternion& rot, float radius, float height, float friction, float bounce, bool trigger);
 		// override
 		void OnImGui() override;
 

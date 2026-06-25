@@ -7,6 +7,7 @@ namespace Player
     using namespace Engine;
     class PlayerController : public Component
     {
-
+    public:
+        void Update(float dt) override;
     };
 }
