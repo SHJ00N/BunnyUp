@@ -13,4 +13,12 @@ namespace Player
             rigidbody->AddForce(Vector3(0.0f, 30.0f, 0.0f));
         }
     }
+
+    void PlayerController::OnCollisionEnter(Rp3dCollider* other)
+    {
+        if (other->ownerGameObject->GetTag() == ObjectTag::Ground)
+        {
+            LOG_INFO("Ground Hit!");
+        }
+    }
 }

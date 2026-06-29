@@ -1,11 +1,4 @@
 #include "CameraController.h"
-#include <GameObject.h>
-#include <InputManager.h>
-#include <algorithm>
-#include <MathHelper.h>
-#include <ImGuiClass.h>
-#include <Camera.h>
-#include <Scene.h>
 
 void CameraController::Update(float dt)
 {

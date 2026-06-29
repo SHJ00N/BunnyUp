@@ -16,8 +16,8 @@ namespace Engine
 	{
 	}
 
-	Rp3dCollider::Rp3dCollider(const Vector3& position, const Quaternion& rotation, float friction, float bounciness, bool trigger)
-		: m_center(position), m_rotation(rotation), m_friction(friction), m_bounciness(bounciness), m_isTrigger(trigger)
+	Rp3dCollider::Rp3dCollider(const Vector3& position, const Quaternion& rotation, float friction, float bounciness, bool trigger, CollisionLayer layer)
+		: m_center(position), m_rotation(rotation), m_friction(friction), m_bounciness(bounciness), m_isTrigger(trigger), m_layer(layer)
 	{
 	}
 
@@ -27,7 +27,18 @@ namespace Engine
 		{
 			m_rigidbody->GetRigidBody()->removeCollider(m_collider);
 			m_collider = nullptr;
+
+			m_rigidbody->RemoveCollider(this);
 		}
+	}
+
+	void Rp3dCollider::UpdateCollisionMask()
+	{
+		if (!m_collider) return;
+
+		uint16_t mask = m_rigidbody->GetPhysicsSystem()->GetCollisionMatrix().GetCollisionMask(m_layer);
+		m_collider->setCollisionCategoryBits(1 << static_cast<uint32_t>(m_layer));
+		m_collider->setCollideWithMaskBits(mask);
 	}
 
 	void Rp3dCollider::SetLocalPosition(const Vector3& position)
@@ -79,8 +90,29 @@ namespace Engine
 		m_collider->setIsTrigger(value);
 	}
 
+	void Rp3dCollider::SetCollisionLayer(CollisionLayer layer)
+	{
+		m_layer = layer;
+
+		UpdateCollisionMask();
+	}
+
 	void Rp3dCollider::OnImGui()
 	{
+		const char* layerTypes[] =
+		{
+			"Default",
+			"Player",
+			"Enemy",
+			"Ground",
+			"Wall",
+			"Trigger"
+		};
+
+		int currentType = static_cast<int>(m_layer);
+
+		ImGui::LabelText("Layer", "%s", layerTypes[static_cast<int>(m_layer)]);
+
 		if (ImGui::DragFloat3("Center", &m_center.x, 0.01f))
 		{
 			SetLocalPosition(m_center);
@@ -116,8 +148,8 @@ namespace Engine
 	{
 	}
 
-	Rp3dBoxCollider::Rp3dBoxCollider(const Vector3& pos, const Quaternion& rot, const Vector3& size, float friction, float bounce, bool trigger)
-		: Rp3dCollider(pos, rot, friction, bounce, trigger), m_size(size)
+	Rp3dBoxCollider::Rp3dBoxCollider(const Vector3& pos, const Quaternion& rot, const Vector3& size, float friction, float bounce, bool trigger, CollisionLayer layer)
+		: Rp3dCollider(pos, rot, friction, bounce, trigger, layer), m_size(size)
 	{
 	}
 
@@ -141,6 +173,11 @@ namespace Engine
 		material.setBounciness(m_bounciness);
 
 		m_collider->setIsTrigger(m_isTrigger);
+
+		m_collider->setUserData(this);
+
+		UpdateCollisionMask();
+		m_rigidbody->AddCollider(this);
 	}
 
 	void Rp3dBoxCollider::OnDestroy()
@@ -187,8 +224,8 @@ namespace Engine
 	{
 	}
 
-	Rp3dSphereCollider::Rp3dSphereCollider(const Vector3& pos, const Quaternion& rot, float radius, float friction, float bounce, bool trigger)
-		: Rp3dCollider(pos, rot, friction, bounce, trigger), m_radius(radius)
+	Rp3dSphereCollider::Rp3dSphereCollider(const Vector3& pos, const Quaternion& rot, float radius, float friction, float bounce, bool trigger, CollisionLayer layer)
+		: Rp3dCollider(pos, rot, friction, bounce, trigger, layer), m_radius(radius)
 	{
 	}
 
@@ -210,6 +247,11 @@ namespace Engine
 		material.setBounciness(m_bounciness);
 
 		m_collider->setIsTrigger(m_isTrigger);
+
+		m_collider->setUserData(this);
+
+		UpdateCollisionMask();
+		m_rigidbody->AddCollider(this);
 	}
 
 	void Rp3dSphereCollider::OnDestroy()
@@ -256,8 +298,8 @@ namespace Engine
 	{
 	}
 
-	Rp3dCapsuleCollider::Rp3dCapsuleCollider(const Vector3& pos, const Quaternion& rot, float radius, float height, float friction, float bounce, bool trigger)
-		: Rp3dCollider(pos, rot, friction, bounce, trigger), m_radius(radius), m_height(height)
+	Rp3dCapsuleCollider::Rp3dCapsuleCollider(const Vector3& pos, const Quaternion& rot, float radius, float height, float friction, float bounce, bool trigger, CollisionLayer layer)
+		: Rp3dCollider(pos, rot, friction, bounce, trigger, layer), m_radius(radius), m_height(height)
 	{
 	}
 
@@ -279,6 +321,11 @@ namespace Engine
 		material.setBounciness(m_bounciness);
 
 		m_collider->setIsTrigger(m_isTrigger);
+
+		m_collider->setUserData(this);
+
+		UpdateCollisionMask();
+		m_rigidbody->AddCollider(this);
 	}
 
 	void Rp3dCapsuleCollider::OnDestroy()

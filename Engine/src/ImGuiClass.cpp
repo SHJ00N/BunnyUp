@@ -162,6 +162,24 @@ namespace Engine
 		{
 			ImGui::Text("Name: %s", m_selectedGameObject->GetName().c_str());
 
+			// Tag
+			const char* tags[] =
+			{
+				"None",
+				"Player",
+				"Enemy",
+				"Ground",
+				"Wall",
+				"Trigger"
+			};
+
+			int currentTag = static_cast<int>(m_selectedGameObject->GetTag());
+
+			if (ImGui::Combo("Tag", &currentTag, tags, IM_ARRAYSIZE(tags)))
+			{
+				m_selectedGameObject->SetTag(static_cast<ObjectTag>(currentTag));
+			}
+
 			// Transform information
 			ImGui::Separator();
 			ImGui::Text("Transform");

@@ -19,22 +19,25 @@ namespace Engine
 
 	void PhysicsSystem::Initialize()
 	{
-		m_rigidbodyCreateListenerID = EventBus::GetInstance().Subscribe<RigidbodyCreateEvent>(
-			[this](const RigidbodyCreateEvent& e)
+		m_collisionCallbackListenerID = EventBus::GetInstance().Subscribe<CollisionCallbackEvent>(
+			[this](const CollisionCallbackEvent& e)
 			{
-				if (e.body)
+				if (e.pair.a == nullptr || e.pair.b == nullptr)
 				{
-					m_bodies[e.body->GetId()] = e.body;
+					return;
 				}
+
+				m_currentPairs.insert(e.pair);
 			}
 		);
 
-		m_rigidbodyDestroyListenerID = EventBus::GetInstance().Subscribe<RigidbodyDestroyEvent>(
-			[this](const RigidbodyDestroyEvent& e)
+		m_objectDestroyedListenerID = EventBus::GetInstance().Subscribe<ObjectDestroyedEvent>(
+			[this](const ObjectDestroyedEvent& e)
 			{
-				if (e.body)
+				auto collider = e.object->GetComponent<Rp3dCollider>();
+				if (collider)
 				{
-					m_bodies.erase(e.body->GetId());
+					removeCollisionPair(collider);
 				}
 			}
 		);
@@ -56,12 +59,17 @@ namespace Engine
 		m_world->setNbIterationsPositionSolver(5);
 		// Set state the sleeping technique. default is true
 		m_world->enableSleeping(true);
+
+		m_world->setEventListener(&m_collisionEventListener);
+
+		// set collision layer
+		customizeCollisionMatrix();
 	}
 
 	void PhysicsSystem::Shutdown()
 	{
-		EventBus::GetInstance().Unsubscribe<RigidbodyCreateEvent>(m_rigidbodyCreateListenerID);
-		EventBus::GetInstance().Unsubscribe<RigidbodyDestroyEvent>(m_rigidbodyDestroyListenerID);
+		EventBus::GetInstance().Unsubscribe<CollisionCallbackEvent>(m_collisionCallbackListenerID);
+		EventBus::GetInstance().Unsubscribe<ObjectDestroyedEvent>(m_objectDestroyedListenerID);
 
 		// world is null
 		if (!m_world) return;
@@ -83,6 +91,10 @@ namespace Engine
 				body.second->SyncTransformToPhysics();
 			}
 		}
+
+		// swap collision pair list
+		m_previousPairs.swap(m_currentPairs);
+		m_currentPairs.clear();
 		
 		m_world->update(fdt);
 
@@ -95,6 +107,19 @@ namespace Engine
 				body.second->SyncPhysicsToTransform();
 			}
 		}
+
+		// dispatch collision events based on current and previous collision pairs
+		processCollisionEvents();
+	}
+
+	void PhysicsSystem::AddRigidbody(Rp3dRigidbody* rigidbody)
+	{
+		m_bodies[rigidbody->GetId()] = rigidbody;
+	}
+
+	void PhysicsSystem::RemoveRigidbody(Rp3dRigidbody* rigidbody)
+	{
+		m_bodies.erase(rigidbody->GetId());
 	}
 
 	void PhysicsSystem::SetDebugDraw(bool value)
@@ -106,6 +131,11 @@ namespace Engine
 		rp3d::DebugRenderer& debugRenderer = m_world->getDebugRenderer();
 		debugRenderer.setIsDebugItemDisplayed(rp3d::DebugRenderer::DebugItem::COLLISION_SHAPE, value);
 		debugRenderer.setIsDebugItemDisplayed(rp3d::DebugRenderer::DebugItem::COLLIDER_BROADPHASE_AABB, value);
+	}
+
+	void PhysicsSystem::SetCollisionLayer(CollisionLayer a, CollisionLayer b, bool enable)
+	{
+		m_collisionMatrix.SetCollision(a, b, enable);
 	}
 
 	void PhysicsSystem::DrawDebug()
@@ -166,5 +196,86 @@ namespace Engine
 				Vector4(r2, g2, b2, 0.2f),
 				Vector4(r3, g3, b3, 0.2f));
 		}
+	}
+
+	void PhysicsSystem::removeCollisionPair(Rp3dCollider* collider)
+	{
+		std::erase_if(
+			m_previousPairs,
+			[collider](const Rp3dCollisionPair& pair)
+			{
+				return pair.a == collider || pair.b == collider;
+			});
+
+		std::erase_if(
+			m_currentPairs,
+			[collider](const Rp3dCollisionPair& pair)
+			{
+				return pair.a == collider || pair.b == collider;
+			});
+	}
+
+	void PhysicsSystem::processCollisionEvents()
+	{
+		// Enter / Stay
+		for (const Rp3dCollisionPair& pair : m_currentPairs)
+		{
+			// check if either collider is a trigger
+			const bool isTrigger = pair.a->IsTrigger() || pair.b->IsTrigger();
+
+			const bool existedLastFrame = m_previousPairs.contains(pair);
+			if (isTrigger)
+			{
+				if (existedLastFrame)
+				{
+					pair.a->ownerGameObject->OnTriggerStay(pair.b);
+					pair.b->ownerGameObject->OnTriggerStay(pair.a);
+				}
+				else
+				{
+					pair.a->ownerGameObject->OnTriggerEnter(pair.b);
+					pair.b->ownerGameObject->OnTriggerEnter(pair.a);
+				}
+			}
+			else
+			{
+				if (existedLastFrame)
+				{
+					pair.a->ownerGameObject->OnCollisionStay(pair.b);
+					pair.b->ownerGameObject->OnCollisionStay(pair.a);
+				}
+				else
+				{
+					pair.a->ownerGameObject->OnCollisionEnter(pair.b);
+					pair.b->ownerGameObject->OnCollisionEnter(pair.a);
+				}
+			}
+		}
+
+		// Exit
+		for (const Rp3dCollisionPair& pair : m_previousPairs)
+		{
+			if (m_currentPairs.contains(pair))
+			{
+				continue;
+			}
+
+			const bool isTrigger = pair.a->IsTrigger() || pair.b->IsTrigger();
+			if (isTrigger)
+			{
+				pair.a->ownerGameObject->OnTriggerExit(pair.b);
+				pair.b->ownerGameObject->OnTriggerExit(pair.a);
+			}
+			else
+			{
+				pair.a->ownerGameObject->OnCollisionExit(pair.b);
+				pair.b->ownerGameObject->OnCollisionExit(pair.a);
+			}
+		}
+	}
+
+	void PhysicsSystem::customizeCollisionMatrix()
+	{
+		SetCollisionLayer(CollisionLayer::Player, CollisionLayer::Ground, true);
 	}
 }

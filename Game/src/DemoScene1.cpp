@@ -20,6 +20,7 @@ namespace Scenes
         SetEnvironmentMap(ResourceManager::GetInstance().GetEnvironmentMap("Sky_EnvMap"));
 
 		auto bunny = CreateGameObject<GameObject>("Bunny");
+        bunny->SetTag(ObjectTag::Player);
         bunny->AddComponent<Player::PlayerController>();
         bunny->transform.SetLocalPosition(Vector3(-20.0f, 0.0f, 0.0f));
 		bunny->transform.SetLocalScale(Vector3(0.1f, 0.1f, 0.1f));
@@ -32,6 +33,7 @@ namespace Scenes
         bunnyCollider->SetLocalPosition(Vector3(0.0f, 8.0f, 0.0f));
         bunnyCollider->SetFriction(1.0f);
         bunnyCollider->SetBounciness(0.7f);
+        bunnyCollider->SetCollisionLayer(CollisionLayer::Player);
 
 		auto animator = bunny->AddComponent<Animator>();
 
@@ -54,6 +56,7 @@ namespace Scenes
         camera2Renderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
 
         auto floor = CreateGameObject<GameObject>("Floor");
+        floor->SetTag(ObjectTag::Ground);
         auto floorRenderer = floor->AddComponent<MeshRenderer>();
         floorRenderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_quad"));
         floorRenderer->SetMaterial(0, ResourceManager::GetInstance().GetMaterial("Textured_material"));
@@ -67,6 +70,7 @@ namespace Scenes
         auto floorRigidbody = floor->AddComponent<Rp3dRigidbody>(1.0f, BodyType::STATIC, false);
         auto floorCollider = floor->AddComponent<Rp3dBoxCollider>();
         floorCollider->SetSize(Vector3(500.0f, 500.0f, 1.0f));
+        floorCollider->SetCollisionLayer(CollisionLayer::Ground);
 
         //auto cube1 = CreateGameObject<GameObject>("Cube1");
         //auto cube1Renderer = cube1->AddComponent<MeshRenderer>();

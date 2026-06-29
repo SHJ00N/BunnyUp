@@ -3,6 +3,7 @@
 namespace Engine
 {
 	class GameObject;
+	class Rp3dCollider;
 	class Collider;
 
 	class Component
@@ -24,13 +25,22 @@ namespace Engine
 		void SetEnabled(bool value) { m_isEnabled = value; }
 
 		// physics methods
-		virtual void OnCollisionEnter(Collider* other) { }
-		virtual void OnCollisionStay(Collider* other) { }
-		virtual void OnCollisionExit(Collider* other) { }
+		virtual void OnCollisionEnter(Rp3dCollider* other) { }
+		virtual void OnCollisionStay(Rp3dCollider* other) { }
+		virtual void OnCollisionExit(Rp3dCollider* other) { }
 
-		virtual void OnTriggerEnter(Collider* other) { }
-		virtual void OnTriggerStay(Collider* other) { }
-		virtual void OnTriggerExit(Collider* other) { }
+		virtual void OnTriggerEnter(Rp3dCollider* other) { }
+		virtual void OnTriggerStay(Rp3dCollider* other) { }
+		virtual void OnTriggerExit(Rp3dCollider* other) { }
+
+		// legacy
+		virtual void OnCollisionEnter(Collider* other) {}
+		virtual void OnCollisionStay(Collider* other) {}
+		virtual void OnCollisionExit(Collider* other) {}
+
+		virtual void OnTriggerEnter(Collider* other) {}
+		virtual void OnTriggerStay(Collider* other) {}
+		virtual void OnTriggerExit(Collider* other) {}
 
 		virtual void OnImGui() { }
 	protected:

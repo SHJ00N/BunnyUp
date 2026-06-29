@@ -5,6 +5,7 @@
 #include <typeindex>
 
 #include "Singleton.h"
+#include "Rp3dCollisionPair.h"
 
 namespace Engine
 {
@@ -26,16 +27,10 @@ namespace Engine
 		ObjectDestroyedEvent(GameObject* obj) : object(obj) { }
 	};
 
-	class Rp3dRigidbody;
-	struct RigidbodyCreateEvent : public IEvent
+	struct CollisionCallbackEvent : public IEvent
 	{
-		Rp3dRigidbody* body = nullptr;
-		RigidbodyCreateEvent(Rp3dRigidbody* body) : body(body) { }
-	};
-	struct RigidbodyDestroyEvent : public IEvent
-	{
-		Rp3dRigidbody* body = nullptr;
-		RigidbodyDestroyEvent(Rp3dRigidbody* body) : body(body) {}
+		Rp3dCollisionPair pair;
+		CollisionCallbackEvent(const Rp3dCollisionPair& pair) : pair(pair) {}
 	};
 
 	class EventBus : public Singleton<EventBus>

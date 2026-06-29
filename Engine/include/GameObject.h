@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include "Transform.h"
+#include "ObjectTag.h"
 
 #include <memory>
 #include <vector>
@@ -11,6 +12,7 @@ namespace Engine
 {
 	class Scene;
 	class Collider;
+	class Rp3dCollider;
 
 	class GameObject
 	{
@@ -86,14 +88,25 @@ namespace Engine
 		void Update(float dt);
 		void FixedUpdate(float fdt);
 		void Destroy();
+
+		void SetTag(ObjectTag tag) { m_tag = tag; }
 		
 		const std::string& GetName() const { return m_name; }
 		void SetName(const std::string& name) { m_name = name; }
 		bool IsDestroyed() const { return m_isDestroyed; }
 		bool IsAncestorOf(const GameObject* node) const;
 		GameObject* GetParent() const { return parent; }
+		ObjectTag GetTag() const { return m_tag; }
 
 		// physics event handlers
+		void OnTriggerEnter(Rp3dCollider* other);
+		void OnTriggerStay(Rp3dCollider* other);
+		void OnTriggerExit(Rp3dCollider* other);
+		void OnCollisionEnter(Rp3dCollider* other);
+		void OnCollisionStay(Rp3dCollider* other);
+		void OnCollisionExit(Rp3dCollider* other);
+
+		// legacy
 		void OnTriggerEnter(Collider* other);
 		void OnTriggerStay(Collider* other);
 		void OnTriggerExit(Collider* other);
@@ -104,6 +117,8 @@ namespace Engine
 	protected:
 		std::string m_name;
 		bool m_isDestroyed = false;
+
+		ObjectTag m_tag = ObjectTag::None;
 
 		// Scene graph
 		GameObject* parent;

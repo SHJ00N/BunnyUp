@@ -11,7 +11,7 @@ namespace Engine
 	uint64_t Rp3dRigidbody::nextId = 0;
 
 	Rp3dRigidbody::Rp3dRigidbody(float mass, BodyType type, bool useGravity)
-		: m_world(nullptr), m_body(nullptr), m_mass(mass), m_type(type), useGravity(useGravity)
+		: m_physics(nullptr), m_body(nullptr), m_mass(mass), m_type(type), useGravity(useGravity)
 	{
 		id = nextId++;
 	}
@@ -22,31 +22,48 @@ namespace Engine
 
 	void Rp3dRigidbody::OnAwake()
 	{
-		m_world = ownerGameObject->scene->GetPhysicsSystem()->GetPhysicsWorld();
+		m_physics = ownerGameObject->scene->GetPhysicsSystem();
+		assert(m_physics, "Physcis system is null");
+
+		auto* world = m_physics->GetPhysicsWorld();
 
 		const auto position = ownerGameObject->transform.GetWorldPosition();
 		const auto rotation = ownerGameObject->transform.GetWorldRotationQuaternion();
 
 		// create rigidbody
 		const rp3d::Transform rp3dTransform(rp3d::Vector3(position.x, position.y, position.z), rp3d::Quaternion(rotation.x, rotation.y, rotation.z, rotation.w));
-		m_body = m_world->createRigidBody(rp3dTransform);
+		m_body = world->createRigidBody(rp3dTransform);
 		// configure rigidbody
 		m_body->setMass(m_mass);
 		m_body->setType(static_cast<rp3d::BodyType>(m_type));
 		m_body->enableGravity(useGravity);
 		m_body->setIsDebugEnabled(true);
 
-		EventBus::GetInstance().Publish< RigidbodyCreateEvent>(RigidbodyCreateEvent{ this });
+		m_body->setUserData(this);
+
+		m_physics->AddRigidbody(this);
 	}
 
 	void Rp3dRigidbody::OnDestroy()
 	{
-		if (!m_world || !m_body) return;
+		auto* world = m_physics->GetPhysicsWorld();
+		if (!world || !m_body) return;
 
-		m_world->destroyRigidBody(m_body);
+		world->destroyRigidBody(m_body);
 		m_body = nullptr;
 
-		EventBus::GetInstance().Publish< RigidbodyDestroyEvent>(RigidbodyDestroyEvent{ this });
+		m_physics->RemoveRigidbody(this);
+	}
+
+
+	void Rp3dRigidbody::AddCollider(Rp3dCollider* collider)
+	{
+		m_colliders.push_back(collider);
+	}
+
+	void Rp3dRigidbody::RemoveCollider(Rp3dCollider* collider)
+	{
+		m_colliders.erase(std::remove(m_colliders.begin(), m_colliders.end(), collider), m_colliders.end());
 	}
 
 	void Rp3dRigidbody::SyncTransformToPhysics()

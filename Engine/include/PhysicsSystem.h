@@ -9,8 +9,12 @@
 
 #include <reactphysics3d/reactphysics3d.h>
 #include <unordered_map>
+#include <unordered_set>
 
 #include "EventBus.h"
+#include "Rp3dCollisionPair.h"
+#include "CollisionEventListener.h"
+#include "CollisionMask.h"
 
 namespace Engine
 {
@@ -31,16 +35,34 @@ namespace Engine
 		// getter
 		rp3d::PhysicsCommon& GetPhysicsCommon() { return m_common; }
 		rp3d::PhysicsWorld* GetPhysicsWorld() const { return m_world; }
+		const CollisionMatrix& GetCollisionMatrix() const { return m_collisionMatrix; }
 
+		// setter
 		void SetDebugDraw(bool value);
+		void SetCollisionLayer(CollisionLayer a, CollisionLayer b, bool enable);
+
+		// rigidbody utility
+		void AddRigidbody(Rp3dRigidbody* rigidbody);
+		void RemoveRigidbody(Rp3dRigidbody* rigidbody);
+
 		void DrawDebug();
 	private:
 		rp3d::PhysicsCommon m_common;
 		rp3d::PhysicsWorld* m_world;
+		CollisionEventListener m_collisionEventListener;
 
 		std::unordered_map<uint64_t, class Rp3dRigidbody*> m_bodies;
 
-		ListenerID m_rigidbodyCreateListenerID;
-		ListenerID m_rigidbodyDestroyListenerID;
+		std::unordered_set<Rp3dCollisionPair, Rp3dCollisionPairHash> m_currentPairs;
+		std::unordered_set<Rp3dCollisionPair, Rp3dCollisionPairHash> m_previousPairs;
+
+		CollisionMatrix m_collisionMatrix;
+
+		ListenerID m_collisionCallbackListenerID;
+		ListenerID m_objectDestroyedListenerID;
+
+		void customizeCollisionMatrix();
+		void processCollisionEvents();
+		void removeCollisionPair(Rp3dCollider* collider);
 	};
 }

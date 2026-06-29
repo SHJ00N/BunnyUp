@@ -7,6 +7,7 @@
 
 #include "Component.h"
 #include "MathHelper.h"
+#include "CollisionMask.h"
 
 #include <reactphysics3d/reactphysics3d.h>
 
@@ -17,7 +18,7 @@ namespace Engine
 	{
 	public:
 		Rp3dCollider();
-		Rp3dCollider(const Vector3& position, const Quaternion& rotation, float friction, float bounciness, bool trigger);
+		Rp3dCollider(const Vector3& position, const Quaternion& rotation, float friction, float bounciness, bool trigger, CollisionLayer layer = CollisionLayer::Default);
 		~Rp3dCollider() = default;
 
 		// override
@@ -29,10 +30,16 @@ namespace Engine
 		void SetFriction(float friction);
 		void SetBounciness(float bounciness);
 		void SetTrigger(bool value);
+		void SetCollisionLayer(CollisionLayer layer);
+		void SetNeedMaskUpdate(bool value);
 		// getter
 		bool IsTrigger() const { return m_isTrigger; }
 		float GetFriction() const { return m_friction; }
 		float GetBounciness() const { return m_bounciness; }
+		CollisionLayer GetCollisionLayer() const { return m_layer; }
+		bool NeedMaskUpdate() const { return m_needMaskUpdate; }
+
+		void UpdateCollisionMask();
 
 	protected:
 		rp3d::Collider* m_collider = nullptr;
@@ -49,6 +56,10 @@ namespace Engine
 
 		// override
 		void OnDestroy() override;
+
+	private:
+		CollisionLayer m_layer = CollisionLayer::Default;
+		bool m_needMaskUpdate = true;
 	};
 
 	class Rp3dBoxCollider : public Rp3dCollider
@@ -56,7 +67,7 @@ namespace Engine
 	public:
 		Rp3dBoxCollider();
 		Rp3dBoxCollider(const Vector3& size);
-		Rp3dBoxCollider(const Vector3& pos, const Quaternion& rot, const Vector3& size, float friction, float bounce, bool trigger);
+		Rp3dBoxCollider(const Vector3& pos, const Quaternion& rot, const Vector3& size, float friction, float bounce, bool trigger, CollisionLayer layer = CollisionLayer::Default);
 		// override
 		void OnImGui() override;
 
@@ -76,7 +87,7 @@ namespace Engine
 	public:
 		Rp3dSphereCollider();
 		Rp3dSphereCollider(float radius);
-		Rp3dSphereCollider(const Vector3& pos, const Quaternion& rot, float radius, float friction, float bounce, bool trigger);
+		Rp3dSphereCollider(const Vector3& pos, const Quaternion& rot, float radius, float friction, float bounce, bool trigger, CollisionLayer layer = CollisionLayer::Default);
 
 		// override
 		void OnImGui() override;
@@ -97,7 +108,7 @@ namespace Engine
 	public:
 		Rp3dCapsuleCollider();
 		Rp3dCapsuleCollider(float radius, float height);
-		Rp3dCapsuleCollider(const Vector3& pos, const Quaternion& rot, float radius, float height, float friction, float bounce, bool trigger);
+		Rp3dCapsuleCollider(const Vector3& pos, const Quaternion& rot, float radius, float height, float friction, float bounce, bool trigger, CollisionLayer layer = CollisionLayer::Default);
 		// override
 		void OnImGui() override;
 

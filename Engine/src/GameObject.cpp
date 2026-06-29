@@ -89,7 +89,7 @@ namespace Engine
 		}
 	}
 
-	void GameObject::OnTriggerEnter(Collider* other)
+	void GameObject::OnTriggerEnter(Rp3dCollider* other)
 	{
 		// Call OnTriggerEnter on all components
 		for (const auto& component : m_components)
@@ -98,7 +98,7 @@ namespace Engine
 		}
 	}
 
-	void GameObject::OnTriggerStay(Collider* other)
+	void GameObject::OnTriggerStay(Rp3dCollider* other)
 	{
 		// Call OnTriggerStay on all components
 		for (const auto& component : m_components)
@@ -107,7 +107,7 @@ namespace Engine
 		}
 	}
 
-	void GameObject::OnTriggerExit(Collider* other)
+	void GameObject::OnTriggerExit(Rp3dCollider* other)
 	{
 		// Call OnTriggerExit on all components
 		for (const auto& component : m_components)
@@ -116,7 +116,7 @@ namespace Engine
 		}
 	}
 
-	void GameObject::OnCollisionEnter(Collider* other)
+	void GameObject::OnCollisionEnter(Rp3dCollider* other)
 	{
 		// Call OnCollisionEnter on all components
 		for (const auto& component : m_components)
@@ -125,7 +125,7 @@ namespace Engine
 		}
 	}
 
-	void GameObject::OnCollisionStay(Collider* other)
+	void GameObject::OnCollisionStay(Rp3dCollider* other)
 	{
 		// Call OnCollisionStay on all components
 		for (const auto& component : m_components)
@@ -134,7 +134,7 @@ namespace Engine
 		}
 	}
 
-	void GameObject::OnCollisionExit(Collider* other)
+	void GameObject::OnCollisionExit(Rp3dCollider* other)
 	{
 		// Call OnCollisionExit on all components
 		for (const auto& component : m_components)

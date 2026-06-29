@@ -12,6 +12,7 @@
 #include "InputManager.h"
 #include "TimeClass.h"
 #include "RandomClass.h"
+#include "ImGuiClass.h"
 
 // Component system
 #include "Component.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Component.h>
+#include <EngineSystem.h>
 
 class CameraController : public Engine::Component
 {
