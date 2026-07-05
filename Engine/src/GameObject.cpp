@@ -40,6 +40,16 @@ namespace Engine
 		return nullptr;
 	}
 
+	void GameObject::SetScene(Scene* scene)
+	{
+		this->scene = scene;
+
+		for (auto& child : children)
+		{
+			child->SetScene(scene);
+		}
+	}
+
 	void GameObject::Awake()
 	{
 		// Call Awake on all components

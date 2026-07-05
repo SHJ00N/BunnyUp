@@ -10,7 +10,7 @@ namespace Engine
 	float TimeClass::s_totalTime = 0.0f;
 	float TimeClass::s_timeScale = 1.0f;
 	
-	float TimeClass::s_fixedDeltaTime = 0.01667f; // 60 FPS
+	float TimeClass::s_fixedDeltaTime = 0.008333333f; // 120 FPS
 	float TimeClass::s_accumulatedTime = 0.0f;
 
 	float TimeClass::s_fpsTimer = 0.0f;

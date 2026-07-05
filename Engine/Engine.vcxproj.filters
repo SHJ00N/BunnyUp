@@ -270,6 +270,12 @@
     <ClInclude Include="include\ObjectTag.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="include\Raycast.h">
+      <Filter>헤더 파일\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TriggerEventListener.h">
+      <Filter>헤더 파일\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\D3DManager.cpp">
@@ -435,6 +441,12 @@
       <Filter>소스 파일\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\CollisionEventListener.cpp">
+      <Filter>소스 파일\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raycast.cpp">
+      <Filter>소스 파일\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TriggerEventListener.cpp">
       <Filter>소스 파일\Physics</Filter>
     </ClCompile>
   </ItemGroup>

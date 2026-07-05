@@ -23,7 +23,7 @@ namespace Engine
 	void Rp3dRigidbody::OnAwake()
 	{
 		m_physics = ownerGameObject->scene->GetPhysicsSystem();
-		assert(m_physics, "Physcis system is null");
+		assert(m_physics && "Physcis system is null");
 
 		auto* world = m_physics->GetPhysicsWorld();
 
@@ -38,6 +38,7 @@ namespace Engine
 		m_body->setType(static_cast<rp3d::BodyType>(m_type));
 		m_body->enableGravity(useGravity);
 		m_body->setIsDebugEnabled(true);
+		m_body->setAngularLockAxisFactor(rp3d::Vector3((float)m_angleLockX, (float)m_angleLockY, (float)m_angleLockZ));
 
 		m_body->setUserData(this);
 
@@ -85,6 +86,40 @@ namespace Engine
 		ownerGameObject->transform.SetLocalRotation(Quaternion(rp3dRotation.x, rp3dRotation.y, rp3dRotation.z, rp3dRotation.w));
 	}
 
+	Vector3 Rp3dRigidbody::GetLinearVelocity() const
+	{
+		const auto& rp3dLinear = m_body->getLinearVelocity();
+		return Vector3(rp3dLinear.x, rp3dLinear.y, rp3dLinear.z);
+	}
+
+	Vector3 Rp3dRigidbody::GetAngularVelocity() const
+	{
+		const auto& rp3dAngular = m_body->getAngularVelocity();
+		return Vector3(rp3dAngular.x, rp3dAngular.y, rp3dAngular.z);
+	}
+
+	void Rp3dRigidbody::SetLinearVelocity(const Vector3& velocity)
+	{
+		m_body->setLinearVelocity(rp3d::Vector3(velocity.x, velocity.y, velocity.z));
+	}
+
+	void Rp3dRigidbody::SetLinearDamping(float value)
+	{
+		m_body->setLinearDamping(value);
+	}
+
+	void Rp3dRigidbody::SetAngularVelocity(const Vector3& velocity)
+	{
+		m_body->setAngularVelocity(rp3d::Vector3(velocity.x, velocity.y, velocity.z));
+	}
+
+	void Rp3dRigidbody::SetAngularLock(bool x, bool y, bool z)
+	{
+		m_angleLockX = x;
+		m_angleLockY = y;
+		m_angleLockZ = z;
+	}
+
 	void Rp3dRigidbody::SetGravity(bool value)
 	{
 		useGravity = value;
@@ -97,6 +132,11 @@ namespace Engine
 		m_body->setType(static_cast<rp3d::BodyType>(type));
 	}
 
+	void Rp3dRigidbody::SetMass(float mass)
+	{
+		m_mass = mass;
+	}
+
 	void Rp3dRigidbody::AddForce(const Vector3& force)
 	{
 		m_body->applyLocalForceAtCenterOfMass(rp3d::Vector3(force.x, force.y, force.z));
@@ -107,10 +147,10 @@ namespace Engine
 		m_body->applyLocalForceAtLocalPosition(rp3d::Vector3(force.x, force.y, force.z), rp3d::Vector3(pos.x, pos.y, pos.z));
 	}
 
-	void Rp3dRigidbody::AddImpulse(const Vector3& force)
+	void Rp3dRigidbody::AddImpulse(const Vector3& impulse)
 	{
 		auto linear = m_body->getLinearVelocity();
-		linear += rp3d::Vector3(force.x, force.y, force.z);
+		linear += rp3d::Vector3(impulse.x, impulse.y, impulse.z) / m_body->getMass();
 
 		m_body->setLinearVelocity(linear);
 	}
@@ -131,7 +171,7 @@ namespace Engine
 			SetBodyType(static_cast<BodyType>(currentType));
 		}
 
-		ImGui::DragFloat("Mass", &m_mass, 0.1f, 1.0f, 50.0f);
+		ImGui::DragFloat("Mass", &m_mass, 0.1f, 1.0f, 1000.0f);
 
 		if (ImGui::Checkbox("Gravity", &useGravity))
 		{

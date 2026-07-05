@@ -2,10 +2,12 @@
 
 #include "DemoScene1.h"
 #include "CameraController.h"
-#include "PlayerController.h"
+#include "Player/PlayerController.h"
 #include "CubeController.h"
+#include "Input/PlayerInputManager.h"
+#include "Player/PlayerFoot.h"
 
-namespace Scenes
+namespace Game
 {
 	DemoScene1::DemoScene1()
 	{
@@ -19,20 +21,23 @@ namespace Scenes
 	{
         SetEnvironmentMap(ResourceManager::GetInstance().GetEnvironmentMap("Sky_EnvMap"));
 
+        auto playerInputManager = CreateGameObject<GameObject>("PlayerInputManager");
+        playerInputManager->AddComponent<PlayerInputManager>();
+
 		auto bunny = CreateGameObject<GameObject>("Bunny");
         bunny->SetTag(ObjectTag::Player);
-        bunny->AddComponent<Player::PlayerController>();
+        bunny->AddComponent<Game::PlayerController>();
         bunny->transform.SetLocalPosition(Vector3(-20.0f, 0.0f, 0.0f));
 		bunny->transform.SetLocalScale(Vector3(0.1f, 0.1f, 0.1f));
 		bunny->transform.SetLocalRotation(Vector3(0.0f, 180.0f, 0.0f));
 		bunny->AddComponent<SkinnedRenderer>()->SetModel(ResourceManager::GetInstance().GetModel("Chibi_Rabbit"));
 
         auto bunnyRigidbody = bunny->AddComponent<Rp3dRigidbody>(1.0f, BodyType::DYNAMIC, true);
-        auto bunnyCollider = bunny->AddComponent<Rp3dBoxCollider>();
-        bunnyCollider->SetSize(Vector3(7.0f, 16.0f, 7.0f));
-        bunnyCollider->SetLocalPosition(Vector3(0.0f, 8.0f, 0.0f));
+        bunnyRigidbody->SetAngularLock(false, true, false); // Lock Y-axis rotation
+        auto bunnyCollider = bunny->AddComponent<Rp3dCapsuleCollider>(4.5f, 6.0f);
+        bunnyCollider->SetLocalPosition(Vector3(0.0f, 7.6f, 0.0f));
         bunnyCollider->SetFriction(1.0f);
-        bunnyCollider->SetBounciness(0.7f);
+        bunnyCollider->SetBounciness(0.0f);
         bunnyCollider->SetCollisionLayer(CollisionLayer::Player);
 
 		auto animator = bunny->AddComponent<Animator>();
@@ -41,6 +46,20 @@ namespace Scenes
 		animator->RegistAnimation("IdleC", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_IdleC").get());
         animator->RegistAnimation("Walk", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Walk").get());
 		animator->RegistAnimation("Run", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Run").get());
+        animator->RegistAnimation("Jump", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Jump").get());
+        animator->RegistAnimation("Jump_Place", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Jump_Place").get());
+        animator->RegistAnimation("Fall", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Fall").get());
+
+
+        auto bunnyFoot = bunny->CreateGameObject<GameObject>("BunnyFoot");
+        bunnyFoot->AddComponent<PlayerFoot>();
+        bunnyFoot->SetTag(ObjectTag::Player);
+        auto footBody = bunnyFoot->AddComponent<Rp3dRigidbody>(1.0f, BodyType::KINEMATIC, false);
+        auto footCollider = bunnyFoot->AddComponent<Rp3dCapsuleCollider>(3.0f, 1.0f);
+        footCollider->SetLocalRotation(RotationPitchYawRoll(90.0f, 0.0f, 90.0f));
+        footCollider->SetLocalPosition(Vector3(0.0f, 2.0f, 0.0f));
+        footCollider->SetTrigger(true);
+
 
 		//auto camera1 = CreateGameObject<GameObject>("Camera1");
 		//camera1->AddComponent<Camera>();
@@ -67,10 +86,11 @@ namespace Scenes
         floor->transform.SetLocalScale(Vector3(500.0f, 500.0f, 1.0f));
         floor->transform.SetLocalPosition(Vector3(0.0f, -50.0f, 0.0f));
 
-        auto floorRigidbody = floor->AddComponent<Rp3dRigidbody>(1.0f, BodyType::STATIC, false);
+        auto floorRigidbody = floor->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
         auto floorCollider = floor->AddComponent<Rp3dBoxCollider>();
-        floorCollider->SetSize(Vector3(500.0f, 500.0f, 1.0f));
+        floorCollider->SetSize(Vector3(500.0f, 500.0f, 10.0f));
         floorCollider->SetCollisionLayer(CollisionLayer::Ground);
+        floorCollider->SetBounciness(0.0f);
 
         //auto cube1 = CreateGameObject<GameObject>("Cube1");
         //auto cube1Renderer = cube1->AddComponent<MeshRenderer>();
@@ -123,13 +143,14 @@ namespace Scenes
         lightingCubeCollider->SetBounciness(0.1f);
 
         auto lightingCube1 = CreateGameObject<GameObject>("Cube2");
+        lightingCube1->SetTag(ObjectTag::Object);
         auto lightingCubeRenderer1 = lightingCube1->AddComponent<MeshRenderer>();
         lightingCubeRenderer1->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
         lightingCube1->transform.SetLocalPosition(Vector3(0.0f, 10.0f, 0.0f));
         lightingCube1->transform.SetLocalScale(Vector3(10.0f, 10.0f, 10.0f));
-        lightingCube1->transform.SetLocalRotation(Vector3(45.0f, 0.0f, 45.0f));
+        lightingCube1->transform.SetLocalRotation(Vector3(0.0f, 0.0f, 0.0f));
         auto lightingCube1Rigidbody = lightingCube1->AddComponent<Rp3dRigidbody>(10.0f, BodyType::DYNAMIC, true);
-        auto lightingCube1Collider = lightingCube1->AddComponent<Rp3dSphereCollider>(10.0f);
-        lightingCube1Collider->SetBounciness(0.5f);
+        auto lightingCube1Collider = lightingCube1->AddComponent<Rp3dBoxCollider>(Vector3(10.0f, 10.0f, 10.0f));
+        lightingCube1Collider->SetBounciness(0.0f);
 	}
 }

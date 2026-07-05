@@ -15,6 +15,8 @@
 #include "Rp3dCollisionPair.h"
 #include "CollisionEventListener.h"
 #include "CollisionMask.h"
+#include "Raycast.h"
+#include "TriggerEventListener.h"
 
 namespace Engine
 {
@@ -45,11 +47,14 @@ namespace Engine
 		void AddRigidbody(Rp3dRigidbody* rigidbody);
 		void RemoveRigidbody(Rp3dRigidbody* rigidbody);
 
+		bool Raycast(const Vector3& origin, const Vector3& direction, float maxDistance, RaycastHit& outHitInfo);
+
 		void DrawDebug();
 	private:
 		rp3d::PhysicsCommon m_common;
 		rp3d::PhysicsWorld* m_world;
 		CollisionEventListener m_collisionEventListener;
+		TriggerEventListener m_triggerEventListener;
 
 		std::unordered_map<uint64_t, class Rp3dRigidbody*> m_bodies;
 
@@ -57,6 +62,8 @@ namespace Engine
 		std::unordered_set<Rp3dCollisionPair, Rp3dCollisionPairHash> m_previousPairs;
 
 		CollisionMatrix m_collisionMatrix;
+
+		std::vector<Ray> m_rayList;
 
 		ListenerID m_collisionCallbackListenerID;
 		ListenerID m_objectDestroyedListenerID;

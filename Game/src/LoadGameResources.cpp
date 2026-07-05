@@ -18,6 +18,9 @@ void LoadGameResources()
 	resourceManager.LoadAnimation("Chibi_Rabbit_IdleC", "resources\\animations\\Anim_Chibi@IdleC.fbx", bunnyModel.get(), true);
 	resourceManager.LoadAnimation("Chibi_Rabbit_Walk", "resources\\animations\\Anim_Chibi@Walk.fbx", bunnyModel.get(), true);
 	resourceManager.LoadAnimation("Chibi_Rabbit_Run", "resources\\animations\\Anim_Chibi@Run.fbx", bunnyModel.get(), true);
+    resourceManager.LoadAnimation("Chibi_Rabbit_Jump", "resources\\animations\\Anim_Chibi@Jump.fbx", bunnyModel.get(), false);
+    resourceManager.LoadAnimation("Chibi_Rabbit_Jump_Place", "resources\\animations\\Anim_Chibi@Jump_In_Place.fbx", bunnyModel.get(), false);
+    resourceManager.LoadAnimation("Chibi_Rabbit_Fall", "resources\\animations\\Anim_Chibi@Quadruped_Chiling.fbx", bunnyModel.get(), true);
 
     resourceManager.LoadEnvironmentMap("Sky_EnvMap", "resources\\textures\\FS002_Day_Sunless.PNG");
 }

@@ -9,6 +9,7 @@ namespace Engine
 		Enemy,
 		Ground,
 		Wall,
-		Trigger
+		Trigger,
+		Object
 	};
 }

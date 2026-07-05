@@ -4,7 +4,7 @@
 #include "CubeController.h"
 #include "CubeGenerator.h"
 
-namespace Scenes
+namespace Game
 {
 	DemoScene2::DemoScene2()
 	{
@@ -34,7 +34,7 @@ namespace Scenes
         floorCollider->SetSize(Vector3(500.0f, 500.0f, 1.0f));
 
         auto cubeGenerator = CreateGameObject<GameObject>("CubeGenerator");
-        cubeGenerator->AddComponent<Cube::CubeGenerator>();
+        cubeGenerator->AddComponent<Game::CubeGenerator>();
         cubeGenerator->transform.SetLocalPosition(Vector3(0.0f, 50.0f, 0.0f));
 	}
 }

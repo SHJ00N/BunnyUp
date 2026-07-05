@@ -144,7 +144,7 @@ namespace Engine
     {
         PlayAnimation(m_Animations[name], force);
     }
-
+    
     void Animator::PlayAnimation(Animation* pAnimation, bool force) {
         if (!pAnimation || !m_model) return;
 
@@ -157,8 +157,24 @@ namespace Engine
             return;
         }
 
+		// if already blending, update next animation to the requested one
+        if (m_isBlending)
+        {
+            if (m_nextAnimation != pAnimation)
+            {
+                m_nextAnimation = pAnimation;
+                m_nextTime = 0.0f;
+                m_blendTime = 0.0f;
+            }
+
+            return;
+        }
+
         // already playing the same animation
-        if (m_CurrentAnimation == pAnimation && !force && !m_animationIsFinished) return;
+        if (m_CurrentAnimation == pAnimation && !force && !m_animationIsFinished)
+        {
+            return;
+        }
 
         // if force play, immediately switch to new animation without blending
         if (force)

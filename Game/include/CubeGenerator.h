@@ -2,7 +2,7 @@
 
 #include <EngineSystem.h>
 
-namespace Cube
+namespace Game
 {
     using namespace Engine;
     class CubeGenerator : public Component

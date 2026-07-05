@@ -24,10 +24,27 @@ namespace Engine
 		Transform transform;
 
 		// owner scene
-		Scene* scene;
+		Scene* scene = nullptr;
 
 		// Propagate dirty flag to children when this node's transform is modified
 		void PropagateTransformDirtyFlag();
+
+		// Add children game object
+		template<typename T, typename... Args>
+		T* CreateGameObject(Args&&... args)
+		{
+			// Ensure T is derived from SceneNode
+			static_assert(std::is_base_of<GameObject, T>(), "T must be a GameObject");
+
+			// Create a new GameObject and add it to the root
+			auto object = std::make_unique<T>(std::forward<Args>(args)...);
+			T* ptr = object.get();
+
+			// Set parent-child relationship
+			AddChild(std::move(object));
+
+			return ptr;
+		}
 
 		// Tree management functions
 		void AddChild(std::unique_ptr<GameObject> child)
@@ -36,7 +53,10 @@ namespace Engine
 			child->parent = this;
 			child->transform.parentTransform = &this->transform;
 
-			child->scene = this->scene;
+			if (this->scene)
+			{
+				child->SetScene(this->scene);
+			}
 
 			children.emplace_back(std::move(child));
 		}
@@ -90,6 +110,8 @@ namespace Engine
 		void Destroy();
 
 		void SetTag(ObjectTag tag) { m_tag = tag; }
+
+		void SetScene(Scene* scene);
 		
 		const std::string& GetName() const { return m_name; }
 		void SetName(const std::string& name) { m_name = name; }

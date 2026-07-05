@@ -54,13 +54,14 @@ namespace Engine
 
 		// setting world
 		// Change the number of iterations of the velocity solver. default value is 10
-		m_world->setNbIterationsVelocitySolver(10);
+		m_world->setNbIterationsVelocitySolver(20);
 		// Change the number of iterations of the position solver. default value is 5
-		m_world->setNbIterationsPositionSolver(5);
+		m_world->setNbIterationsPositionSolver(10);
 		// Set state the sleeping technique. default is true
 		m_world->enableSleeping(true);
 
 		m_world->setEventListener(&m_collisionEventListener);
+		m_world->setEventListener(&m_triggerEventListener);
 
 		// set collision layer
 		customizeCollisionMatrix();
@@ -86,7 +87,7 @@ namespace Engine
 		for (auto body : m_bodies)
 		{
 			auto rigidbody = body.second;
-			if (rigidbody && rigidbody->GetType() == BodyType::KINEMATIC)
+			if (rigidbody && rigidbody->GetType() != BodyType::STATIC)
 			{
 				body.second->SyncTransformToPhysics();
 			}
@@ -196,6 +197,14 @@ namespace Engine
 				Vector4(r2, g2, b2, 0.2f),
 				Vector4(r3, g3, b3, 0.2f));
 		}
+
+		// draw ray
+		for (const auto& ray : m_rayList)
+		{
+			DebugRenderer::GetInstance().AddLine(ray.start, ray.end, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
+		}
+		// clear ray
+		m_rayList.clear();
 	}
 
 	void PhysicsSystem::removeCollisionPair(Rp3dCollider* collider)
@@ -277,5 +286,24 @@ namespace Engine
 	void PhysicsSystem::customizeCollisionMatrix()
 	{
 		SetCollisionLayer(CollisionLayer::Player, CollisionLayer::Ground, true);
+	}
+
+	bool PhysicsSystem::Raycast(const Vector3& origin, const Vector3& direction, float maxDistance, RaycastHit& outHitInfo)
+	{
+		outHitInfo = {};
+
+		Vector3 dir = Normalize(direction);
+		Normalize(dir);
+		const Vector3 end = origin + dir * maxDistance;
+
+		// add ray for debug
+		m_rayList.push_back({ origin, end, maxDistance });
+
+		rp3d::Ray ray(rp3d::Vector3(origin.x, origin.y, origin.z), rp3d::Vector3(end.x, end.y, end.z));
+		RaycastCallback callback(outHitInfo, maxDistance);
+
+		m_world->raycast(ray, &callback);
+
+		return outHitInfo.collider != nullptr;
 	}
 }

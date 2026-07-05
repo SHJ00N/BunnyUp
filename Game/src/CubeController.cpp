@@ -1,6 +1,6 @@
 #include "CubeController.h"
 
-namespace Cube
+namespace Game
 {
     void CubeController::OnStart()
     {

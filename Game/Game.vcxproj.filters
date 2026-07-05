@@ -22,6 +22,21 @@
     <Filter Include="소스 파일\Main">
       <UniqueIdentifier>{15237dc3-7659-4682-9ae6-2bb1b083bbfa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Input">
+      <UniqueIdentifier>{74297755-428b-4454-a9cb-55985c0f4850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Player">
+      <UniqueIdentifier>{63116333-be12-4777-b6c3-f768351ad918}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Scenes">
+      <UniqueIdentifier>{310a5f97-4d8b-49a3-bd8d-0cbba427befe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Player">
+      <UniqueIdentifier>{e39d2489-1db6-4fbd-86d3-78288660a6ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Input">
+      <UniqueIdentifier>{324e7f95-0886-457a-8424-68d0e0f3b9f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -42,20 +57,53 @@
     <ClCompile Include="src\CameraController.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="src\PlayerController.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="src\CubeController.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="src\CubeGenerator.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="src\Input\KeyMapping.cpp">
+      <Filter>소스 파일\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input\PlayerInputManager.cpp">
+      <Filter>소스 파일\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\PlayerController.cpp">
+      <Filter>소스 파일\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\IdleState.cpp">
+      <Filter>소스 파일\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\JumpingState.cpp">
+      <Filter>소스 파일\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\MovingState.cpp">
+      <Filter>소스 파일\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\OnGroundState.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Player\WalkingState.h">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\WalkingState.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\RunningState.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\OnAirState.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\FallingState.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\PlayerFoot.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\DemoScene1.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>헤더 파일\Default</Filter>
     </ClInclude>
@@ -68,19 +116,58 @@
     <ClInclude Include="main.h">
       <Filter>헤더 파일\Default</Filter>
     </ClInclude>
-    <ClInclude Include="include\DemoScene2.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="include\CameraController.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="include\PlayerController.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="include\CubeController.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="include\CubeGenerator.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Singleton.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DemoScene1.h">
+      <Filter>헤더 파일\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DemoScene2.h">
+      <Filter>헤더 파일\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player\PlayerState.h">
+      <Filter>헤더 파일\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player\PlayerController.h">
+      <Filter>헤더 파일\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player\MovingState.h">
+      <Filter>헤더 파일\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player\JumpingState.h">
+      <Filter>헤더 파일\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player\IdleState.h">
+      <Filter>헤더 파일\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Input\KeyMapping.h">
+      <Filter>헤더 파일\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Input\PlayerInputManager.h">
+      <Filter>헤더 파일\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player\OnGroundState.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player\RunningState.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player\OnAirState.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player\FallingState.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player\PlayerFoot.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -170,7 +170,8 @@ namespace Engine
 				"Enemy",
 				"Ground",
 				"Wall",
-				"Trigger"
+				"Trigger",
+				"Object"
 			};
 
 			int currentTag = static_cast<int>(m_selectedGameObject->GetTag());

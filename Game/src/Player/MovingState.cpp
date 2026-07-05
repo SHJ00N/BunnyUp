@@ -1,0 +1,58 @@
+#include "Player/MovingState.h"
+#include "Player/PlayerController.h"
+#include "Player/IdleState.h"
+#include "Input/PlayerInputManager.h"
+
+namespace Game
+{
+    bool MovingState::HandleInput(PlayerController& playerController, const PlayerInputState& inputState)
+    {
+        if(OnGroundState::HandleInput(playerController, inputState))
+        {
+            return true;
+        }
+
+        if (!inputState.moveForward && !inputState.moveBackward && !inputState.moveLeft && !inputState.moveRight)
+        {
+            // Transition to IdleState
+            playerController.ChangeState(playerController.GetIdleState());
+            return true;
+        }
+
+        return false;
+    }
+
+    void MovingState::Update(float deltaTime, PlayerController& playerController, const PlayerInputState& inputState)
+    {
+        Vector2 movementInput(0.0f, 0.0f);
+        movementInput.x = inputState.moveRight - inputState.moveLeft;
+        movementInput.y = inputState.moveForward - inputState.moveBackward;
+
+        auto movementDirection = Vector3(movementInput.x, 0.0f, movementInput.y);
+        if (Length(movementDirection) > 0.0f)
+        {
+            movementDirection = Normalize(movementDirection);
+
+            auto* rigidbody = playerController.GetRigidbody();
+            auto linearVelocity = rigidbody->GetLinearVelocity();
+            auto velocity = movementDirection * playerController.moveSpeed;
+            velocity.y = linearVelocity.y; // Preserve vertical velocity (e.g., for jumping)
+            rigidbody->SetLinearVelocity(velocity);
+
+            // Rotate the player to face the movement direction
+            auto& transform = playerController.ownerGameObject->transform;
+            auto targetRotation = AngleAxis(atan2(movementDirection.x, movementDirection.z) * (180.0f / 3.14159265f), Vector3(0.0f, 1.0f, 0.0f));
+            const auto& currentRotation = transform.GetLocalQuaternionRotation();
+            auto rotation = Slerp(currentRotation, targetRotation, 10.0f * deltaTime);
+            transform.SetLocalRotation(rotation);
+        }
+    }
+
+    void MovingState::Exit(PlayerController& playerController)
+    {
+        // Stop the player's movement when exiting the moving state
+        auto* rigidbody = playerController.GetRigidbody();
+        auto linearVelocity = rigidbody->GetLinearVelocity();
+        rigidbody->SetLinearVelocity(Vector3(0.0f, linearVelocity.y, 0.0f));
+    }
+}

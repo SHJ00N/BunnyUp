@@ -31,13 +31,12 @@ namespace Engine
 		void SetBounciness(float bounciness);
 		void SetTrigger(bool value);
 		void SetCollisionLayer(CollisionLayer layer);
-		void SetNeedMaskUpdate(bool value);
 		// getter
 		bool IsTrigger() const { return m_isTrigger; }
 		float GetFriction() const { return m_friction; }
 		float GetBounciness() const { return m_bounciness; }
 		CollisionLayer GetCollisionLayer() const { return m_layer; }
-		bool NeedMaskUpdate() const { return m_needMaskUpdate; }
+		Vector3 GetLocalPosition() const { return m_center; }
 
 		void UpdateCollisionMask();
 
@@ -59,7 +58,6 @@ namespace Engine
 
 	private:
 		CollisionLayer m_layer = CollisionLayer::Default;
-		bool m_needMaskUpdate = true;
 	};
 
 	class Rp3dBoxCollider : public Rp3dCollider
@@ -72,6 +70,7 @@ namespace Engine
 		void OnImGui() override;
 
 		void SetSize(const Vector3& size);
+		Vector3 GetSize() const { return m_size; }
 
 	protected:
 		void OnStart() override;
@@ -93,6 +92,7 @@ namespace Engine
 		void OnImGui() override;
 
 		void SetRadius(float radius);
+		float GetRadius(float radius) const { return m_radius; }
 
 	protected:
 		void OnStart() override;
@@ -114,6 +114,9 @@ namespace Engine
 
 		void SetRadius(float radius);
 		void SetHeight(float height);
+
+		float GetRadius() const { return m_radius; }
+		float GetHeight() const { return m_height; }
 
 	protected:
 		void OnStart() override;

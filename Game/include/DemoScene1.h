@@ -2,7 +2,7 @@
 
 #include "Scene.h"
 
-namespace Scenes
+namespace Game
 {
 	using namespace Engine;
 	class DemoScene1 : public Scene

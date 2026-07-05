@@ -13,6 +13,7 @@
 #include "TimeClass.h"
 #include "RandomClass.h"
 #include "ImGuiClass.h"
+#include "PhysicsSystem.h"
 
 // Component system
 #include "Component.h"

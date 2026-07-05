@@ -24,12 +24,24 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\Player\WalkingState.h" />
     <ClCompile Include="src\CameraController.cpp" />
     <ClCompile Include="src\CubeController.cpp" />
     <ClCompile Include="src\CubeGenerator.cpp" />
     <ClCompile Include="src\DemoScene2.cpp" />
+    <ClCompile Include="src\Input\KeyMapping.cpp" />
+    <ClCompile Include="src\Input\PlayerInputManager.cpp" />
     <ClCompile Include="src\LoadGameResources.cpp" />
-    <ClCompile Include="src\PlayerController.cpp" />
+    <ClCompile Include="src\Player\FallingState.cpp" />
+    <ClCompile Include="src\Player\IdleState.cpp" />
+    <ClCompile Include="src\Player\JumpingState.cpp" />
+    <ClCompile Include="src\Player\MovingState.cpp" />
+    <ClCompile Include="src\Player\OnAirState.cpp" />
+    <ClCompile Include="src\Player\OnGroundState.cpp" />
+    <ClCompile Include="src\Player\PlayerController.cpp" />
+    <ClCompile Include="src\Player\PlayerFoot.cpp" />
+    <ClCompile Include="src\Player\RunningState.cpp" />
+    <ClCompile Include="src\Player\WalkingState.cpp" />
     <ClCompile Include="src\RegistractionGameScenes.cpp" />
     <ClCompile Include="src\DemoScene1.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -41,7 +53,19 @@
     <ClInclude Include="include\CubeGenerator.h" />
     <ClInclude Include="include\DemoScene1.h" />
     <ClInclude Include="include\DemoScene2.h" />
-    <ClInclude Include="include\PlayerController.h" />
+    <ClInclude Include="include\Input\PlayerInputManager.h" />
+    <ClInclude Include="include\Input\KeyMapping.h" />
+    <ClInclude Include="include\Player\FallingState.h" />
+    <ClInclude Include="include\Player\IdleState.h" />
+    <ClInclude Include="include\Player\JumpingState.h" />
+    <ClInclude Include="include\Player\MovingState.h" />
+    <ClInclude Include="include\Player\OnAirState.h" />
+    <ClInclude Include="include\Player\OnGroundState.h" />
+    <ClInclude Include="include\Player\PlayerController.h" />
+    <ClInclude Include="include\Player\PlayerFoot.h" />
+    <ClInclude Include="include\Player\PlayerState.h" />
+    <ClInclude Include="include\Player\RunningState.h" />
+    <ClInclude Include="include\Singleton.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="targetver.h" />
@@ -110,26 +134,30 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\</IntDir>
-    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>C:\Project\BunnyUp\Engine\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\</IntDir>
-    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>C:\Project\BunnyUp\Engine\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\</IntDir>
-    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>C:\Project\BunnyUp\Engine\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\</IntDir>
-    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>C:\Project\BunnyUp\Engine\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -141,6 +169,7 @@
       <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\ReactPhysics3D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -169,6 +198,7 @@
       <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\ReactPhysics3D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -191,6 +221,7 @@
       <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\ReactPhysics3D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -219,6 +250,7 @@
       <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\ReactPhysics3D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

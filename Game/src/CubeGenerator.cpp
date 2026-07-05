@@ -1,7 +1,7 @@
 #include "CubeGenerator.h"
 #include "CubeController.h"
 
-namespace Cube
+namespace Game
 {
     void CubeGenerator::Update(float dt)
     {
