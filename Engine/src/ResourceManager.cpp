@@ -5,6 +5,7 @@
 #include "Animation.h"
 #include "PrimitiveMeshFactory.h"
 #include "EnvironmentMap.h"
+#include "SamplerStateManager.h"
 
 namespace Engine
 {
@@ -37,6 +38,11 @@ namespace Engine
 		// Debug shader
 		LoadShader<VertexPC>("Debug_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\DebugShader.hlsl");
 
+		// Default textures
+		LoadTexture("Default_Black", "C:\\Project\\BunnyUp\\Engine\\resources\\textures\\Default_Black.png", TextureType::Albedo);
+		LoadTexture("Default_White", "C:\\Project\\BunnyUp\\Engine\\resources\\textures\\Default_White.png", TextureType::Albedo);
+		LoadTexture("Default_Normal", "C:\\Project\\BunnyUp\\Engine\\resources\\textures\\Default_Normal.png", TextureType::Normal);
+
 		// Create primitive meshes
 		auto quadData = PrimitiveMeshFactory::CreateQuad();
 		CreateMesh<VertexPNUT>("Primitive_quad", quadData.vertices, quadData.indices);
@@ -53,6 +59,19 @@ namespace Engine
 		auto texturedMaterial = CreateMaterial("Textured_material");
 		texturedMaterial->SetShader(GetShader("Textured_shader"));
 		texturedMaterial->SetRenderState(RenderStateManager::GetInstance().GetState("Opaque"));
+		// set default map
+		texturedMaterial->SetTexture(0, ResourceManager::GetInstance().GetTexture("Default_White"));	// albedo
+		texturedMaterial->SetSampler(0, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+		texturedMaterial->SetTexture(1, ResourceManager::GetInstance().GetTexture("Default_Normal"));		// normal
+		texturedMaterial->SetSampler(1, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+		texturedMaterial->SetTexture(2, ResourceManager::GetInstance().GetTexture("Default_White"));	// roughness
+		texturedMaterial->SetSampler(2, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+		texturedMaterial->SetTexture(3, ResourceManager::GetInstance().GetTexture("Default_Black"));	// metallic
+		texturedMaterial->SetSampler(3, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+		texturedMaterial->SetTexture(4, ResourceManager::GetInstance().GetTexture("Default_White"));	// ambient occlusion
+		texturedMaterial->SetSampler(4, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+		texturedMaterial->SetTexture(5, ResourceManager::GetInstance().GetTexture("Default_White"));	// opacity
+		texturedMaterial->SetSampler(5, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
 	}
 
 	void ResourceManager::Clear()
@@ -116,7 +135,7 @@ namespace Engine
 		}
 
 		auto model = std::make_shared<Model>();
-		if (!model->LoadModel(filePath))
+		if (!model->LoadModel(filePath, name))
 		{
 			LOG_ERROR("Failed to load model: %s", filePath.c_str());
 			return nullptr;

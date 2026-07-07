@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "TimeClass.h"
 #include "PhysicsSystem.h"
+#include "Rp3dRigidbody.h"
 
 namespace Engine
 {
@@ -187,7 +188,7 @@ namespace Engine
 
 			// Set up local variables to hold transform data for ImGui editing
 			Vector3 position = m_selectedGameObject->transform.GetLocalPosition();
-			Vector3 rotation = m_selectedGameObject->transform.GetLocalEulerRotation();
+			Quaternion rotation = m_selectedGameObject->transform.GetLocalQuaternionRotation();
 			Vector3 scale = m_selectedGameObject->transform.GetLocalScale();
 
 			if (ImGui::DragFloat3("Position", &position.x, 0.1f))
@@ -195,9 +196,15 @@ namespace Engine
 				m_selectedGameObject->transform.SetLocalPosition(position);
 			}
 
-			if (ImGui::DragFloat3("Rotation", &rotation.x, 0.1f))
+			if (ImGui::DragFloat3("Rotation", &rotation.x, 0.01f))
 			{
 				m_selectedGameObject->transform.SetLocalRotation(rotation);
+
+				auto rigidbody = m_selectedGameObject->GetComponent<Rp3dRigidbody>();
+				if (rigidbody)
+				{
+					rigidbody->SyncTransformToPhysics();
+				}
 			}
 
 			if (ImGui::DragFloat3("Scale", &scale.x, 0.01f, 0.01f, 1000.0f))

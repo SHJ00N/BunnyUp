@@ -41,6 +41,10 @@ namespace Engine
 		Vector4 color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 		float roughness = 1.0f;
 		float metallic = 0.0f;
+		uint32_t hasNormal = false;
+		uint32_t hasRoughness = false;
+		uint32_t hasMetallic = false;
+		uint32_t hasAmbientOcclusion = false;
 		Vector2 padding;
 	};
 

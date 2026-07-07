@@ -26,6 +26,12 @@ namespace Engine
         mat->m_name = m_name;
 
         mat->SetColor(m_cbPerMaterial.color);
+        mat->SetMetallic(m_cbPerMaterial.metallic);
+        mat->SetRoughness(m_cbPerMaterial.roughness);
+        mat->SetHasNormalMap(m_cbPerMaterial.hasNormal);
+        mat->SetHasRoughnessMap(m_cbPerMaterial.hasRoughness);
+        mat->SetHasMetallicMap(m_cbPerMaterial.hasMetallic);
+        mat->SetHasAOMap(m_cbPerMaterial.hasAmbientOcclusion);
 
 		return mat;
 	}

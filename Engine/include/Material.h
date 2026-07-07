@@ -27,6 +27,10 @@ namespace Engine
 		void SetColor(const Vector4 v) { m_cbPerMaterial.color = v; }
 		void SetMetallic(const float metallic) { m_cbPerMaterial.metallic = metallic; }
 		void SetRoughness(const float roughness) { m_cbPerMaterial.roughness = roughness; }
+		void SetHasNormalMap(bool value) { m_cbPerMaterial.hasNormal = value; }
+		void SetHasRoughnessMap(bool value) { m_cbPerMaterial.hasRoughness = value; }
+		void SetHasMetallicMap(bool value) { m_cbPerMaterial.hasMetallic = value; }
+		void SetHasAOMap(bool value) { m_cbPerMaterial.hasAmbientOcclusion = value; }
 
 		const std::string& GetName() const { return m_name; }
 		std::shared_ptr<Texture2D> GetTexture(UINT slot) const;

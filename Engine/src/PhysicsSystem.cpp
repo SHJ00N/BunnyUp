@@ -285,7 +285,9 @@ namespace Engine
 
 	void PhysicsSystem::customizeCollisionMatrix()
 	{
-		SetCollisionLayer(CollisionLayer::Player, CollisionLayer::Ground, true);
+		SetCollisionLayer(CollisionLayer::Player, CollisionLayer::Player, false);
+		SetCollisionLayer(CollisionLayer::Enemy, CollisionLayer::Enemy, false);
+		SetCollisionLayer(CollisionLayer::Ground, CollisionLayer::Ground, false);
 	}
 
 	bool PhysicsSystem::Raycast(const Vector3& origin, const Vector3& direction, float maxDistance, RaycastHit& outHitInfo)

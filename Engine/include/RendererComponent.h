@@ -53,6 +53,8 @@ namespace Engine
 		}
 
 	protected:
+		virtual ~RendererComponent() = default;
+
 		std::vector<std::shared_ptr<Material>>  m_materials;
 		ConstantBufferPerObject m_cbPerObject;
 		std::unique_ptr<AABB> m_bound;

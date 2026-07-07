@@ -20,6 +20,10 @@ cbuffer MaterialConstantBuffer : register(b3)
     float4 mColor;
     float Roughness;
     float Metallic;
+    uint HasNormal;
+    uint HasRougness;
+    uint HasMetallic;
+    uint HasAmbientOcclusion;
     float Padding[2];
 }
 
@@ -74,8 +78,6 @@ PS_OUTPUT PSMain(PS_INPUT input) : SV_TARGET
     PS_OUTPUT Output;
        // store albedo, discard if alpha is too low
     Output.Albedo = input.Color;
-    if (Output.Albedo.a < 0.1f)
-        discard;
     
     Output.Position = input.WorldPosition; // store world position in output for later use in deferred shading
     // store normal

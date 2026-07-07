@@ -91,12 +91,42 @@
     <ClInclude Include="include\WindowClass.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\external\ImGui\imgui.cpp" />
-    <ClCompile Include="..\external\ImGui\imgui_draw.cpp" />
-    <ClCompile Include="..\external\ImGui\imgui_impl_dx11.cpp" />
-    <ClCompile Include="..\external\ImGui\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\external\ImGui\imgui_tables.cpp" />
-    <ClCompile Include="..\external\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="..\external\ImGui\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\external\ImGui\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\external\ImGui\imgui_impl_dx11.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\external\ImGui\imgui_impl_win32.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\external\ImGui\imgui_tables.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\external\ImGui\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClInclude Include="include\RenderGraph.h" />
     <ClCompile Include="src\Animation.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
@@ -473,7 +503,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(projectDir)build\$(Configuration)\</OutDir>
     <IntDir>$(projectDir)bin\$(Configuration)\</IntDir>
-    <IncludePath>C:\Project\BunnyUp\Engine\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;$(IncludePath)</IncludePath>
     <SourcePath>$(SourcePath)</SourcePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <ExternalIncludePath>C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ReactPhysics3D\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\ImGui;$(ExternalIncludePath)</ExternalIncludePath>
@@ -481,7 +511,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(projectDir)build\$(Configuration)\</OutDir>
     <IntDir>$(projectDir)bin\$(Configuration)\</IntDir>
-    <IncludePath>C:\Project\BunnyUp\Engine\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;$(IncludePath)</IncludePath>
     <SourcePath>$(SourcePath)</SourcePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <ExternalIncludePath>C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ReactPhysics3D\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\ImGui;$(ExternalIncludePath)</ExternalIncludePath>
@@ -489,7 +519,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(projectDir)build\$(Configuration)\</OutDir>
     <IntDir>$(projectDir)bin\$(Configuration)\</IntDir>
-    <IncludePath>C:\Project\BunnyUp\Engine\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;$(IncludePath)</IncludePath>
     <SourcePath>$(SourcePath)</SourcePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <ExternalIncludePath>C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ReactPhysics3D\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\ImGui;$(ExternalIncludePath)</ExternalIncludePath>
@@ -497,7 +527,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(projectDir)build\$(Configuration)\</OutDir>
     <IntDir>$(projectDir)bin\$(Configuration)\</IntDir>
-    <IncludePath>C:\Project\BunnyUp\Engine\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;$(IncludePath)</IncludePath>
     <SourcePath>$(SourcePath)</SourcePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <ExternalIncludePath>C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ReactPhysics3D\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\ImGui;$(ExternalIncludePath)</ExternalIncludePath>

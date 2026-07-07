@@ -8,8 +8,12 @@
 
 namespace Engine
 {
+	MeshRenderer::MeshRenderer()
+	{
+	}
+
 	void MeshRenderer::SetMesh(std::shared_ptr<Mesh> mesh) 
-	{ 
+	{
 		m_meshes.clear();
 		m_meshes.push_back(mesh); 
 
@@ -28,6 +32,8 @@ namespace Engine
 
 	void MeshRenderer::SetMesh(std::shared_ptr<Model> model)
 	{
+		m_model = model;
+
 		m_meshes.clear();
 		m_meshes = model->GetMeshes();
 		
@@ -67,6 +73,42 @@ namespace Engine
 
 	void MeshRenderer::OnImGui()
 	{
+		//=================================================
+		// Model
+		//=================================================
+		auto model = GetModel();
+		std::string currentModel = model ? model->GetName() : "None";
+
+		ImGui::Text("Model");
+		ImGui::SameLine();
+
+		ImGui::SetNextItemWidth(250.0f);
+
+		if (ImGui::BeginCombo("##Model", currentModel.c_str()))
+		{
+			const auto& models = ResourceManager::GetInstance().GetModels();
+
+			for (const auto& pair : models)
+			{
+				bool selected = (pair.second.get() == model);
+
+				if (ImGui::Selectable(pair.first.c_str(), selected))
+				{
+					SetMesh(pair.second);
+				}
+
+				if (selected)
+					ImGui::SetItemDefaultFocus();
+			}
+
+			ImGui::EndCombo();
+		}
+
+		ImGui::Separator();
+
+		//=================================================
+		// Materials
+		//=================================================
 		for (int m = 0; m < m_materials.size(); ++m)
 		{
 			auto& mat = m_materials[m];

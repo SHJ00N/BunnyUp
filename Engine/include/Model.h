@@ -18,7 +18,7 @@ namespace Engine
 		Model();
 		~Model();
 
-		bool LoadModel(const std::string& path);
+		bool LoadModel(const std::string& path, const std::string& name);
 
 		const std::vector<std::shared_ptr<Mesh>>& GetMeshes() const { return m_meshes; }
 		const std::vector<std::shared_ptr<Material>>& GetMaterials() const { return m_materials; }
@@ -28,10 +28,15 @@ namespace Engine
 
 		const Matrix4x4& GetGlobalInverseTransform() const { return m_globalInverseTransform; }
 
+		const std::string& GetName() const { return m_name; }
+
 	private:
 		std::vector<std::shared_ptr<Mesh>> m_meshes;
 		std::vector<std::shared_ptr<Material>> m_materials;
 		std::string m_directory;
+		std::string m_name;
+
+		void loadMaterialTexture(Material* mat, const std::string& path, UINT slot, TextureType type = TextureType::Default);
 
 		// bone data
 		Matrix4x4 m_globalInverseTransform;

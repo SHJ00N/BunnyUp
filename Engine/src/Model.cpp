@@ -17,12 +17,12 @@ namespace Engine
 	{
 	}
 
-	bool Model::LoadModel(const std::string& path)
+	bool Model::LoadModel(const std::string& path, const std::string& name)
 	{
 		Assimp::Importer importer;
 
 		const aiScene* scene = importer.ReadFile(path,
-			aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace | aiProcess_FlipWindingOrder |aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+			aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
 		if (!scene || !scene->mRootNode)
 		{
 			return false;
@@ -38,6 +38,8 @@ namespace Engine
 		aiMatrix4x4 globalTransformation = scene->mRootNode->mTransformation;
 		globalTransformation = globalTransformation.Inverse();
 		m_globalInverseTransform = AssimpDXHelpers::ConvertMatrixToDXFormat(globalTransformation);
+
+		m_name = name;
 
 		return true;
 	}
@@ -63,7 +65,6 @@ namespace Engine
 		for (UINT i = 0; i < mesh->mNumVertices; i++)
 		{
 			VertexPNUT v;
-
 			v.position = {
 				mesh->mVertices[i].x,
 				mesh->mVertices[i].y,
@@ -83,12 +84,16 @@ namespace Engine
 				v.normal = { 0.0, 1.0f, 0.0f };
 			}
 
-			if (mesh->mTextureCoords[0])
+			if (mesh->HasTextureCoords(0))
 			{
 				v.uv = {
 					mesh->mTextureCoords[0][i].x,
 					mesh->mTextureCoords[0][i].y
 				};
+			}
+			else
+			{
+				v.uv = { 0.0f, 0.0f };
 			}
 
 			if (mesh->HasTangentsAndBitangents())
@@ -188,6 +193,20 @@ namespace Engine
 			aiMaterial* aiMat = scene->mMaterials[i];
 			auto mat = std::make_unique<Material>();
 
+			bool isTransparent = false;
+
+			// set default map
+			mat->SetTexture(0, ResourceManager::GetInstance().GetTexture("Default_White"));	// albedo
+			mat->SetSampler(0, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+			mat->SetTexture(1, ResourceManager::GetInstance().GetTexture("Default_Normal"));		// normal
+			mat->SetSampler(1, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+			mat->SetTexture(2, ResourceManager::GetInstance().GetTexture("Default_White"));	// roughness
+			mat->SetSampler(2, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+			mat->SetTexture(3, ResourceManager::GetInstance().GetTexture("Default_Black"));	// metallic
+			mat->SetSampler(3, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+			mat->SetTexture(4, ResourceManager::GetInstance().GetTexture("Default_White"));	// ambient occlusion
+			mat->SetSampler(4, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+
 			// set material name
 			aiString name;
 			if (aiMat->Get(AI_MATKEY_NAME, name) == AI_SUCCESS)
@@ -201,34 +220,70 @@ namespace Engine
 
 			// create material textures
 			aiString path;
+			// Albedo
 			if (aiMat->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
 			{
 				std::string fullPath = m_directory + '\\' + path.C_Str();
-				// load texture
-				auto tex = ResourceManager::GetInstance().LoadTexture(mat->GetName() + "_Diffuse", fullPath, TextureType::Albedo);
-				// set texture slot
-				mat->SetTexture(0, tex);
-				// set sampler slot
-				mat->SetSampler(0, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+				loadMaterialTexture(mat.get(), fullPath, 0, TextureType::Albedo);
 			}
+			// Normal
 			if (aiMat->GetTexture(aiTextureType_NORMALS, 0, &path) == AI_SUCCESS)
 			{
+				mat->SetHasNormalMap(true);
+
 				std::string fullPath = m_directory + '\\' + path.C_Str();
-				// load texture
-				auto tex = ResourceManager::GetInstance().LoadTexture(mat->GetName() + "_Normal", fullPath, TextureType::Normal);
-				// set texture slot
-				mat->SetTexture(1, tex);
-				// set sampler slot
-				mat->SetSampler(1, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+				loadMaterialTexture(mat.get(), fullPath, 1, TextureType::Normal);
+			}
+			// Roughness
+			if (aiMat->GetTexture(aiTextureType_DIFFUSE_ROUGHNESS, 0, &path) == AI_SUCCESS)
+			{
+				mat->SetHasRoughnessMap(true);
+
+				std::string fullPath = m_directory + '\\' + path.C_Str();
+				loadMaterialTexture(mat.get(), fullPath, 2, TextureType::Default);
+			}
+			// Metallic
+			if (aiMat->GetTexture(aiTextureType_METALNESS, 0, &path) == AI_SUCCESS)
+			{
+				mat->SetHasMetallicMap(true);
+
+				std::string fullPath = m_directory + '\\' + path.C_Str();
+				loadMaterialTexture(mat.get(), fullPath, 3, TextureType::Default);
+			}
+			// Ambient Occlusion
+			if (aiMat->GetTexture(aiTextureType_AMBIENT_OCCLUSION, 0, &path) == AI_SUCCESS)
+			{
+				mat->SetHasAOMap(true);
+
+				std::string fullPath = m_directory + '\\' + path.C_Str();
+				loadMaterialTexture(mat.get(), fullPath, 4, TextureType::Default);
+			}
+			// Opacity
+			if (aiMat->GetTexture(aiTextureType_OPACITY, 0, &path) == AI_SUCCESS)
+			{
+				isTransparent = true;
+
+				std::string fullPath = m_directory + '\\' + path.C_Str();
+				loadMaterialTexture(mat.get(), fullPath, 5, TextureType::Default);
 			}
 
 			// set shader
-			mat->SetShader(m_boneCounter ? ResourceManager::GetInstance().GetShader("Skinning_shader") : ResourceManager::GetInstance().GetShader("Default_shader"));
+			mat->SetShader(m_boneCounter ? ResourceManager::GetInstance().GetShader("Skinning_shader") : ResourceManager::GetInstance().GetShader("Textured_shader"));
 			// set render state
-			mat->SetRenderState(RenderStateManager::GetInstance().GetState("Opaque"));
+			mat->SetRenderState(RenderStateManager::GetInstance().GetState(isTransparent ? "Transparent" : "Opaque"));
 
 			m_materials[i] = std::move(mat);
 		}
+	}
+
+	void Model::loadMaterialTexture(Material* mat, const std::string& path, UINT slot, TextureType type)
+	{
+		// load texture
+		auto tex = ResourceManager::GetInstance().LoadTexture(path, path, type);
+		// set texture slot
+		mat->SetTexture(slot, tex);
+		// set sampler slot
+		mat->SetSampler(slot, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
 	}
 
 	void Model::extractBoneWeightForVertices(std::vector<VertexSkin>& vertices, aiMesh* mesh, const aiScene* scene) 

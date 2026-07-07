@@ -5,9 +5,8 @@
 
 namespace Engine
 {
-	void SkinnedRenderer::SetModel(std::shared_ptr<Model> model)
+	void SkinnedRenderer::SetMesh(std::shared_ptr<Model> model)
 	{
-		m_model = model;
 		MeshRenderer::SetMesh(model);
 	}
 

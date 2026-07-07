@@ -173,7 +173,9 @@ float4 PSMain(PS_INPUT input) : SV_TARGET
     if(depth >= 1.0f) // if depth is 1.0, it means this pixel is background, discard it for better performance
         discard;
     
-    float3 albedo = albedoMap.Sample(linearClamp, input.UV).rgb;
+    float4 sampledAlbedo = albedoMap.Sample(linearClamp, input.UV);
+    float3 albedo = sampledAlbedo.rgb;
+    float alpha = sampledAlbedo.a;
     float metallic = metallicRoughnessAoMap.Sample(linearClamp, input.UV).r;
     float roughness = clamp(metallicRoughnessAoMap.Sample(linearClamp, input.UV).g, 0.04f, 1.0f);
     float ao = metallicRoughnessAoMap.Sample(linearClamp, input.UV).b;
@@ -239,7 +241,7 @@ float4 PSMain(PS_INPUT input) : SV_TARGET
     // gamma correct
     color = pow(color, 1.0f / 2.2f);
 
-    float4 FragColor = float4(color, 1.0f);
+    float4 FragColor = float4(color, alpha);
     
     return FragColor;
 }

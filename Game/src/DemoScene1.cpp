@@ -24,13 +24,15 @@ namespace Game
         auto playerInputManager = CreateGameObject<GameObject>("PlayerInputManager");
         playerInputManager->AddComponent<PlayerInputManager>();
 
+        // Player
+        // -------------------------------------------------------------------------------------------------------
 		auto bunny = CreateGameObject<GameObject>("Bunny");
         bunny->SetTag(ObjectTag::Player);
         bunny->AddComponent<Game::PlayerController>();
         bunny->transform.SetLocalPosition(Vector3(-20.0f, 0.0f, 0.0f));
 		bunny->transform.SetLocalScale(Vector3(0.1f, 0.1f, 0.1f));
 		bunny->transform.SetLocalRotation(Vector3(0.0f, 180.0f, 0.0f));
-		bunny->AddComponent<SkinnedRenderer>()->SetModel(ResourceManager::GetInstance().GetModel("Chibi_Rabbit"));
+		bunny->AddComponent<SkinnedRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Chibi_Rabbit"));
 
         auto bunnyRigidbody = bunny->AddComponent<Rp3dRigidbody>(1.0f, BodyType::DYNAMIC, true);
         bunnyRigidbody->SetAngularLock(false, true, false); // Lock Y-axis rotation
@@ -50,7 +52,7 @@ namespace Game
         animator->RegistAnimation("Jump_Place", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Jump_Place").get());
         animator->RegistAnimation("Fall", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Fall").get());
 
-
+        // Player foot
         auto bunnyFoot = bunny->CreateGameObject<GameObject>("BunnyFoot");
         bunnyFoot->AddComponent<PlayerFoot>();
         bunnyFoot->SetTag(ObjectTag::Player);
@@ -60,12 +62,8 @@ namespace Game
         footCollider->SetLocalPosition(Vector3(0.0f, 2.0f, 0.0f));
         footCollider->SetTrigger(true);
 
-
-		//auto camera1 = CreateGameObject<GameObject>("Camera1");
-		//camera1->AddComponent<Camera>();
-		//camera1->transform.SetLocalPosition(Vector3(0.0f, 100.0f, 0.0f));
-		//camera1->transform.SetLocalRotation(Vector3(90.0f, 0.0f, 0.0f));
-
+        // Camera
+        // -------------------------------------------------------------------------------------------------------
 		auto camera2 = CreateGameObject<GameObject>("Culling Debug Camera");
 		camera2->AddComponent<Camera>();
 		camera2->AddComponent<CameraController>();
@@ -74,23 +72,30 @@ namespace Game
         auto camera2Renderer = camera2->AddComponent<MeshRenderer>();
         camera2Renderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
 
+        // Floor
+        // -------------------------------------------------------------------------------------------------------
         auto floor = CreateGameObject<GameObject>("Floor");
         floor->SetTag(ObjectTag::Ground);
+        floor->transform.SetLocalRotation(Vector3(90.0f, 0.0f, 0.0f));
+        floor->transform.SetLocalScale(Vector3(500.0f, 500.0f, 1.0f));
+        floor->transform.SetLocalPosition(Vector3(0.0f, -50.0f, 0.0f));
+
         auto floorRenderer = floor->AddComponent<MeshRenderer>();
         floorRenderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_quad"));
         floorRenderer->SetMaterial(0, ResourceManager::GetInstance().GetMaterial("Textured_material"));
         floorRenderer->GetMaterial(0)->SetTexture(0, ResourceManager::GetInstance().GetTexture("T_Snow_Ground"));
-        floorRenderer->GetMaterial(0)->SetSampler(0, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
-
-        floor->transform.SetLocalRotation(Vector3(90.0f, 0.0f, 0.0f));
-        floor->transform.SetLocalScale(Vector3(500.0f, 500.0f, 1.0f));
-        floor->transform.SetLocalPosition(Vector3(0.0f, -50.0f, 0.0f));
 
         auto floorRigidbody = floor->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
         auto floorCollider = floor->AddComponent<Rp3dBoxCollider>();
         floorCollider->SetSize(Vector3(500.0f, 500.0f, 10.0f));
         floorCollider->SetCollisionLayer(CollisionLayer::Ground);
         floorCollider->SetBounciness(0.0f);
+
+        // Snow Floor
+        auto snowFloor = CreateGameObject<GameObject>("WinterFell");
+        snowFloor->SetTag(ObjectTag::Ground);
+        snowFloor->transform.SetLocalScale(Vector3(0.2f));
+        snowFloor->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Winter_Barrel_03"));
 
         //auto cube1 = CreateGameObject<GameObject>("Cube1");
         //auto cube1Renderer = cube1->AddComponent<MeshRenderer>();

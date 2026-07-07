@@ -25,6 +25,10 @@ cbuffer MaterialConstantBuffer : register(b3)
     float4 mColor;
     float Roughness;
     float Metallic;
+    uint HasNormal;
+    uint HasRougness;
+    uint HasMetallic;
+    uint HasAmbientOcclusion;
     float PaddingMat[2];
 }
 
@@ -105,24 +109,52 @@ Texture2D albedoMap : register(t0);
 SamplerState sampler0 : register(s0);
 Texture2D normalMap : register(t1);
 SamplerState sampler1 : register(s1);
+Texture2D roughnessMap : register(t2);
+SamplerState sampler2 : register(s2);
+Texture2D metallicMap : register(t3);
+SamplerState sampler3 : register(s3);
+Texture2D ambientOcclusionMap : register(t4);
+SamplerState sampler4 : register(s4);
+Texture2D opacityMap : register(t5);
+SamplerState sampler5 : register(s5);
 
 PS_OUTPUT PSMain(PS_INPUT input) : SV_TARGET
 {
     PS_OUTPUT Output;
     
-    // store albedo, discard if alpha is too low
+    // store albedo and apply opacity value
     float4 albedo = albedoMap.Sample(sampler0, input.UV);
-    Output.Albedo = float4(albedo.rgb * mColor.rgb, albedo.a);
-    if (albedo.a < 0.1f)
-        discard;
+    float alpha = opacityMap.Sample(sampler5, input.UV).a;
+    Output.Albedo = float4(albedo.rgb * mColor.rgb, alpha);
     
     Output.Position = input.WorldPosition; // store world position in output for later use in deferred shading
     // store normal
-    float3 normal = normalize(normalMap.Sample(sampler1, input.UV).rgb * 2.0f - 1.0f); // convert from [0, 1] to [-1, 1]
-    normal = normalize(mul(normal, float3x3(input.Tangent, input.Bitangent, input.Normal))) * 0.5f + 0.5f;
+    float3 normal;
+    if (HasNormal == 1)
+    {
+        normal = normalize(normalMap.Sample(sampler1, input.UV).rgb * 2.0f - 1.0f); // convert from [0, 1] to [-1, 1]
+        normal = normalize(mul(normal, float3x3(input.Tangent, input.Bitangent, input.Normal))) * 0.5f + 0.5f;
+    }
+    else
+    {
+        normal = normalize(float3(input.Normal)) * 0.5f + 0.5f;
+    }
     Output.Normal = float4(normal, 0.0f);
     
-    Output.MetallicRoughnessAO = float4(Metallic, Roughness, 1.0f, 1.0f); // placeholder, can be replaced with actual metallic, roughness, ao values from texture maps
+    float4 MRA = float4(Metallic, Roughness, 1.0f, 1.0f);
+    if (HasMetallic == 1)
+    {
+        MRA.x = metallicMap.Sample(sampler3, input.UV).r;
+    }
+    if (HasRougness == 1)
+    {
+        MRA.y = roughnessMap.Sample(sampler2, input.UV).r;
+    }
+    if (HasAmbientOcclusion == 1)
+    {
+        MRA.z = ambientOcclusionMap.Sample(sampler4, input.UV).r;
+    }
+    Output.MetallicRoughnessAO = MRA; // placeholder, can be replaced with actual metallic, roughness, ao values from texture maps
     
     return Output;
 }
