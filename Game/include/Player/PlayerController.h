@@ -20,7 +20,8 @@ namespace Game
     class PlayerController : public Component
     {
     public:
-        float moveSpeed = 10.0f;
+        float moveSpeed = 35.0f;
+        bool isRunning = false;
         bool isGrounded = false;
         bool isFootGrounded = false;
 
@@ -44,6 +45,8 @@ namespace Game
         // jump utitlity
         bool CanJump() const { return isGrounded || m_coyoteTimer > 0.0f; }
         void ConsumeJump() { m_coyoteTimer = 0.0f; }
+
+        void OnImGui() override;
 
     protected:
         void OnStart() override;

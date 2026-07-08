@@ -113,4 +113,9 @@ namespace Game
     {
 
     }
+
+    void PlayerController::OnImGui()
+    {
+        ImGui::DragFloat("Speed", &moveSpeed, 0.1f, 0.0f, 100.0f);
+    }
 }

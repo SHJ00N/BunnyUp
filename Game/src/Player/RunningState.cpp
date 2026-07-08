@@ -25,7 +25,7 @@ namespace Game
     {
         LOG_INFO("Entering Running State");
         playerController.GetAnimator()->PlayAnimation("Run");
-        playerController.moveSpeed = 40.0f; // Set running speed
+        playerController.isRunning = true;
     }
 
     void RunningState::Exit(PlayerController& playerController)

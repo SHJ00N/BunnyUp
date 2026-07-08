@@ -24,6 +24,15 @@ namespace Game
         auto playerInputManager = CreateGameObject<GameObject>("PlayerInputManager");
         playerInputManager->AddComponent<PlayerInputManager>();
 
+        // Directional Light
+        auto directionalLight = CreateGameObject<GameObject>("DirectionalLight");
+        auto directionalLightRenderer = directionalLight->AddComponent<MeshRenderer>();
+        auto directionalLightComponent = directionalLight->AddComponent<Light>();
+        directionalLightComponent->type = LightType::Directional;
+        directionalLightComponent->color = Vector4(1.0f, 1.0f, 0.8f, 1.0f);
+        directionalLight->transform.SetLocalPosition(Vector3(0.0f, 30.0f, 0.0f));
+        directionalLight->transform.SetLocalRotation(Vector3(50.0f, 0.0f, 0.0f));
+
         // Player
         // -------------------------------------------------------------------------------------------------------
 		auto bunny = CreateGameObject<GameObject>("Bunny");
@@ -64,38 +73,247 @@ namespace Game
 
         // Camera
         // -------------------------------------------------------------------------------------------------------
-		auto camera2 = CreateGameObject<GameObject>("Culling Debug Camera");
-		camera2->AddComponent<Camera>();
-		camera2->AddComponent<CameraController>();
-		camera2->transform.SetLocalPosition(Vector3(0.0f, 15.0f, -80.0f));
-        camera2->transform.SetLocalScale(Vector3(0.75f, 0.75f, 1.0f));
+		auto camera2 = CreateGameObject<GameObject>("MainCamera");
+		camera2->transform.SetLocalPosition(Vector3(0.0f, 0.0f, 0.0f));
+        camera2->transform.SetLocalScale(Vector3(2.0f));
+		auto cameraComponent = camera2->AddComponent<Camera>();
+		auto camera2Controller = camera2->AddComponent<CameraController>();
+        camera2Controller->SetTarget(bunny);
+        camera2Controller->SetCameraOffset(Vector3(0.0f, 40.0f, -60.0f));
+        camera2Controller->SetTargetOffset(Vector3(0.0f, 20.0f, 0.0f));
         auto camera2Renderer = camera2->AddComponent<MeshRenderer>();
         camera2Renderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
+
+        // SetMainCamera(cameraComponent);
 
         // Floor
         // -------------------------------------------------------------------------------------------------------
         auto floor = CreateGameObject<GameObject>("Floor");
         floor->SetTag(ObjectTag::Ground);
         floor->transform.SetLocalRotation(Vector3(90.0f, 0.0f, 0.0f));
-        floor->transform.SetLocalScale(Vector3(500.0f, 500.0f, 1.0f));
+        floor->transform.SetLocalScale(Vector3(1500.0f, 1500.0f, 1.0f));
         floor->transform.SetLocalPosition(Vector3(0.0f, -50.0f, 0.0f));
 
         auto floorRenderer = floor->AddComponent<MeshRenderer>();
         floorRenderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_quad"));
         floorRenderer->SetMaterial(0, ResourceManager::GetInstance().GetMaterial("Textured_material"));
-        floorRenderer->GetMaterial(0)->SetTexture(0, ResourceManager::GetInstance().GetTexture("T_Snow_Ground"));
+        auto floorMat = floorRenderer->GetMaterial(0);
+        floorMat->SetTexture(0, ResourceManager::GetInstance().GetTexture("Snow_Floor_Color"));
+        floorMat->SetTexture(1, ResourceManager::GetInstance().GetTexture("Snow_Floor_Normal"));
+        floorMat->SetTexture(2, ResourceManager::GetInstance().GetTexture("Snow_Floor_Roughness"));
+        floorMat->SetTexture(4, ResourceManager::GetInstance().GetTexture("Snow_Floor_Ambient_Occlusion"));
+        floorMat->SetHasNormalMap(true);
+        floorMat->SetHasRoughnessMap(true);
+        floorMat->SetHasAOMap(true);
 
         auto floorRigidbody = floor->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
         auto floorCollider = floor->AddComponent<Rp3dBoxCollider>();
-        floorCollider->SetSize(Vector3(500.0f, 500.0f, 10.0f));
+        floorCollider->SetLocalPosition(Vector3(0.0f, 0.0f, 5.0f));
+        floorCollider->SetSize(Vector3(1500.0f, 1500.0f, 10.0f));
         floorCollider->SetCollisionLayer(CollisionLayer::Ground);
         floorCollider->SetBounciness(0.0f);
 
-        // Snow Floor
-        auto snowFloor = CreateGameObject<GameObject>("WinterFell");
-        snowFloor->SetTag(ObjectTag::Ground);
-        snowFloor->transform.SetLocalScale(Vector3(0.2f));
-        snowFloor->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Winter_Barrel_03"));
+        // Wall
+        // -------------------------------------------------------------------------------------------------------
+        // Front
+        auto wallFront = CreateGameObject<GameObject>("WallFront");
+        wallFront->SetTag(ObjectTag::Wall);
+        wallFront->transform.SetLocalPosition(Vector3(0.0f, 0.0f, 700.0f));
+        wallFront->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
+        auto wallFrontCollider = wallFront->AddComponent<Rp3dBoxCollider>();
+        wallFrontCollider->SetSize(Vector3(1500.0f, 250.0f, 300.0f));
+        wallFrontCollider->SetCollisionLayer(CollisionLayer::Wall);
+
+        auto frontWall1 = wallFront->CreateGameObject<GameObject>("FrontWall1");
+        frontWall1->transform.SetLocalPosition(Vector3(-450.0f, 300.0f, 50.0f));
+        frontWall1->transform.SetLocalRotation(Vector3(0.0f, 45.0f, 0.0f));
+        frontWall1->transform.SetLocalScale(Vector3(0.7f));
+        frontWall1->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Winter_Floating_Islend"));
+        auto frontWall2 = wallFront->CreateGameObject<GameObject>("FrontWall2");
+        frontWall2->transform.SetLocalPosition(Vector3(0.0f, 200.0f, 200.0f));
+        frontWall2->transform.SetLocalScale(Vector3(0.7f));
+        frontWall2->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Winter_Floating_Islend"));
+        auto frontWall3 = wallFront->CreateGameObject<GameObject>("FrontWall3");
+        frontWall3->transform.SetLocalPosition(Vector3(450.0f, 250.0f, 60.0f));
+        frontWall1->transform.SetLocalRotation(Vector3(0.0f, -90.0f, 0.0f));
+        frontWall3->transform.SetLocalScale(Vector3(0.7f));
+        frontWall3->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Winter_Floating_Islend"));
+
+        // Back
+        auto wallBack = CreateGameObject<GameObject>("WallBack");
+        wallBack->SetTag(ObjectTag::Wall);
+        wallBack->transform.SetLocalPosition(Vector3(0.0f, 0.0f, -700.0f));
+        wallBack->transform.SetLocalRotation(Vector3(0.0f, 180.0f, 0.0f));
+        wallBack->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
+        auto wallBackCollider = wallBack->AddComponent<Rp3dBoxCollider>();
+        wallBackCollider->SetSize(Vector3(1500.0f, 250.0f, 300.0f));
+        wallBackCollider->SetCollisionLayer(CollisionLayer::Wall);
+
+        auto backWall1 = wallBack->CreateGameObject<GameObject>("BackWall1");
+        backWall1->transform.SetLocalPosition(Vector3(-510.0f, 120.0f, 0.0f));
+        backWall1->transform.SetLocalRotation(Vector3(0.0f, -130.0f, 0.0f));
+        backWall1->transform.SetLocalScale(Vector3(0.5f));
+        backWall1->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Winter_Floating_Islend"));
+        auto backWall2 = wallBack->CreateGameObject<GameObject>("BackWall2");
+        backWall2->transform.SetLocalPosition(Vector3(-70.0f, 170.0f, 130.0f));
+        backWall2->transform.SetLocalRotation(Vector3(0.0f, 90.0f, 0.0f));
+        backWall2->transform.SetLocalScale(Vector3(0.7f));
+        backWall2->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Winter_Floating_Islend"));
+        auto backWall3 = wallBack->CreateGameObject<GameObject>("BackWall3");
+        backWall3->transform.SetLocalPosition(Vector3(430.0f, 200.0f, 60.0f));
+        backWall3->transform.SetLocalRotation(Vector3(0.0f, 95.0f, 0.0f));
+        backWall3->transform.SetLocalScale(Vector3(0.6f));
+        backWall3->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Winter_Floating_Islend"));
+
+        // Right
+        auto wallRight = CreateGameObject<GameObject>("WallRight");
+        wallRight->SetTag(ObjectTag::Wall);
+        wallRight->transform.SetLocalPosition(Vector3(700.0f, 0.0f, 0.0f));
+        wallRight->transform.SetLocalRotation(Vector3(0.0f, 90.0f, 0.0f));
+        wallRight->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
+        auto wallRightCollider = wallRight->AddComponent<Rp3dBoxCollider>();
+        wallRightCollider->SetSize(Vector3(1500.0f, 250.0f, 300.0f));
+        wallRightCollider->SetCollisionLayer(CollisionLayer::Wall);
+
+        auto rightWall1 = wallRight->CreateGameObject<GameObject>("RightWall1");
+        rightWall1->transform.SetLocalPosition(Vector3(-435.0f, 300.0f, 60.0f));
+        rightWall1->transform.SetLocalRotation(Vector3(0.0f, 45.0f, 0.0f));
+        rightWall1->transform.SetLocalScale(Vector3(0.7f));
+        rightWall1->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Winter_Floating_Islend"));
+        auto rightWall2 = wallRight->CreateGameObject<GameObject>("RightWall2");
+        rightWall2->transform.SetLocalPosition(Vector3(-10.0f, 200.0f, 150.0f));
+        rightWall2->transform.SetLocalRotation(Vector3(0.0f, -30.0f, 0.0f));
+        rightWall2->transform.SetLocalScale(Vector3(0.7f));
+        rightWall2->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Winter_Floating_Islend"));
+        auto rightWall3 = wallRight->CreateGameObject<GameObject>("RightWall3");
+        rightWall3->transform.SetLocalPosition(Vector3(400.0f, 150.0f, 45.0f));
+        rightWall3->transform.SetLocalRotation(Vector3(0.0f, 100.0f, 0.0f));
+        rightWall3->transform.SetLocalScale(Vector3(0.5f));
+        rightWall3->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Winter_Floating_Islend"));
+
+        // Left
+        auto wallLeft = CreateGameObject<GameObject>("WallLeft");
+        wallLeft->SetTag(ObjectTag::Wall);
+        wallLeft->transform.SetLocalPosition(Vector3(-700.0f, 0.0f, 0.0f));
+        wallLeft->transform.SetLocalRotation(Vector3(0.0f, -90.0f, 0.0f));
+        wallLeft->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
+        auto wallLeftCollider = wallLeft->AddComponent<Rp3dBoxCollider>();
+        wallLeftCollider->SetSize(Vector3(1500.0f, 250.0f, 300.0f));
+        wallLeftCollider->SetCollisionLayer(CollisionLayer::Wall);
+
+        auto leftWall1 = wallLeft->CreateGameObject<GameObject>("LeftWall1");
+        leftWall1->transform.SetLocalPosition(Vector3(-435.0f, 300.0f, 140.0f));
+        leftWall1->transform.SetLocalRotation(Vector3(0.0f, 45.0f, 0.0f));
+        leftWall1->transform.SetLocalScale(Vector3(0.7f));
+        leftWall1->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Winter_Floating_Islend"));
+        auto leftWall2 = wallLeft->CreateGameObject<GameObject>("LeftWall2");
+        leftWall2->transform.SetLocalPosition(Vector3(-10.0f, 200.0f, 150.0f));
+        leftWall2->transform.SetLocalRotation(Vector3(0.0f, -30.0f, 0.0f));
+        leftWall2->transform.SetLocalScale(Vector3(0.7f));
+        leftWall2->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Winter_Floating_Islend"));
+        auto leftWall3 = wallLeft->CreateGameObject<GameObject>("LeftWall3");
+        leftWall3->transform.SetLocalPosition(Vector3(400.0f, 150.0f, 60.0f));
+        leftWall3->transform.SetLocalRotation(Vector3(0.0f, 100.0f, 0.0f));
+        leftWall3->transform.SetLocalScale(Vector3(0.5f));
+        leftWall3->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Winter_Floating_Islend"));
+
+        // Environments
+        // -------------------------------------------------------------------------------------------------------
+        // Trees
+        auto treesA = CreateGameObject<GameObject>("TreesA");
+        treesA->transform.SetLocalPosition(Vector3(-350.0f, -50.0f, 0.0f));
+        createTree(treesA, "treeA1", Vector3(-10.0f, 0.0f, -30.0f), Vector3(0.3f));
+        createTree(treesA, "treeA2", Vector3(-100.0f, 0.0f, 80.0f), Vector3(0.3f));
+        createTree(treesA, "treeA3", Vector3(-180.0f, 0.0f, -200.0f), Vector3(0.3f));
+        createTree(treesA, "treeA4", Vector3(-75.0f, 0.0f, -300.0f), Vector3(0.3f));
+        createTree(treesA, "treeA5", Vector3(30.0f, 0.0f, -160.0f), Vector3(0.3f));
+        createTree(treesA, "treeA6", Vector3(-60.0f, 0.0f, -430.0f), Vector3(0.3f));
+        createTree(treesA, "treeA7", Vector3(-180.0f, 0.0f, 175.0f), Vector3(0.3f));
+        createTree(treesA, "treeA8", Vector3(-20.0f, 0.0f, 320.0f), Vector3(0.3f));
+        createTree(treesA, "treeA9", Vector3(8.0f, 0.0f, 145.0f), Vector3(0.3f));
+
+        auto treesB = CreateGameObject<GameObject>("TreesB");
+        treesB->transform.SetLocalPosition(Vector3(350.0f, -50.0f, 0.0f));
+        createTree(treesB, "treeB1", Vector3(70.0f, 0.0f, -30.0f), Vector3(0.3f));
+        createTree(treesB, "treeB2", Vector3(-20.0f, 0.0f, -140.0f), Vector3(0.3f));
+        createTree(treesB, "treeB3", Vector3(65.0f, 0.0f, -350.0f), Vector3(0.3f));
+        createTree(treesB, "treeB4", Vector3(115.0f, 0.0f, -200.0f), Vector3(0.3f));
+        createTree(treesB, "treeB5", Vector3(-40.0f, 0.0f, -450.0f), Vector3(0.3f));
+        createTree(treesB, "treeB6", Vector3(-150.0f, 0.0f, 350.0f), Vector3(0.3f));
+        createTree(treesB, "treeB7", Vector3(-10.0f, 0.0f, 385.0f), Vector3(0.3f));
+        createTree(treesB, "treeB8", Vector3(120.0f, 0.0f, 180.0f), Vector3(0.3f));
+
+        auto treesC = CreateGameObject<GameObject>("TreesC");
+        treesC->transform.SetLocalPosition(Vector3(0.0f, -50.0f, 350.0f));
+        createTree(treesC, "treeC1", Vector3(70.0f, 0.0f, -15.0f), Vector3(0.3f));
+        createTree(treesC, "treeC2", Vector3(-40.0f, 0.0f, 135.0f), Vector3(0.3f));
+        createTree(treesC, "treeC3", Vector3(-250.0f, 0.0f, 30.0f), Vector3(0.3f));
+        createTree(treesC, "treeC4", Vector3(-110.0f, 0.0f, -10.0f), Vector3(0.3f));
+
+        auto treesD = CreateGameObject<GameObject>("TreesD");
+        treesD->transform.SetLocalPosition(Vector3(0.0f, -50.0f, -350.0f));
+        createTree(treesD, "treeD1", Vector3(130.0f, 0.0f, -50.0f), Vector3(0.3f));
+        createTree(treesD, "treeD2", Vector3(5.0f, 0.0f, 20.0f), Vector3(0.3f));
+        createTree(treesD, "treeD3", Vector3(-220.0f, 0.0f, 60.0f), Vector3(0.3f));
+        createTree(treesD, "treeD4", Vector3(-130.0f, 0.0f, -80.0f), Vector3(0.3f));
+
+        // Objects
+        auto starTree = CreateGameObject<GameObject>("StarTree");
+        starTree->transform.SetLocalPosition(Vector3(0.0f, -50.0f, 0.0f));
+        starTree->transform.SetLocalRotation(Vector3(0.0f, 0.0f, 0.0f));
+        starTree->transform.SetLocalScale(Vector3(0.2f));
+        starTree->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Chibi_Tree_C"));
+        starTree->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
+        auto starTreeCollider1 = starTree->AddComponent<Rp3dBoxCollider>();
+        starTreeCollider1->SetCollisionLayer(CollisionLayer::Wall);
+        starTreeCollider1->SetLocalPosition(Vector3(0.0f, 15.0f, 0.0f));
+        starTreeCollider1->SetSize(Vector3(10.0f, 30.0f, 10.0f));
+        auto starTreeCollider2 = starTree->AddComponent<Rp3dBoxCollider>();
+        starTreeCollider2->SetCollisionLayer(CollisionLayer::Wall);
+        starTreeCollider2->SetLocalPosition(Vector3(0.0f, 65.0f, 0.0f));
+        starTreeCollider2->SetSize(Vector3(50.0f, 70.0f, 50.0f));
+        auto starLight = starTree->CreateGameObject<GameObject>("PointLight");
+        starLight->transform.SetLocalPosition(Vector3(0.0f, 550.0f, 0.0f));
+        starLight->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
+        auto starPointLight = starLight->AddComponent<Light>();
+        starPointLight->type = LightType::Point;
+        starPointLight->color = Vector4(100.0f, 100.0f, 0.0f, 100.0f);
+
+        auto gifts = CreateGameObject<GameObject>("Gifts");
+        createGift(gifts, "GiftA", 0, Vector3(-80.0f, -42.0f, -30.0f), Vector3(0.0f, 30.0f, 0.0f), Vector3(0.3f));
+        createGift(gifts, "GiftB", 1, Vector3(-10.0f, -42.0f, -135.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.3f));
+        createGift(gifts, "GiftC", 2, Vector3(45.0f, -42.0f, -145.0f), Vector3(0.0f, 90.0f, 0.0f), Vector3(0.3f));
+        createGift(gifts, "GiftD", 0, Vector3(-180.0f, -42.0f, 65.0f), Vector3(0.0f, -10.0f, 0.0f), Vector3(0.3f));
+        createGift(gifts, "GiftE", 1, Vector3(140.0f, -42.0f, -30.0f), Vector3(0.0f, -20.0f, 0.0f), Vector3(0.3f));
+
+        auto bigGifts = CreateGameObject<GameObject>("BigGifts");
+        bigGifts->transform.SetLocalPosition(Vector3(45.0f, -37.0f, 100.0f));
+        auto giftA = bigGifts->CreateGameObject<GameObject>("GiftA");
+        giftA->SetTag(ObjectTag::Object);
+        giftA->transform.SetLocalPosition(Vector3(0.0f, 0.0f, 0.0f));
+        giftA->transform.SetLocalRotation(Vector3(0.0f, 10.0f, 0.0f));
+        giftA->transform.SetLocalScale(Vector3(0.5f));
+        giftA->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Chibi_Gift_A"));
+        giftA->AddComponent<Rp3dRigidbody>(10.0f, BodyType::STATIC, false);
+        auto giftACollider = giftA->AddComponent<Rp3dBoxCollider>();
+        giftACollider->SetCollisionLayer(CollisionLayer::Object);
+        giftACollider->SetLocalPosition(Vector3(0.0f, -4.0f, 0.0f));
+        giftACollider->SetSize(Vector3(22.0f, 20.5f, 22.0f));
+
+        auto giftB = bigGifts->CreateGameObject<GameObject>("GiftB");
+        giftB->SetTag(ObjectTag::Object);
+        giftB->transform.SetLocalPosition(Vector3(26.0f, 0.0f, 5.0f));
+        giftB->transform.SetLocalRotation(Vector3(0.0f, -5.0f, 0.0f));
+        giftB->transform.SetLocalScale(Vector3(0.5f));
+        giftB->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Chibi_Gift_B"));
+        giftB->AddComponent<Rp3dRigidbody>(10.0f, BodyType::STATIC, false);
+        auto giftBCollider = giftB->AddComponent<Rp3dBoxCollider>();
+        giftBCollider->SetCollisionLayer(CollisionLayer::Object);
+        giftBCollider->SetLocalPosition(Vector3(0.0f, -4.0f, 0.0f));
+        giftBCollider->SetSize(Vector3(22.0f, 20.5f, 22.0f));
+
+        createGift(bigGifts, "GiftC", 0, Vector3(18.0f, -5.0f, -15.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.3f));
+        createGift(bigGifts, "GiftD", 2, Vector3(14.0f, 15.5f, 5.0f), Vector3(0.0f, -10.0f, 0.0f), Vector3(0.3f));
 
         //auto cube1 = CreateGameObject<GameObject>("Cube1");
         //auto cube1Renderer = cube1->AddComponent<MeshRenderer>();
@@ -128,34 +346,46 @@ namespace Game
         //cube3PointLight->color = Vector4(1.0f, 5.0f, 1.0f, 1000.0f);
         //cube3->transform.SetLocalPosition(Vector3(0.0f, 15.0f, 10.0f));
         //cube3->transform.SetLocalScale(Vector3(5.0f, 5.0f, 5.0f));
-
-        auto directionalLight = CreateGameObject<GameObject>("DirectionalLight");
-        auto directionalLightRenderer = directionalLight->AddComponent<MeshRenderer>();
-        // directionalLightRenderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
-        auto directionalLightComponent = directionalLight->AddComponent<Light>();
-        directionalLightComponent->type = LightType::Directional;
-        directionalLightComponent->color = Vector4(1.0f, 1.0f, 0.8f, 1.0f);
-        directionalLight->transform.SetLocalPosition(Vector3(0.0f, 30.0f, 0.0f));
-        directionalLight->transform.SetLocalRotation(Vector3(50.0f, 0.0f, 0.0f));
-
-        auto lightingCube = CreateGameObject<GameObject>("Cube1");
-        auto lightingCubeRenderer = lightingCube->AddComponent<MeshRenderer>();
-        lightingCubeRenderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
-        lightingCube->transform.SetLocalPosition(Vector3(20.0f, 10.0f, 0.0f));
-        lightingCube->transform.SetLocalScale(Vector3(10.0f, 10.0f, 10.0f));
-        auto lightingCubeRigidbody = lightingCube->AddComponent<Rp3dRigidbody>(10.0f, BodyType::KINEMATIC, true);
-        auto lightingCubeCollider = lightingCube->AddComponent<Rp3dBoxCollider>(Vector3(12.0f, 12.0f, 12.0f));
-        lightingCubeCollider->SetBounciness(0.1f);
-
-        auto lightingCube1 = CreateGameObject<GameObject>("Cube2");
-        lightingCube1->SetTag(ObjectTag::Object);
-        auto lightingCubeRenderer1 = lightingCube1->AddComponent<MeshRenderer>();
-        lightingCubeRenderer1->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
-        lightingCube1->transform.SetLocalPosition(Vector3(0.0f, 10.0f, 0.0f));
-        lightingCube1->transform.SetLocalScale(Vector3(10.0f, 10.0f, 10.0f));
-        lightingCube1->transform.SetLocalRotation(Vector3(0.0f, 0.0f, 0.0f));
-        auto lightingCube1Rigidbody = lightingCube1->AddComponent<Rp3dRigidbody>(10.0f, BodyType::DYNAMIC, true);
-        auto lightingCube1Collider = lightingCube1->AddComponent<Rp3dBoxCollider>(Vector3(10.0f, 10.0f, 10.0f));
-        lightingCube1Collider->SetBounciness(0.0f);
 	}
+
+    void DemoScene1::createTree(GameObject* parent, const std::string& name, const Vector3& pos, const Vector3& scale)
+    {
+        auto tree = parent->CreateGameObject<GameObject>(name);
+        tree->transform.SetLocalPosition(pos);
+        tree->transform.SetLocalScale(scale);
+        tree->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Chibi_Tree_B"));
+        tree->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
+        auto treeCollider1 = tree->AddComponent<Rp3dBoxCollider>();
+        treeCollider1->SetCollisionLayer(CollisionLayer::Wall);
+        treeCollider1->SetLocalPosition(Vector3(0.0f, 20.0f, 0.0f));
+        treeCollider1->SetSize(Vector3(15.0f, 40.0f, 15.0f));
+        auto treeCollider2 = tree->AddComponent<Rp3dBoxCollider>();
+        treeCollider2->SetCollisionLayer(CollisionLayer::Wall);
+        treeCollider2->SetLocalPosition(Vector3(0.0f, 90.0f, 0.0f));
+        treeCollider2->SetSize(Vector3(85.0f, 100.0f, 85.0f));
+    }
+
+    void DemoScene1::createGift(GameObject* parent, const std::string& name, int type, const Vector3& pos, const Vector3& rot, const Vector3& scale)
+    {
+        auto gift = parent->CreateGameObject<GameObject>(name);
+        gift->SetTag(ObjectTag::Object);
+        gift->transform.SetLocalPosition(pos);
+        gift->transform.SetLocalRotation(rot);
+        gift->transform.SetLocalScale(scale);
+        
+        std::shared_ptr<Model> model;
+        switch (type)
+        {
+        case 0: model = ResourceManager::GetInstance().GetModel("Chibi_Gift_A"); break;
+        case 1: model = ResourceManager::GetInstance().GetModel("Chibi_Gift_B"); break;
+        case 2: model = ResourceManager::GetInstance().GetModel("Chibi_Gift_C"); break;
+        default: model = ResourceManager::GetInstance().GetModel("Chibi_Gift_A"); break;
+        }
+        gift->AddComponent<MeshRenderer>()->SetMesh(model);
+        gift->AddComponent<Rp3dRigidbody>(10.0f, BodyType::STATIC, false);
+        auto giftCollider = gift->AddComponent<Rp3dBoxCollider>();
+        giftCollider->SetCollisionLayer(CollisionLayer::Object);
+        giftCollider->SetLocalPosition(Vector3(0.0f, -1.5f, 0.0f));
+        giftCollider->SetSize(Vector3(12.5f, 12.5f, 12.5f));
+    }
 }

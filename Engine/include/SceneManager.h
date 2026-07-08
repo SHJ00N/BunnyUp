@@ -11,6 +11,7 @@ namespace Engine
 	{
 	public:
 		void LoadScene(const std::string& name);
+		void LoadScene(int index);
 		void CurrentSceneUpdate(float dt);
 		void CurrentSceneFixedUpdate(float fdt);
 		void CurrentSceneObjectDestroy();

@@ -106,6 +106,7 @@ namespace Engine
 			"Enemy",
 			"Ground",
 			"Wall",
+			"Object",
 			"Trigger"
 		};
 

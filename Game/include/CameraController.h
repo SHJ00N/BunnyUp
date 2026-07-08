@@ -2,18 +2,20 @@
 
 #include <EngineSystem.h>
 
-class CameraController : public Engine::Component
+namespace Game
 {
-public:
-	float moveSpeed = 10.0f;
-	float sensitivity = 0.05f;
-    float scrollSpeed = 0.05f;
+    class CameraController : public Engine::Component
+    {
+    public:
+        void Update(float dt) override;
+        void OnImGui() override;
 
-	void Update(float dt) override;
-	void OnImGui() override;
-private:
-	float yaw = 0.0f;
-	float pitch = 0.0f;
-
-	bool m_isActive = false;
-};
+        void SetTarget(Engine::GameObject* target);
+        void SetCameraOffset(const Engine::Vector3& offset) { m_cameraOffset = offset; }
+        void SetTargetOffset(const Engine::Vector3& offset) { m_targetOffset = offset; }
+    private:
+        Engine::GameObject* m_target = nullptr;
+        Engine::Vector3 m_cameraOffset;
+        Engine::Vector3 m_targetOffset;
+    };
+}

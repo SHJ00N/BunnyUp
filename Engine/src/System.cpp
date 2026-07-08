@@ -144,7 +144,7 @@ namespace Engine
 			{
 				static int sceneState = 0;
 				sceneState++;
-				SceneManager::GetInstance().LoadScene(sceneState % 2 ? "DemoScene2" : "DemoScene1");
+				SceneManager::GetInstance().LoadScene(sceneState % SceneFactory::GetInstance().GetSceneCount());
 			}
 			if (InputManager::GetInstance().IsKeyPressed(DirectX::Keyboard::Keys::F3))
 			{

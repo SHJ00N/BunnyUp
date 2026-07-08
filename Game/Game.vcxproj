@@ -29,6 +29,7 @@
     <ClCompile Include="src\CubeController.cpp" />
     <ClCompile Include="src\CubeGenerator.cpp" />
     <ClCompile Include="src\DemoScene2.cpp" />
+    <ClCompile Include="src\GameScene.cpp" />
     <ClCompile Include="src\Input\KeyMapping.cpp" />
     <ClCompile Include="src\Input\PlayerInputManager.cpp" />
     <ClCompile Include="src\LoadGameResources.cpp" />
@@ -53,6 +54,7 @@
     <ClInclude Include="include\CubeGenerator.h" />
     <ClInclude Include="include\DemoScene1.h" />
     <ClInclude Include="include\DemoScene2.h" />
+    <ClInclude Include="include\GameScene.h" />
     <ClInclude Include="include\Input\PlayerInputManager.h" />
     <ClInclude Include="include\Input\KeyMapping.h" />
     <ClInclude Include="include\Player\FallingState.h" />

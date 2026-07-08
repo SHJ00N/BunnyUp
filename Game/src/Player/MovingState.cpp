@@ -35,7 +35,7 @@ namespace Game
 
             auto* rigidbody = playerController.GetRigidbody();
             auto linearVelocity = rigidbody->GetLinearVelocity();
-            auto velocity = movementDirection * playerController.moveSpeed;
+            auto velocity = movementDirection * playerController.moveSpeed * (playerController.isRunning ? 2.0f : 1.0f);
             velocity.y = linearVelocity.y; // Preserve vertical velocity (e.g., for jumping)
             rigidbody->SetLinearVelocity(velocity);
 

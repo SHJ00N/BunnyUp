@@ -11,7 +11,7 @@ namespace Engine
 {
 	void SceneManager::Initialize()
 	{
-		LoadScene("DemoScene1");
+		LoadScene(0);
 	}
 
 	void SceneManager::LoadScene(const std::string& name)
@@ -19,11 +19,24 @@ namespace Engine
 		auto scene = SceneFactory::GetInstance().CreateScene(name);
 		if (!scene)
 		{
-			LOG_ERROR("Failed to load scene : %s", name);
+			LOG_ERROR("Failed to load scene from name : %s", name);
 			return;
 		}
 
 		scene->SetSceneRootName(name);
+		m_nextScene = std::move(scene);
+	}
+
+	void SceneManager::LoadScene(int index)
+	{
+		auto scene = SceneFactory::GetInstance().CreateScene(index);
+		if (!scene)
+		{
+			LOG_ERROR("Failed to load scene from index : %d", index);
+			return;
+		}
+
+		scene->SetSceneRootName(SceneFactory::GetInstance().GetSceneName(index));
 		m_nextScene = std::move(scene);
 	}
 
@@ -62,6 +75,11 @@ namespace Engine
 
 	void SceneManager::CurrentSceneFixedUpdate(float fdt)
 	{
+		if (m_nextScene)
+		{
+			setCurrentScene(std::move(m_nextScene));
+		}
+
 		if (m_currentScene)
 		{
 			m_currentScene->SceneStart();

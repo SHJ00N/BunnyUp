@@ -206,6 +206,8 @@ namespace Engine
 			mat->SetSampler(3, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
 			mat->SetTexture(4, ResourceManager::GetInstance().GetTexture("Default_White"));	// ambient occlusion
 			mat->SetSampler(4, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+			mat->SetTexture(5, ResourceManager::GetInstance().GetTexture("Default_White"));	// opacity
+			mat->SetSampler(5, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
 
 			// set material name
 			aiString name;

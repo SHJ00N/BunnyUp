@@ -69,6 +69,10 @@ namespace Engine
 
 	void PhysicsSystem::Shutdown()
 	{
+		m_previousPairs.clear();
+		m_currentPairs.clear();
+		m_bodies.clear();
+
 		EventBus::GetInstance().Unsubscribe<CollisionCallbackEvent>(m_collisionCallbackListenerID);
 		EventBus::GetInstance().Unsubscribe<ObjectDestroyedEvent>(m_objectDestroyedListenerID);
 
@@ -288,6 +292,8 @@ namespace Engine
 		SetCollisionLayer(CollisionLayer::Player, CollisionLayer::Player, false);
 		SetCollisionLayer(CollisionLayer::Enemy, CollisionLayer::Enemy, false);
 		SetCollisionLayer(CollisionLayer::Ground, CollisionLayer::Ground, false);
+		SetCollisionLayer(CollisionLayer::Wall, CollisionLayer::Wall, false);
+		SetCollisionLayer(CollisionLayer::Ground, CollisionLayer::Wall, false);
 	}
 
 	bool PhysicsSystem::Raycast(const Vector3& origin, const Vector3& direction, float maxDistance, RaycastHit& outHitInfo)

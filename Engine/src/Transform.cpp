@@ -166,4 +166,32 @@ namespace Engine
 			}
 		}
 	}
+
+	void Transform::LookAt(const Vector3& target)
+	{
+		LookAt(target, Vector3(0.f, 1.f, 0.f));
+	}
+
+	void Transform::LookAt(const Vector3& target, const Vector3& up)
+	{
+		Vector3 position = GetWorldPosition();
+
+		if (LengthSq(target - position) < 1e-6f)
+			return;
+
+		Matrix4x4 view = LookAtLH(position, target, up);
+		Matrix4x4 world = Inverse(view);
+
+		Quaternion worldRotation = RotationQuaternion(world);
+
+		if (parentTransform)
+		{
+			Quaternion local = Inverse(parentTransform->GetWorldRotationQuaternion()) * worldRotation;
+			SetLocalRotation(local);
+		}
+		else
+		{
+			SetLocalRotation(worldRotation);
+		}
+	}
 }

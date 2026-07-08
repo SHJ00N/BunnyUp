@@ -352,6 +352,7 @@ namespace Engine
 	inline Quaternion& operator+=(Quaternion& a, const Quaternion& b) noexcept { a = a + b; return a; }
 
 
+	inline Quaternion RotationQuaternion(const Matrix4x4& m) noexcept { return Quaternion::FromSIMD(DirectX::XMQuaternionRotationMatrix(m.ToSIMD())); }
 	inline Quaternion AngleAxis(float angle, const Vector3& axis) noexcept { return Quaternion::FromSIMD(DirectX::XMQuaternionRotationAxis(axis.ToSIMD(), Radians(angle))); }
 	inline Quaternion RotationPitchYawRoll(float pitch, float yaw, float roll) noexcept { return Quaternion::FromSIMD(DirectX::XMQuaternionRotationRollPitchYaw(Radians(pitch), Radians(yaw), Radians(roll))); }
 	inline Vector3 QuaternionToEuler(const Quaternion& q)

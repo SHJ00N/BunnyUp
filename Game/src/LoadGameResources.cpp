@@ -55,4 +55,11 @@ void LoadGameResources()
     resourceManager.LoadModel("Winter_Tree2", "resources\\models\\WinterFell\\Tree2.fbx");
     resourceManager.LoadModel("Winter_Tree2_Lights", "resources\\models\\WinterFell\\Tree2_Lights.fbx");
     resourceManager.LoadModel("Winter_Trunk", "resources\\models\\WinterFell\\Trunk.fbx");
+
+    // Textures
+    // ---------------------------------------------------------------------------------------------------
+    resourceManager.LoadTexture("Snow_Floor_Color", "resources\\textures\\Snow_Floor\\snow_01_color_2k.png", Engine::TextureType::Albedo);
+    resourceManager.LoadTexture("Snow_Floor_Normal", "resources\\textures\\Snow_Floor\\snow_01_normal_dx_2k.png", Engine::TextureType::Normal);
+    resourceManager.LoadTexture("Snow_Floor_Roughness", "resources\\textures\\Snow_Floor\\snow_01_roughness_2k.png", Engine::TextureType::Default);
+    resourceManager.LoadTexture("Snow_Floor_Ambient_Occlusion", "resources\\textures\\Snow_Floor\\snow_01_ambient_occlusion_2k.png", Engine::TextureType::Default);
 }

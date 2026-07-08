@@ -25,7 +25,7 @@ namespace Game
     {
         LOG_INFO("Entering Walking State");
         playerController.GetAnimator()->PlayAnimation("Walk");
-        playerController.moveSpeed = 20.0f; // Set walking speed
+        playerController.isRunning = false;
     }
 
     void WalkingState::Exit(PlayerController& playerController)
