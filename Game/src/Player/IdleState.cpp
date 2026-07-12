@@ -7,10 +7,10 @@ namespace Game
 {
     bool IdleState::HandleInput(PlayerController& playerController, const PlayerInputState& inputState)
     {
-        if(OnGroundState::HandleInput(playerController, inputState))
-        {
-            return true;
-        }
+        if (CanJump(playerController, inputState)) return true;
+        if (CanFall(playerController)) return true;
+        if (CanDash(playerController, inputState)) return true;
+        if (CanAttack(playerController, inputState)) return true;
 
         if (inputState.moveForward || inputState.moveBackward || inputState.moveLeft || inputState.moveRight)
         {
@@ -28,7 +28,7 @@ namespace Game
         playerController.GetAnimator()->PlayAnimation("IdleA");
     }
 
-    void IdleState::Update(float deltaTime, PlayerController& playerController, const PlayerInputState& inputState)
+    void IdleState::OnUpdate(float deltaTime, PlayerController& playerController, const PlayerInputState& inputState)
     {
         // Handle idle state logic here
     }

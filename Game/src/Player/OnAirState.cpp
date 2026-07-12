@@ -4,13 +4,13 @@
 
 namespace Game
 {
-    bool OnAirState::HandleInput(PlayerController& playerController, const PlayerInputState& inputState)
+    bool OnAirState::IsGround(PlayerController& playerController, const PlayerInputState& inputState)
     {
         if (playerController.isGrounded)
         {
             Vector2 movementInput(0.0f, 0.0f);
-            movementInput.x = inputState.moveRight - inputState.moveLeft;
-            movementInput.y = inputState.moveForward - inputState.moveBackward;
+            movementInput.x = static_cast<float>(inputState.moveRight - inputState.moveLeft);
+            movementInput.y = static_cast<float>(inputState.moveForward - inputState.moveBackward);
 
             if (Length(movementInput) <= 0.0f)
             {
@@ -27,11 +27,23 @@ namespace Game
         return false;
     }
 
-    void OnAirState::Update(float deltaTime, PlayerController& playerController, const PlayerInputState& inputState)
+    bool OnAirState::CanAttack(PlayerController& playerController, const PlayerInputState& inputState)
+    {
+        // Transition to Attack state
+        if (inputState.attack)
+        {
+            playerController.ChangeState(playerController.GetJumpAttackState());
+            return true;
+        }
+
+        return false;
+    }
+
+    void OnAirState::OnUpdate(float deltaTime, PlayerController& playerController, const PlayerInputState& inputState)
     {
         Vector2 movementInput(0.0f, 0.0f);
-        movementInput.x = inputState.moveRight - inputState.moveLeft;
-        movementInput.y = inputState.moveForward - inputState.moveBackward;
+        movementInput.x = static_cast<float>(inputState.moveRight - inputState.moveLeft);
+        movementInput.y = static_cast<float>(inputState.moveForward - inputState.moveBackward);
 
         auto* rigidbody = playerController.GetRigidbody();
         auto linearVelocity = rigidbody->GetLinearVelocity();
@@ -40,7 +52,7 @@ namespace Game
         {
             movementDirection = Normalize(movementDirection);
 
-            auto velocity = movementDirection * playerController.moveSpeed * 0.75f;
+            auto velocity = movementDirection * playerController.moveSpeed;
             velocity.y = linearVelocity.y; // Preserve vertical velocity (e.g., for jumping)
             rigidbody->SetLinearVelocity(velocity);
 
@@ -52,7 +64,7 @@ namespace Game
             transform.SetLocalRotation(rotation);
         }
 
-        float gravityScale = linearVelocity.y < 0.0f ? 8.0f : 5.0f;
+        float gravityScale = linearVelocity.y < 0.0f ? 15.0f : 10.0f;
         rigidbody->AddForce(Vector3(0.0f, rigidbody->GetMass() * -9.81f * gravityScale, 0.0f));
     }
 

@@ -22,7 +22,8 @@
     <ClInclude Include="include\BoundingVolume.h" />
     <ClInclude Include="include\BVHNode.h" />
     <ClInclude Include="include\Collider_Legacy.h" />
-    <ClInclude Include="include\CollisionEventListener.h" />
+    <ClInclude Include="include\CollisionData.h" />
+    <ClInclude Include="include\PhysicsEventListener.h" />
     <ClInclude Include="include\CollisionMask.h" />
     <ClInclude Include="include\Collision_Legacy.h" />
     <ClInclude Include="include\ObjectTag.h" />
@@ -86,7 +87,6 @@
     <ClInclude Include="include\Texture2D.h" />
     <ClInclude Include="include\TimeClass.h" />
     <ClInclude Include="include\Transform.h" />
-    <ClInclude Include="include\TriggerEventListener.h" />
     <ClInclude Include="include\VertexType.h" />
     <ClInclude Include="include\WindowClass.h" />
   </ItemGroup>
@@ -172,7 +172,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\CollisionEventListener.cpp" />
+    <ClCompile Include="src\PhysicsEventListener.cpp" />
     <ClCompile Include="src\Collision_Legacy.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
@@ -422,7 +422,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\TriggerEventListener.cpp" />
     <ClCompile Include="src\WindowClass.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>

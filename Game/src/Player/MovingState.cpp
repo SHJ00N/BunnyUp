@@ -7,10 +7,10 @@ namespace Game
 {
     bool MovingState::HandleInput(PlayerController& playerController, const PlayerInputState& inputState)
     {
-        if(OnGroundState::HandleInput(playerController, inputState))
-        {
-            return true;
-        }
+        if (CanJump(playerController, inputState)) return true;
+        if (CanFall(playerController)) return true;
+        if (CanDash(playerController, inputState)) return true;
+        if (CanAttack(playerController, inputState)) return true;
 
         if (!inputState.moveForward && !inputState.moveBackward && !inputState.moveLeft && !inputState.moveRight)
         {
@@ -22,11 +22,11 @@ namespace Game
         return false;
     }
 
-    void MovingState::Update(float deltaTime, PlayerController& playerController, const PlayerInputState& inputState)
+    void MovingState::OnUpdate(float deltaTime, PlayerController& playerController, const PlayerInputState& inputState)
     {
         Vector2 movementInput(0.0f, 0.0f);
-        movementInput.x = inputState.moveRight - inputState.moveLeft;
-        movementInput.y = inputState.moveForward - inputState.moveBackward;
+        movementInput.x = static_cast<float>(inputState.moveRight - inputState.moveLeft);
+        movementInput.y = static_cast<float>(inputState.moveForward - inputState.moveBackward);
 
         auto movementDirection = Vector3(movementInput.x, 0.0f, movementInput.y);
         if (Length(movementDirection) > 0.0f)

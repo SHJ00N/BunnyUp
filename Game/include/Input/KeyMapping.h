@@ -12,7 +12,9 @@ namespace Game
         MoveRight,
 
         Run,
-        Jump
+        Jump,
+        Dash,
+        Attack
     };
 
     class KeyMapping

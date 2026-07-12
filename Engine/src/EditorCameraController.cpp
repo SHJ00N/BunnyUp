@@ -82,7 +82,7 @@ namespace Engine
 
 	void EditorCameraController::OnImGui()
 	{
-		ImGui::DragFloat("Move Speed", &moveSpeed, 0.1f, 1.0f, 50.0f);
+		ImGui::DragFloat("Move Speed", &moveSpeed, 0.1f, 1.0f, 100.0f);
 		ImGui::DragFloat("Sensitivity", &mouseSensitivity, 0.01f, 0.01f, 0.1f);
 		ImGui::DragFloat("Field of View", &ownerGameObject->GetComponent<Camera>()->fov, 1.0f, 1.0f, 179.0f);
 

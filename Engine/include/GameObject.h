@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "Transform.h"
 #include "ObjectTag.h"
+#include "CollisionData.h"
 
 #include <memory>
 #include <vector>
@@ -124,9 +125,9 @@ namespace Engine
 		void OnTriggerEnter(Rp3dCollider* other);
 		void OnTriggerStay(Rp3dCollider* other);
 		void OnTriggerExit(Rp3dCollider* other);
-		void OnCollisionEnter(Rp3dCollider* other);
-		void OnCollisionStay(Rp3dCollider* other);
-		void OnCollisionExit(Rp3dCollider* other);
+		void OnCollisionEnter(CollisionData data);
+		void OnCollisionStay(CollisionData data);
+		void OnCollisionExit(CollisionData data);
 
 		// legacy
 		void OnTriggerEnter(Collider* other);

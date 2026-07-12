@@ -7,7 +7,7 @@ namespace Engine
 	class EditorCameraController : public Component
 	{
 	public:
-		float moveSpeed = 25.0f;
+		float moveSpeed = 50.0f;
 		float mouseSensitivity = 0.05f;
 
 		void Update(float dt) override;

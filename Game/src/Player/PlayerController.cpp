@@ -11,7 +11,7 @@ namespace Game
         m_rigidbody = ownerGameObject->GetComponent<Rp3dRigidbody>();
         m_collider = ownerGameObject->GetComponent<Rp3dCapsuleCollider>();
 
-        m_rigidbody->SetLinearDamping(0.3f);
+        m_rigidbody->SetLinearDamping(PlayerDefaultDamping);
     }
 
     void PlayerController::Update(float dt)
@@ -30,55 +30,30 @@ namespace Game
 
     void PlayerController::FixedUpdate(float fdt)
     {
-        // bool previousGrounded = isGrounded;
+        isGrounded = false;
 
-        //RaycastHit hitInfo;
-        //Vector3 rayOrigin = ownerGameObject->transform.GetWorldPosition() + m_collider->GetLocalPosition();
-        //rayOrigin.y -= m_collider->GetHeight() * 0.5f + m_collider->GetRadius();
-        //rayOrigin.y += 0.02f; // Slightly above the player's position to avoid self-collision
-        //
-        //float offset = 1.0f;
-        //Vector3 rayL = { rayOrigin.x - offset, rayOrigin.y, rayOrigin.z };
-        //Vector3 rayR = { rayOrigin.x + offset, rayOrigin.y, rayOrigin.z };
-        //Vector3 rayU = { rayOrigin.x, rayOrigin.y, rayOrigin.z + offset };
-        //Vector3 rayD = { rayOrigin.x, rayOrigin.y, rayOrigin.z - offset };
-        //Vector3 rayLU = { rayOrigin.x - offset, rayOrigin.y, rayOrigin.z + offset };
-        //Vector3 rayRU = { rayOrigin.x + offset, rayOrigin.y, rayOrigin.z + offset };
-        //Vector3 rayLD = { rayOrigin.x - offset, rayOrigin.y, rayOrigin.z - offset };
-        //Vector3 rayRD = { rayOrigin.x + offset, rayOrigin.y, rayOrigin.z - offset };
+        // Check player is grounded     
+        if (m_rigidbody->GetLinearVelocity().y <= 0.1f)
+        {
+            bool hasContact = false;
+            for (auto& c : m_contacts)
+            {
+                if (c.normal.y > 0.7f)
+                {
+                    hasContact = true;
+                    break;
+                }
+            }
 
-        //
-        //Vector3 rayNormal = Vector3(0.0f, -1.0f, 0.0f);
-        //float distance = 1.0f;
-        //// Perform a raycast downwards to check if the player is grounded
-        //bool hit =
-        //    ownerGameObject->scene->GetPhysicsSystem()->Raycast(rayOrigin, rayNormal, distance, hitInfo);
-        //    ownerGameObject->scene->GetPhysicsSystem()->Raycast(rayL, rayNormal, distance, hitInfo) ||
-        //    ownerGameObject->scene->GetPhysicsSystem()->Raycast(rayR, rayNormal, distance, hitInfo) ||
-        //    ownerGameObject->scene->GetPhysicsSystem()->Raycast(rayU, rayNormal, distance, hitInfo) ||
-        //    ownerGameObject->scene->GetPhysicsSystem()->Raycast(rayD, rayNormal, distance, hitInfo) ||
-        //    ownerGameObject->scene->GetPhysicsSystem()->Raycast(rayLU, rayNormal, distance, hitInfo) ||
-        //    ownerGameObject->scene->GetPhysicsSystem()->Raycast(rayRU, rayNormal, distance, hitInfo) ||
-        //    ownerGameObject->scene->GetPhysicsSystem()->Raycast(rayLD, rayNormal, distance, hitInfo) ||
-        //    ownerGameObject->scene->GetPhysicsSystem()->Raycast(rayRD, rayNormal, distance, hitInfo);
+            RaycastHit hitInfo;
+            Vector3 rayOrigin = ownerGameObject->transform.GetWorldPosition() + m_collider->GetLocalPosition();
+            rayOrigin.y -= m_collider->GetHeight() * 0.5f + m_collider->GetRadius() - 0.02f;
 
-        //Vector3 velocity = m_rigidbody->GetLinearVelocity();
-        //bool detectedGround = hit && isFootGrounded && velocity.y < 0.5f;    // if enter the jumping state, prevent grounded true
+            bool isRayHit = ownerGameObject->scene->GetPhysicsSystem()->Raycast(rayOrigin, Vector3(0.0f, -1.0f, 0.0f), 0.1f, hitInfo);
 
-        //if (detectedGround)
-        //{
-        //    m_groundLostTimer = 0.0f;
-        //    isGrounded = true;
-        //}
-        //else
-        //{
-        //    m_groundLostTimer += fdt;
-
-        //    if (m_groundLostTimer >= GroundLostDelay)
-        //    {
-        //        isGrounded = false;
-        //    }
-        //}
+            isGrounded = hasContact || isRayHit;
+        }
+        m_contacts.clear();
 
         // update coyote
         if (isGrounded)
@@ -91,25 +66,30 @@ namespace Game
         }
     }
 
-    void PlayerController::ChangeState(PlayerState* nextState)
+    void PlayerController::ChangeState(PlayerState* nextState, bool force)
     {
-        if(m_currentState == nextState || nextState == nullptr)
-            return;
+        if(nextState == nullptr) return;
+        if (!force && m_currentState == nextState) return;
 
         m_currentState->Exit(*this);
         m_currentState = nextState;
         m_currentState->Enter(*this);
     }
 
-    void PlayerController::OnCollisionEnter(Rp3dCollider* other)
+    void PlayerController::OnCollisionEnter(CollisionData data)
     {
-        if (other->ownerGameObject->GetTag() == ObjectTag::Ground)
+
+    }
+
+    void PlayerController::OnCollisionStay(CollisionData data)
+    {
+        if (data.other->ownerGameObject->GetTag() == ObjectTag::Ground || data.other->ownerGameObject->GetTag() == ObjectTag::Object)
         {
-            LOG_INFO("Ground Hit!");
+            m_contacts.push_back(data);
         }
     }
 
-    void PlayerController::OnCollisionExit(Rp3dCollider* other)
+    void PlayerController::OnCollisionExit(CollisionData data)
     {
 
     }
@@ -117,5 +97,10 @@ namespace Game
     void PlayerController::OnImGui()
     {
         ImGui::DragFloat("Speed", &moveSpeed, 0.1f, 0.0f, 100.0f);
+        ImGui::DragFloat("Dash", &dashSpeed, 1.0f, 0.0f, 1000.0f);
+        ImGui::DragFloat("Jump", &jumpImpulse, 1.0f, 0.0f, 1000.0f);
+        ImGui::DragFloat("JumpAttack", &jumpAttackImpulse, 1.0f, 0.0f, 1000.0f);
+
+        ImGui::Checkbox("IsGrounded", &isGrounded);
     }
 }

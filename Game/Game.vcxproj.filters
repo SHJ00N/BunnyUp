@@ -93,9 +93,6 @@
     <ClCompile Include="src\Player\RunningState.cpp">
       <Filter>소스 파일\Player</Filter>
     </ClCompile>
-    <ClCompile Include="src\Player\PlayerFoot.cpp">
-      <Filter>소스 파일\Player</Filter>
-    </ClCompile>
     <ClCompile Include="src\Player\WalkingState.cpp">
       <Filter>소스 파일\Player</Filter>
     </ClCompile>
@@ -104,6 +101,15 @@
     </ClCompile>
     <ClCompile Include="src\GameScene.cpp">
       <Filter>소스 파일\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\DashState.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\AttackState.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player\JumpAttackState.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -158,9 +164,6 @@
     <ClInclude Include="include\Input\PlayerInputManager.h">
       <Filter>헤더 파일\Input</Filter>
     </ClInclude>
-    <ClInclude Include="include\Player\PlayerFoot.h">
-      <Filter>헤더 파일\Player</Filter>
-    </ClInclude>
     <ClInclude Include="include\Player\RunningState.h">
       <Filter>헤더 파일\Player</Filter>
     </ClInclude>
@@ -175,6 +178,15 @@
     </ClInclude>
     <ClInclude Include="include\GameScene.h">
       <Filter>헤더 파일\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player\DashState.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player\AttackState.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player\JumpAttackState.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

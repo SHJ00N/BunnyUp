@@ -264,7 +264,7 @@
     <ClInclude Include="include\Rp3dCollisionPair.h">
       <Filter>헤더 파일\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="include\CollisionEventListener.h">
+    <ClInclude Include="include\PhysicsEventListener.h">
       <Filter>헤더 파일\Physics</Filter>
     </ClInclude>
     <ClInclude Include="include\ObjectTag.h">
@@ -273,7 +273,7 @@
     <ClInclude Include="include\Raycast.h">
       <Filter>헤더 파일\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="include\TriggerEventListener.h">
+    <ClInclude Include="include\CollisionData.h">
       <Filter>헤더 파일\Physics</Filter>
     </ClInclude>
   </ItemGroup>
@@ -440,13 +440,10 @@
     <ClCompile Include="src\Rp3dCollider.cpp">
       <Filter>소스 파일\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\CollisionEventListener.cpp">
+    <ClCompile Include="src\PhysicsEventListener.cpp">
       <Filter>소스 파일\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Raycast.cpp">
-      <Filter>소스 파일\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TriggerEventListener.cpp">
       <Filter>소스 파일\Physics</Filter>
     </ClCompile>
   </ItemGroup>

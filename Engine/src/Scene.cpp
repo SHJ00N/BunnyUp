@@ -58,9 +58,10 @@ namespace Engine
 
 	void Scene::SceneFixedUpdate(float fdt)
 	{
-		traverseFixedUpdate(m_root.get(), fdt);
 		// Update physics system
 		m_physicsSystem->Update(fdt);
+
+		traverseFixedUpdate(m_root.get(), fdt);
 	}
 
 	void Scene::traverseAwake(GameObject* node)

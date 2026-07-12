@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CollisionData.h"
+
 namespace Engine
 {
 	class GameObject;
@@ -25,9 +27,9 @@ namespace Engine
 		void SetEnabled(bool value) { m_isEnabled = value; }
 
 		// physics methods
-		virtual void OnCollisionEnter(Rp3dCollider* other) { }
-		virtual void OnCollisionStay(Rp3dCollider* other) { }
-		virtual void OnCollisionExit(Rp3dCollider* other) { }
+		virtual void OnCollisionEnter(CollisionData data) { }
+		virtual void OnCollisionStay(CollisionData data) { }
+		virtual void OnCollisionExit(CollisionData data) { }
 
 		virtual void OnTriggerEnter(Rp3dCollider* other) { }
 		virtual void OnTriggerStay(Rp3dCollider* other) { }

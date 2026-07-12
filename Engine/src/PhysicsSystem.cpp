@@ -54,14 +54,13 @@ namespace Engine
 
 		// setting world
 		// Change the number of iterations of the velocity solver. default value is 10
-		m_world->setNbIterationsVelocitySolver(20);
+		m_world->setNbIterationsVelocitySolver(40);
 		// Change the number of iterations of the position solver. default value is 5
-		m_world->setNbIterationsPositionSolver(10);
+		m_world->setNbIterationsPositionSolver(20);
 		// Set state the sleeping technique. default is true
 		m_world->enableSleeping(true);
 
-		m_world->setEventListener(&m_collisionEventListener);
-		m_world->setEventListener(&m_triggerEventListener);
+		m_world->setEventListener(&m_physicsEventListener);
 
 		// set collision layer
 		customizeCollisionMatrix();
@@ -236,6 +235,9 @@ namespace Engine
 			// check if either collider is a trigger
 			const bool isTrigger = pair.a->IsTrigger() || pair.b->IsTrigger();
 
+			CollisionData dataA(pair.b, pair.contact.normal * -1.0f, pair.contact.penetrationDepth);
+			CollisionData dataB(pair.a, pair.contact.normal, pair.contact.penetrationDepth);
+
 			const bool existedLastFrame = m_previousPairs.contains(pair);
 			if (isTrigger)
 			{
@@ -254,13 +256,13 @@ namespace Engine
 			{
 				if (existedLastFrame)
 				{
-					pair.a->ownerGameObject->OnCollisionStay(pair.b);
-					pair.b->ownerGameObject->OnCollisionStay(pair.a);
+					pair.a->ownerGameObject->OnCollisionStay(dataA);
+					pair.b->ownerGameObject->OnCollisionStay(dataB);
 				}
 				else
 				{
-					pair.a->ownerGameObject->OnCollisionEnter(pair.b);
-					pair.b->ownerGameObject->OnCollisionEnter(pair.a);
+					pair.a->ownerGameObject->OnCollisionEnter(dataA);
+					pair.b->ownerGameObject->OnCollisionEnter(dataB);
 				}
 			}
 		}
@@ -273,6 +275,9 @@ namespace Engine
 				continue;
 			}
 
+			CollisionData dataA(pair.b, pair.contact.normal * -1.0f, pair.contact.penetrationDepth);
+			CollisionData dataB(pair.a, pair.contact.normal, pair.contact.penetrationDepth);
+
 			const bool isTrigger = pair.a->IsTrigger() || pair.b->IsTrigger();
 			if (isTrigger)
 			{
@@ -281,8 +286,8 @@ namespace Engine
 			}
 			else
 			{
-				pair.a->ownerGameObject->OnCollisionExit(pair.b);
-				pair.b->ownerGameObject->OnCollisionExit(pair.a);
+				pair.a->ownerGameObject->OnCollisionExit(dataA);
+				pair.b->ownerGameObject->OnCollisionExit(dataB);
 			}
 		}
 	}

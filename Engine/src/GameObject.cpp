@@ -126,30 +126,30 @@ namespace Engine
 		}
 	}
 
-	void GameObject::OnCollisionEnter(Rp3dCollider* other)
+	void GameObject::OnCollisionEnter(CollisionData data)
 	{
 		// Call OnCollisionEnter on all components
 		for (const auto& component : m_components)
 		{
-			component->OnCollisionEnter(other);
+			component->OnCollisionEnter(data);
 		}
 	}
 
-	void GameObject::OnCollisionStay(Rp3dCollider* other)
+	void GameObject::OnCollisionStay(CollisionData data)
 	{
 		// Call OnCollisionStay on all components
 		for (const auto& component : m_components)
 		{
-			component->OnCollisionStay(other);
+			component->OnCollisionStay(data);
 		}
 	}
 
-	void GameObject::OnCollisionExit(Rp3dCollider* other)
+	void GameObject::OnCollisionExit(CollisionData data)
 	{
 		// Call OnCollisionExit on all components
 		for (const auto& component : m_components)
 		{
-			component->OnCollisionExit(other);
+			component->OnCollisionExit(data);
 		}
 	}
 	

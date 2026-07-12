@@ -5,7 +5,6 @@
 #include "Player/PlayerController.h"
 #include "CubeController.h"
 #include "Input/PlayerInputManager.h"
-#include "Player/PlayerFoot.h"
 
 namespace Game
 {
@@ -60,17 +59,10 @@ namespace Game
         animator->RegistAnimation("Jump", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Jump").get());
         animator->RegistAnimation("Jump_Place", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Jump_Place").get());
         animator->RegistAnimation("Fall", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Fall").get());
-
-        // Player foot
-        auto bunnyFoot = bunny->CreateGameObject<GameObject>("BunnyFoot");
-        bunnyFoot->AddComponent<PlayerFoot>();
-        bunnyFoot->SetTag(ObjectTag::Player);
-        auto footBody = bunnyFoot->AddComponent<Rp3dRigidbody>(1.0f, BodyType::KINEMATIC, false);
-        auto footCollider = bunnyFoot->AddComponent<Rp3dCapsuleCollider>(3.0f, 1.0f);
-        footCollider->SetLocalRotation(RotationPitchYawRoll(90.0f, 0.0f, 90.0f));
-        footCollider->SetLocalPosition(Vector3(0.0f, 2.0f, 0.0f));
-        footCollider->SetTrigger(true);
-
+        animator->RegistAnimation("Dash", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Dash").get());
+        animator->RegistAnimation("Attack", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Attack").get());
+        animator->RegistAnimation("JumpAttack", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_JumpAttack").get());
+        
         // Camera
         // -------------------------------------------------------------------------------------------------------
 		auto camera2 = CreateGameObject<GameObject>("MainCamera");
@@ -108,7 +100,7 @@ namespace Game
 
         auto floorRigidbody = floor->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
         auto floorCollider = floor->AddComponent<Rp3dBoxCollider>();
-        floorCollider->SetLocalPosition(Vector3(0.0f, 0.0f, 5.0f));
+        floorCollider->SetLocalPosition(Vector3(0.0f, 0.0f, 4.9f));
         floorCollider->SetSize(Vector3(1500.0f, 1500.0f, 10.0f));
         floorCollider->SetCollisionLayer(CollisionLayer::Ground);
         floorCollider->SetBounciness(0.0f);
@@ -123,6 +115,34 @@ namespace Game
         auto wallFrontCollider = wallFront->AddComponent<Rp3dBoxCollider>();
         wallFrontCollider->SetSize(Vector3(1500.0f, 250.0f, 300.0f));
         wallFrontCollider->SetCollisionLayer(CollisionLayer::Wall);
+        wallFrontCollider->SetFriction(0.0f);
+        
+        auto frontRock1 = wallFront->CreateGameObject<GameObject>("frontRock1Collider");
+        frontRock1->transform.SetLocalPosition(Vector3(-180.0f, 33.0f, -195.0f));
+        frontRock1->transform.SetLocalRotation(Vector3(0.0f, 45.0f, -0.0f));
+        frontRock1->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
+        auto frontRockCollider1 = frontRock1->AddComponent<Rp3dBoxCollider>();
+        frontRockCollider1->SetSize(Vector3(60.0f, 75.0f, 60.0f));
+        frontRockCollider1->SetCollisionLayer(CollisionLayer::Object);
+        frontRockCollider1->SetFriction(0.0f);
+
+        auto frontRock2 = wallFront->CreateGameObject<GameObject>("frontRock2Collider");
+        frontRock2->transform.SetLocalPosition(Vector3(110.0f, -33.0f, -220.0f));
+        frontRock2->transform.SetLocalRotation(Vector3(0.0f, 45.0f, -0.0f));
+        frontRock2->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
+        auto frontRockCollider2 = frontRock2->AddComponent<Rp3dBoxCollider>();
+        frontRockCollider2->SetSize(Vector3(55.0f, 50.0f, 55.0f));
+        frontRockCollider2->SetCollisionLayer(CollisionLayer::Object);
+        frontRockCollider2->SetFriction(0.0f);
+
+        auto frontRock3 = wallFront->CreateGameObject<GameObject>("frontRock3Collider");
+        frontRock3->transform.SetLocalPosition(Vector3(200.0f, -7.5f, -215.0f));
+        frontRock3->transform.SetLocalRotation(Vector3(0.0f, 60.0f, -0.0f));
+        frontRock3->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
+        auto frontRockCollider3 = frontRock3->AddComponent<Rp3dBoxCollider>();
+        frontRockCollider3->SetSize(Vector3(55.0f, 85.0f, 65.0f));
+        frontRockCollider3->SetCollisionLayer(CollisionLayer::Object);
+        frontRockCollider3->SetFriction(0.0f);
 
         auto frontWall1 = wallFront->CreateGameObject<GameObject>("FrontWall1");
         frontWall1->transform.SetLocalPosition(Vector3(-450.0f, 300.0f, 50.0f));
@@ -148,6 +168,7 @@ namespace Game
         auto wallBackCollider = wallBack->AddComponent<Rp3dBoxCollider>();
         wallBackCollider->SetSize(Vector3(1500.0f, 250.0f, 300.0f));
         wallBackCollider->SetCollisionLayer(CollisionLayer::Wall);
+        wallBackCollider->SetFriction(0.0f);
 
         auto backWall1 = wallBack->CreateGameObject<GameObject>("BackWall1");
         backWall1->transform.SetLocalPosition(Vector3(-510.0f, 120.0f, 0.0f));
@@ -174,6 +195,34 @@ namespace Game
         auto wallRightCollider = wallRight->AddComponent<Rp3dBoxCollider>();
         wallRightCollider->SetSize(Vector3(1500.0f, 250.0f, 300.0f));
         wallRightCollider->SetCollisionLayer(CollisionLayer::Wall);
+        wallRightCollider->SetFriction(0.0f);
+
+        auto rightRock1 = wallRight->CreateGameObject<GameObject>("rightRock1Collider");
+        rightRock1->transform.SetLocalPosition(Vector3(-80.0f, -35.0f, -220.0f));
+        rightRock1->transform.SetLocalRotation(Vector3(0.0f, 25.0f, -0.0f));
+        rightRock1->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
+        auto rightRockCollider1 = rightRock1->AddComponent<Rp3dBoxCollider>();
+        rightRockCollider1->SetSize(Vector3(50.0f, 55.0f, 50.0f));
+        rightRockCollider1->SetCollisionLayer(CollisionLayer::Object);
+        rightRockCollider1->SetFriction(0.0f);
+
+        auto rightRock2 = wallRight->CreateGameObject<GameObject>("rightRock2Collider");
+        rightRock2->transform.SetLocalPosition(Vector3(295.0f, -27.0f, -160.0f));
+        rightRock2->transform.SetLocalRotation(Vector3(0.0f, 0.0f, -0.0f));
+        rightRock2->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
+        auto rightRockCollider2 = rightRock2->AddComponent<Rp3dBoxCollider>();
+        rightRockCollider2->SetSize(Vector3(58.0f, 50.0f, 55.0f));
+        rightRockCollider2->SetCollisionLayer(CollisionLayer::Object);
+        rightRockCollider2->SetFriction(0.0f);
+
+        auto rightRock3 = wallRight->CreateGameObject<GameObject>("rightRock3Collider");
+        rightRock3->transform.SetLocalPosition(Vector3(460.0f, -41.5f, -185.5f));
+        rightRock3->transform.SetLocalRotation(Vector3(0.0f, 75.0f, -0.0f));
+        rightRock3->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
+        auto rightRockCollider3 = rightRock3->AddComponent<Rp3dBoxCollider>();
+        rightRockCollider3->SetSize(Vector3(40.0f, 35.0f, 47.0f));
+        rightRockCollider3->SetCollisionLayer(CollisionLayer::Object);
+        rightRockCollider3->SetFriction(0.0f);
 
         auto rightWall1 = wallRight->CreateGameObject<GameObject>("RightWall1");
         rightWall1->transform.SetLocalPosition(Vector3(-435.0f, 300.0f, 60.0f));
@@ -200,6 +249,25 @@ namespace Game
         auto wallLeftCollider = wallLeft->AddComponent<Rp3dBoxCollider>();
         wallLeftCollider->SetSize(Vector3(1500.0f, 250.0f, 300.0f));
         wallLeftCollider->SetCollisionLayer(CollisionLayer::Wall);
+        wallLeftCollider->SetFriction(0.0f);
+
+        auto leftRock1 = wallLeft->CreateGameObject<GameObject>("leftRock1Collider");
+        leftRock1->transform.SetLocalPosition(Vector3(-85.0f, -35.0f, -215.0f));
+        leftRock1->transform.SetLocalRotation(Vector3(0.0f, 20.0f, -0.0f));
+        leftRock1->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
+        auto leftLockCollider1 = leftRock1->AddComponent<Rp3dBoxCollider>();
+        leftLockCollider1->SetSize(Vector3(55.0f, 50.0f, 55.0f));
+        leftLockCollider1->SetCollisionLayer(CollisionLayer::Object);
+        leftLockCollider1->SetFriction(0.0f);
+
+        auto leftRock2 = wallLeft->CreateGameObject<GameObject>("leftRock2Collider");
+        leftRock2->transform.SetLocalPosition(Vector3(300.0f, -33.0f, -160.0f));
+        leftRock2->transform.SetLocalRotation(Vector3(0.0f, 20.0f, -0.0f));
+        leftRock2->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
+        auto leftRockCollider2 = leftRock2->AddComponent<Rp3dBoxCollider>();
+        leftRockCollider2->SetSize(Vector3(55.0f, 50.0f, 55.0f));
+        leftRockCollider2->SetCollisionLayer(CollisionLayer::Object);
+        leftRockCollider2->SetFriction(0.0f);
 
         auto leftWall1 = wallLeft->CreateGameObject<GameObject>("LeftWall1");
         leftWall1->transform.SetLocalPosition(Vector3(-435.0f, 300.0f, 140.0f));
@@ -265,13 +333,15 @@ namespace Game
         starTree->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Chibi_Tree_C"));
         starTree->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
         auto starTreeCollider1 = starTree->AddComponent<Rp3dBoxCollider>();
-        starTreeCollider1->SetCollisionLayer(CollisionLayer::Wall);
+        starTreeCollider1->SetCollisionLayer(CollisionLayer::Object);
         starTreeCollider1->SetLocalPosition(Vector3(0.0f, 15.0f, 0.0f));
         starTreeCollider1->SetSize(Vector3(10.0f, 30.0f, 10.0f));
+        starTreeCollider1->SetFriction(0.0f);
         auto starTreeCollider2 = starTree->AddComponent<Rp3dBoxCollider>();
-        starTreeCollider2->SetCollisionLayer(CollisionLayer::Wall);
+        starTreeCollider2->SetCollisionLayer(CollisionLayer::Object);
         starTreeCollider2->SetLocalPosition(Vector3(0.0f, 65.0f, 0.0f));
         starTreeCollider2->SetSize(Vector3(50.0f, 70.0f, 50.0f));
+        starTreeCollider2->SetFriction(0.0f);
         auto starLight = starTree->CreateGameObject<GameObject>("PointLight");
         starLight->transform.SetLocalPosition(Vector3(0.0f, 550.0f, 0.0f));
         starLight->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
@@ -280,11 +350,12 @@ namespace Game
         starPointLight->color = Vector4(100.0f, 100.0f, 0.0f, 100.0f);
 
         auto gifts = CreateGameObject<GameObject>("Gifts");
-        createGift(gifts, "GiftA", 0, Vector3(-80.0f, -42.0f, -30.0f), Vector3(0.0f, 30.0f, 0.0f), Vector3(0.3f));
-        createGift(gifts, "GiftB", 1, Vector3(-10.0f, -42.0f, -135.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.3f));
-        createGift(gifts, "GiftC", 2, Vector3(45.0f, -42.0f, -145.0f), Vector3(0.0f, 90.0f, 0.0f), Vector3(0.3f));
-        createGift(gifts, "GiftD", 0, Vector3(-180.0f, -42.0f, 65.0f), Vector3(0.0f, -10.0f, 0.0f), Vector3(0.3f));
-        createGift(gifts, "GiftE", 1, Vector3(140.0f, -42.0f, -30.0f), Vector3(0.0f, -20.0f, 0.0f), Vector3(0.3f));
+        gifts->transform.SetLocalPosition(Vector3(0.0f, -42.0f, 0.0f));
+        createGift(gifts, "GiftA", 0, Vector3(-80.0f, 0.0f, -30.0f), Vector3(0.0f, 30.0f, 0.0f), Vector3(0.3f));
+        createGift(gifts, "GiftB", 1, Vector3(-10.0f, 0.0f, -135.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.3f));
+        createGift(gifts, "GiftC", 2, Vector3(45.0f, 0.0f, -145.0f), Vector3(0.0f, 90.0f, 0.0f), Vector3(0.3f));
+        createGift(gifts, "GiftD", 0, Vector3(-180.0f, 0.0f, 65.0f), Vector3(0.0f, -10.0f, 0.0f), Vector3(0.3f));
+        createGift(gifts, "GiftE", 1, Vector3(140.0f, 0.0f, -30.0f), Vector3(0.0f, -20.0f, 0.0f), Vector3(0.3f));
 
         auto bigGifts = CreateGameObject<GameObject>("BigGifts");
         bigGifts->transform.SetLocalPosition(Vector3(45.0f, -37.0f, 100.0f));
@@ -299,6 +370,7 @@ namespace Game
         giftACollider->SetCollisionLayer(CollisionLayer::Object);
         giftACollider->SetLocalPosition(Vector3(0.0f, -4.0f, 0.0f));
         giftACollider->SetSize(Vector3(22.0f, 20.5f, 22.0f));
+        giftACollider->SetFriction(0.0f);
 
         auto giftB = bigGifts->CreateGameObject<GameObject>("GiftB");
         giftB->SetTag(ObjectTag::Object);
@@ -311,6 +383,7 @@ namespace Game
         giftBCollider->SetCollisionLayer(CollisionLayer::Object);
         giftBCollider->SetLocalPosition(Vector3(0.0f, -4.0f, 0.0f));
         giftBCollider->SetSize(Vector3(22.0f, 20.5f, 22.0f));
+        giftBCollider->SetFriction(0.0f);
 
         createGift(bigGifts, "GiftC", 0, Vector3(18.0f, -5.0f, -15.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.3f));
         createGift(bigGifts, "GiftD", 2, Vector3(14.0f, 15.5f, 5.0f), Vector3(0.0f, -10.0f, 0.0f), Vector3(0.3f));
@@ -357,10 +430,12 @@ namespace Game
         tree->AddComponent<Rp3dRigidbody>(1000.0f, BodyType::STATIC, false);
         auto treeCollider1 = tree->AddComponent<Rp3dBoxCollider>();
         treeCollider1->SetCollisionLayer(CollisionLayer::Wall);
+        treeCollider1->SetFriction(0.0f);
         treeCollider1->SetLocalPosition(Vector3(0.0f, 20.0f, 0.0f));
         treeCollider1->SetSize(Vector3(15.0f, 40.0f, 15.0f));
         auto treeCollider2 = tree->AddComponent<Rp3dBoxCollider>();
         treeCollider2->SetCollisionLayer(CollisionLayer::Wall);
+        treeCollider2->SetFriction(0.0f);
         treeCollider2->SetLocalPosition(Vector3(0.0f, 90.0f, 0.0f));
         treeCollider2->SetSize(Vector3(85.0f, 100.0f, 85.0f));
     }
@@ -385,6 +460,7 @@ namespace Game
         gift->AddComponent<Rp3dRigidbody>(10.0f, BodyType::STATIC, false);
         auto giftCollider = gift->AddComponent<Rp3dBoxCollider>();
         giftCollider->SetCollisionLayer(CollisionLayer::Object);
+        giftCollider->SetFriction(0.0f);
         giftCollider->SetLocalPosition(Vector3(0.0f, -1.5f, 0.0f));
         giftCollider->SetSize(Vector3(12.5f, 12.5f, 12.5f));
     }

@@ -34,7 +34,9 @@ void LoadGameResources()
     resourceManager.LoadAnimation("Chibi_Rabbit_Jump", "resources\\animations\\Anim_Chibi@Jump.fbx", bunnyModel.get(), false);
     resourceManager.LoadAnimation("Chibi_Rabbit_Jump_Place", "resources\\animations\\Anim_Chibi@Jump_In_Place.fbx", bunnyModel.get(), false);
     resourceManager.LoadAnimation("Chibi_Rabbit_Fall", "resources\\animations\\Anim_Chibi@Quadruped_Chiling.fbx", bunnyModel.get(), true);
-
+    resourceManager.LoadAnimation("Chibi_Rabbit_Dash", "resources\\animations\\Anim_Chibi@Dash.fbx", bunnyModel.get(), false);
+    resourceManager.LoadAnimation("Chibi_Rabbit_Attack", "resources\\animations\\Anim_Chibi@NormalATK.fbx", bunnyModel.get(), false);
+    resourceManager.LoadAnimation("Chibi_Rabbit_JumpAttack", "resources\\animations\\Anim_Chibi@Swiming.fbx", bunnyModel.get(), true);
     // Winter Fell
     // ---------------------------------------------------------------------------------------------------
     // Models

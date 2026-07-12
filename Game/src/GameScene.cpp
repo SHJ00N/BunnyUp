@@ -3,7 +3,6 @@
 #include "GameScene.h"
 #include "Player/PlayerController.h"
 #include "Input/PlayerInputManager.h"
-#include "Player/PlayerFoot.h"
 
 namespace Game
 {
@@ -49,16 +48,6 @@ namespace Game
         animator->RegistAnimation("Jump", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Jump").get());
         animator->RegistAnimation("Jump_Place", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Jump_Place").get());
         animator->RegistAnimation("Fall", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Fall").get());
-
-        // Player foot
-        auto bunnyFoot = bunny->CreateGameObject<GameObject>("BunnyFoot");
-        bunnyFoot->AddComponent<PlayerFoot>();
-        bunnyFoot->SetTag(ObjectTag::Player);
-        auto footBody = bunnyFoot->AddComponent<Rp3dRigidbody>(1.0f, BodyType::KINEMATIC, false);
-        auto footCollider = bunnyFoot->AddComponent<Rp3dCapsuleCollider>(3.0f, 1.0f);
-        footCollider->SetLocalRotation(RotationPitchYawRoll(90.0f, 0.0f, 90.0f));
-        footCollider->SetLocalPosition(Vector3(0.0f, 2.0f, 0.0f));
-        footCollider->SetTrigger(true);
 
         // Map
         // -------------------------------------------------------------------------------------------------------
