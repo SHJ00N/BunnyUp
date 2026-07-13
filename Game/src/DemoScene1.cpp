@@ -34,6 +34,13 @@ namespace Game
 
         // Player
         // -------------------------------------------------------------------------------------------------------
+        auto staff = CreateGameObject<GameObject>("Staff");
+        staff->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Chibi_Candy_Staff"));
+        auto earmuff = CreateGameObject<GameObject>("Earmuff");
+        earmuff->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Chibi_Earmuff"));
+        auto scarf = CreateGameObject<GameObject>("Scarf");
+        scarf->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Chibi_Scarf"));
+
 		auto bunny = CreateGameObject<GameObject>("Bunny");
         bunny->SetTag(ObjectTag::Player);
         bunny->AddComponent<Game::PlayerController>();
@@ -51,9 +58,9 @@ namespace Game
         bunnyCollider->SetCollisionLayer(CollisionLayer::Player);
 
 		auto animator = bunny->AddComponent<Animator>();
-
 		animator->RegistAnimation("IdleA", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_IdleA").get());
 		animator->RegistAnimation("IdleC", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_IdleC").get());
+        animator->RegistAnimation("Idle03", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Idle03").get());
         animator->RegistAnimation("Walk", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Walk").get());
 		animator->RegistAnimation("Run", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Run").get());
         animator->RegistAnimation("Jump", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Jump").get());
@@ -61,7 +68,11 @@ namespace Game
         animator->RegistAnimation("Fall", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Fall").get());
         animator->RegistAnimation("Dash", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Dash").get());
         animator->RegistAnimation("Attack", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Attack").get());
-        animator->RegistAnimation("JumpAttack", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_JumpAttack").get());
+
+        auto bunnySocket = bunny->AddComponent<SocketComponent>();
+        bunnySocket->Attach("Weapon", 22, staff, Vector3(0.0f), Vector3(0.0f, 0.0f, 2.5f), Vector3(1.0f));
+        bunnySocket->Attach("Helmet", 42, earmuff, Vector3(0.0f), Vector3(1.7f, -1.45f, -3.0f), Vector3(1.0f));
+        bunnySocket->Attach("Cape", 10, scarf, Vector3(3.0f, 0.0f, 0.0f), Vector3(4.75f, 0.0f, -1.5f), Vector3(1.0f));
         
         // Camera
         // -------------------------------------------------------------------------------------------------------
@@ -76,7 +87,7 @@ namespace Game
         auto camera2Renderer = camera2->AddComponent<MeshRenderer>();
         camera2Renderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
 
-        // SetMainCamera(cameraComponent);
+        SetMainCamera(cameraComponent);
 
         // Floor
         // -------------------------------------------------------------------------------------------------------

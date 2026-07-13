@@ -25,7 +25,7 @@ namespace Game
     void IdleState::Enter(PlayerController& playerController)
     {
         LOG_INFO("Entering Idle State");
-        playerController.GetAnimator()->PlayAnimation("IdleA");
+        playerController.GetAnimator()->PlayAnimation("Idle03");
     }
 
     void IdleState::OnUpdate(float deltaTime, PlayerController& playerController, const PlayerInputState& inputState)

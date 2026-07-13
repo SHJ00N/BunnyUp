@@ -194,4 +194,10 @@ namespace Engine
 			SetLocalRotation(worldRotation);
 		}
 	}
+
+	void Transform::SetWorldMatrix(const Matrix4x4& world)
+	{
+		m_worldMatrix = world;
+		SetDirty();
+	}
 }

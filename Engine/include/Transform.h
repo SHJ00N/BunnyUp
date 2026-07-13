@@ -29,6 +29,7 @@ namespace Engine
 		void SetDirty() { m_isDirty = true; }
 		void LookAt(const Vector3& target);
 		void LookAt(const Vector3& target, const Vector3& up);
+		void SetWorldMatrix(const Matrix4x4& world);
 
 		const Vector3& GetLocalPosition() const { return m_position; }
 		Vector3 GetLocalEulerRotation() const { return QuaternionToEuler(m_quaternionRotation); }

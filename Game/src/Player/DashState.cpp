@@ -9,7 +9,7 @@ namespace Game
         if (Elapsed(0.1f) && CanJump(playerController, inputState)) return true;
         
         // cancel dash
-        if (Elapsed(0.75f))
+        if (Elapsed(0.7f))
         {
             if (inputState.dash)
             {

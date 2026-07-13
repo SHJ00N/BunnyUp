@@ -11,6 +11,10 @@ void LoadGameResources()
     // ---------------------------------------------------------------------------------------------------
     // Models
 	auto bunnyModel = resourceManager.LoadModel("Chibi_Rabbit", "resources\\models\\Chibi_Rabbit\\Chibi_Rabbit.fbx");
+    resourceManager.LoadModel("Chibi_Candy_Staff", "resources\\models\\Chibi_Rabbit\\Candy_cane_staff.fbx");
+    resourceManager.LoadModel("Chibi_Earmuff", "resources\\models\\Chibi_Rabbit\\Earmuff.fbx");
+    resourceManager.LoadModel("Chibi_Scarf", "resources\\models\\Chibi_Rabbit\\Scarf.fbx");
+    resourceManager.LoadModel("Candy_Staff", "resources\\models\\Chibi_Rabbit\\Candy_cane_staff.fbx");
     resourceManager.LoadModel("Chibi_Gift_A", "resources\\models\\Environment\\Gift_A.fbx");
     resourceManager.LoadModel("Chibi_Gift_B", "resources\\models\\Environment\\Gift_B.fbx");
     resourceManager.LoadModel("Chibi_Gift_C", "resources\\models\\Environment\\Gift_C.fbx");
@@ -29,6 +33,7 @@ void LoadGameResources()
 	// Animations
 	resourceManager.LoadAnimation("Chibi_Rabbit_IdleA", "resources\\animations\\Anim_Chibi@IdleA.fbx", bunnyModel.get(), true);
 	resourceManager.LoadAnimation("Chibi_Rabbit_IdleC", "resources\\animations\\Anim_Chibi@IdleC.fbx", bunnyModel.get(), true);
+    resourceManager.LoadAnimation("Chibi_Rabbit_Idle03", "resources\\animations\\Anim_Chibi@Idle03.fbx", bunnyModel.get(), true);
 	resourceManager.LoadAnimation("Chibi_Rabbit_Walk", "resources\\animations\\Anim_Chibi@Walk.fbx", bunnyModel.get(), true);
 	resourceManager.LoadAnimation("Chibi_Rabbit_Run", "resources\\animations\\Anim_Chibi@Run.fbx", bunnyModel.get(), true);
     resourceManager.LoadAnimation("Chibi_Rabbit_Jump", "resources\\animations\\Anim_Chibi@Jump.fbx", bunnyModel.get(), false);
@@ -36,7 +41,7 @@ void LoadGameResources()
     resourceManager.LoadAnimation("Chibi_Rabbit_Fall", "resources\\animations\\Anim_Chibi@Quadruped_Chiling.fbx", bunnyModel.get(), true);
     resourceManager.LoadAnimation("Chibi_Rabbit_Dash", "resources\\animations\\Anim_Chibi@Dash.fbx", bunnyModel.get(), false);
     resourceManager.LoadAnimation("Chibi_Rabbit_Attack", "resources\\animations\\Anim_Chibi@NormalATK.fbx", bunnyModel.get(), false);
-    resourceManager.LoadAnimation("Chibi_Rabbit_JumpAttack", "resources\\animations\\Anim_Chibi@Swiming.fbx", bunnyModel.get(), true);
+
     // Winter Fell
     // ---------------------------------------------------------------------------------------------------
     // Models

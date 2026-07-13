@@ -402,6 +402,22 @@ namespace Engine
 
 	inline Matrix4x4 Transpose(const Matrix4x4& m) noexcept { return Matrix4x4::FromSIMD(DirectX::XMMatrixTranspose(m.ToSIMD())); }
 	inline Matrix4x4 Inverse(const Matrix4x4& m) noexcept { return Matrix4x4::FromSIMD(DirectX::XMMatrixInverse(nullptr, m.ToSIMD())); }
+	inline bool Decompose(const Matrix4x4& m, Vector3& p, Quaternion& q, Vector3& s) noexcept 
+	{ 
+		DirectX::XMVECTOR xmp = p.ToSIMD();
+		DirectX::XMVECTOR xmq = q.ToSIMD();
+		DirectX::XMVECTOR xms = s.ToSIMD();
+
+		bool result = DirectX::XMMatrixDecompose(&xms, &xmq, &xmp, m.ToSIMD());
+
+		if (!result) return false;
+
+		p = Vector3::FromSIMD(xmp);
+		q = Quaternion::FromSIMD(xmq);
+		s = Vector3::FromSIMD(xms);
+
+		return true;
+	}
 
 	// transformation matrices
 	inline Matrix4x4 Translation(const Vector3& position) noexcept { return Matrix4x4::FromSIMD(DirectX::XMMatrixTranslation(position.x, position.y, position.z)); }
@@ -412,6 +428,14 @@ namespace Engine
 		return Matrix4x4::FromSIMD(
 			DirectX::XMMatrixScaling(scale.x, scale.y, scale.z) *
 			DirectX::XMMatrixRotationQuaternion(rotation.ToSIMD()) *
+			DirectX::XMMatrixTranslation(position.x, position.y, position.z)
+		);
+	}
+	inline Matrix4x4 TransformMatrix(const Vector3& position, const Vector3& rotation, const Vector3& scale) noexcept
+	{
+		return Matrix4x4::FromSIMD(
+			DirectX::XMMatrixScaling(scale.x, scale.y, scale.z) *
+			DirectX::XMMatrixRotationRollPitchYawFromVector(rotation.ToSIMD()) *
 			DirectX::XMMatrixTranslation(position.x, position.y, position.z)
 		);
 	}

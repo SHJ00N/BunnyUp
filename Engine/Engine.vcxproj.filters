@@ -276,6 +276,9 @@
     <ClInclude Include="include\CollisionData.h">
       <Filter>헤더 파일\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Socket.h">
+      <Filter>헤더 파일\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\D3DManager.cpp">
@@ -445,6 +448,9 @@
     </ClCompile>
     <ClCompile Include="src\Raycast.cpp">
       <Filter>소스 파일\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Socket.cpp">
+      <Filter>소스 파일\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
