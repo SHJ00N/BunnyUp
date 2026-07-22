@@ -19,38 +19,81 @@ namespace Engine
     {
         m_d3dManager = d3dManager;
         m_cbManager = cbManager;
+        m_lineBufferCapacity = MaxDebugVertices;
+        m_triangleBufferCapacity = MaxDebugVertices;
 
+        HRESULT hr = S_OK;
+
+        // create line buffer
+        hr = createLineVertexBuffer(m_lineBufferCapacity);
+        if (FAILED(hr))
+        {
+            return hr;
+        }
+        m_lineVertices.reserve(m_lineBufferCapacity);
+        
+        // create triangle buffer
+        hr = createTriangleVertexBuffer(m_lineBufferCapacity);
+        if (FAILED(hr))
+        {
+            return hr;
+        }
+        m_triangleVertices.reserve(m_lineBufferCapacity);
+
+        return hr;
+    }
+
+    HRESULT DebugRenderer::createLineVertexBuffer(size_t bufferCapacity)
+    {
         HRESULT hr = S_OK;
         auto device = m_d3dManager->GetDevice();
         // create buffer desc
         CD3D11_BUFFER_DESC vDesc{};
-        vDesc.ByteWidth = static_cast<UINT>(sizeof(DebugVertex) * MaxDebugVertices);
+        vDesc.ByteWidth = static_cast<UINT>(sizeof(DebugVertex) * bufferCapacity);
         vDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
         vDesc.Usage = D3D11_USAGE_DYNAMIC;
         vDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
         // create line buffer
+        m_pLineVertexBuffer.Reset();
         hr = device->CreateBuffer(&vDesc, nullptr, m_pLineVertexBuffer.GetAddressOf());
         if (FAILED(hr))
         {
             return hr;
         }
+        return hr;
+    }
+
+    HRESULT DebugRenderer::createTriangleVertexBuffer(size_t bufferCapacity)
+    {
+        HRESULT hr = S_OK;
+        auto device = m_d3dManager->GetDevice();
+        // create buffer desc
+        CD3D11_BUFFER_DESC vDesc{};
+        vDesc.ByteWidth = static_cast<UINT>(sizeof(DebugVertex) * bufferCapacity);
+        vDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+        vDesc.Usage = D3D11_USAGE_DYNAMIC;
+        vDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
         // create triangle buffer
+        m_pTriangleVertexBuffer.Reset();
         hr = device->CreateBuffer(&vDesc, nullptr, m_pTriangleVertexBuffer.GetAddressOf());
         if (FAILED(hr))
         {
             return hr;
         }
-
         return hr;
     }
 
-    void DebugRenderer::Render(Scene* scene)
+    void DebugRenderer::Clear()
     {
         // clear vertices
         m_lineVertices.clear();
         m_triangleVertices.clear();
+    }
 
+    void DebugRenderer::Render(Scene* scene)
+    {
         // render culling bounds
         //for (auto& child : scene->GetRoot()->GetChildren())
         //{
@@ -64,11 +107,11 @@ namespace Engine
             AddFrustum(createFrustumFromCamera(*camera), Vector4(1.0f, 1.0f, 0.0f, 0.2f));
         }
 
-        // render collider
-        //for (auto collider : scene->GetColliders())
-        //{
-        //    collider->BuildDebugRender(this);
-        //}
+        // render  navigate obstacle colliders
+        for (auto collider : scene->GetObstacleColliders())
+        {
+            collider->BuildDebugRender(this);
+        }
 
         // render physics
         scene->GetPhysicsSystem()->DrawDebug();
@@ -212,6 +255,23 @@ namespace Engine
         }
     }
 
+    void DebugRenderer::AddAABB(const AABB* bound, const Vector4& color)
+    {
+        const auto vertices = bound->GetVertices();    // get vertices
+
+        static constexpr uint32_t edges[] =
+        {
+            0,1,    1,3,    3,2,    2,0,
+            4,5,    5,7,    7,6,    6,4,
+            0,4,    1,5,    2,6,    3,7
+        };
+
+        for (uint32_t i = 0; i < 24; i += 2)
+        {
+            AddLine(vertices[edges[i]], vertices[edges[i + 1]], color);
+        }
+    }
+
     void DebugRenderer::AddFrustum(const Frustum& frustum, const Vector4& color)
     {
         const auto corners = frustum.GetCorners();
@@ -280,6 +340,55 @@ namespace Engine
         AddAABB(&aabb, transform, color);
     }
 
+    void DebugRenderer::AddSphere(const Vector3& center, float radius, const Vector4& color)
+    {
+        constexpr int segments = 16;
+        constexpr float PI = 3.14159265359f;
+
+        for (int x = 0; x < segments; ++x)
+        {
+            const float theta0 = PI * static_cast<float>(x) / segments;
+            const float theta1 = PI * static_cast<float>(x + 1) / segments;
+
+            for (int y = 0; y < segments; ++y)
+            {
+                const float phi0 = 2.0f * PI * static_cast<float>(y) / segments;
+                const float phi1 = 2.0f * PI * static_cast<float>(y + 1) / segments;
+
+                Vector3 p00 =
+                {
+                    radius * sinf(theta0) * cosf(phi0),
+                    radius * cosf(theta0),
+                    radius * sinf(theta0) * sinf(phi0)
+                };
+
+                Vector3 p01 =
+                {
+                    radius * sinf(theta0) * cosf(phi1),
+                    radius * cosf(theta0),
+                    radius * sinf(theta0) * sinf(phi1)
+                };
+
+                Vector3 p10 =
+                {
+                    radius * sinf(theta1) * cosf(phi0),
+                    radius * cosf(theta1),
+                    radius * sinf(theta1) * sinf(phi0)
+                };
+
+                p00 += center;
+                p01 += center;
+                p10 += center;
+
+                // latitude line
+                AddLine(p00, p01, color);
+
+                // longitude line
+                AddLine(p00, p10, color);
+            }
+        }
+    }
+
     void DebugRenderer::AddSphere(const Vector3& center, float radius, const Transform& transform, const Vector4& color)
     {
         constexpr int segments = 16;
@@ -341,6 +450,12 @@ namespace Engine
         cmd.SetDepthState(RenderStateManager::GetInstance().GetDepthState(DepthType::Read));
         cmd.SetRasterState(RenderStateManager::GetInstance().GetRasterState(RasterType::None));
 
+        if (m_lineVertices.size() > m_lineBufferCapacity)
+        {
+            m_lineBufferCapacity = m_lineVertices.size() * 2;
+            createLineVertexBuffer(m_lineBufferCapacity);
+        }
+
         D3D11_MAPPED_SUBRESOURCE mapped{ };
         context->Map(m_pLineVertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
 
@@ -365,6 +480,12 @@ namespace Engine
         cmd.SetBlendState(RenderStateManager::GetInstance().GetBlendState(BlendType::Alpha));
         cmd.SetDepthState(RenderStateManager::GetInstance().GetDepthState(DepthType::Read));
         cmd.SetRasterState(RenderStateManager::GetInstance().GetRasterState(RasterType::None));
+
+        if (m_triangleVertices.size() > m_triangleBufferCapacity)
+        {
+            m_triangleBufferCapacity = m_triangleVertices.size() * 2;
+            createLineVertexBuffer(m_triangleBufferCapacity);
+        }
 
         D3D11_MAPPED_SUBRESOURCE mapped{ };
         context->Map(m_pTriangleVertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);

@@ -10,6 +10,7 @@
 #include "Collider_Legacy.h"
 #include "EventBus.h"
 #include "PhysicsSystem.h"
+#include "GameObject.h"
 
 namespace Engine
 {
@@ -117,11 +118,7 @@ namespace Engine
 		// destroy
 		for (auto object : destroyList)
 		{
-			EventBus::GetInstance().Publish<ObjectDestroyedEvent>(ObjectDestroyedEvent{ object });
-			if (auto parent = object->GetParent())
-			{
-				parent->RemoveChild(object);
-			}
+			object->DestroyObject();
 		}
 	}
 
@@ -139,11 +136,16 @@ namespace Engine
 		}
 	}
 
+	void Scene::RequestCreateObject(GameObject* parent, std::unique_ptr<GameObject> object)
+	{
+		m_requstedCreateObject.push_back({ parent, std::move(object) });
+	}
+
 	void Scene::FlushCreateObjectRequest()
 	{
-		for (auto& obj : m_requstedCreateObject)
+		for (auto& request : m_requstedCreateObject)
 		{
-			m_root->AddChild(std::move(obj));
+			request.parent->AddChild(std::move(request.object));
 		}
 
 		traverseAwake(m_root.get());
@@ -254,23 +256,16 @@ namespace Engine
 		cbManager.UpdatePerLight(m_cbPerLight);
 	}
 
-
-	void Scene::RegisterCollider(Collider* collider)
+	void Scene::RegistObstacleCollider(Rp3dCollider* collider)
 	{
-		m_colliders.push_back(collider);
+		m_navObstacleColliders.push_back(collider);
 	}
 
-	void Scene::UnregisterCollider(Collider* collider)
+	void Scene::UnregistObstacleCollider(Rp3dCollider* collider)
 	{
-		// legacy collider code
-		//if(collider->bvhNode)
-		//{
-		//	BVH::DestroyLeaf(m_physicsSystem->GetBVHRootPtr(), collider->bvhNode);
-		//}
-
-		m_colliders.erase(
-			std::remove(m_colliders.begin(), m_colliders.end(), collider),
-			m_colliders.end()
+		m_navObstacleColliders.erase(
+			std::remove(m_navObstacleColliders.begin(), m_navObstacleColliders.end(), collider),
+			m_navObstacleColliders.end()
 		);
 	}
 }

@@ -5,6 +5,10 @@
 #include "Player/PlayerController.h"
 #include "CubeController.h"
 #include "Input/PlayerInputManager.h"
+#include "Enemy/NavigationManager.h"
+#include "Enemy/EnemyBehaviorTree.h"
+#include "Enemy/EnemyController.h"
+#include "Common/Health.h"
 
 namespace Game
 {
@@ -19,6 +23,9 @@ namespace Game
 	void DemoScene1::SceneEnter()
 	{
         SetEnvironmentMap(ResourceManager::GetInstance().GetEnvironmentMap("Sky_EnvMap"));
+
+        auto navigationManager = CreateGameObject<GameObject>("NavigationManager");
+        navigationManager->AddComponent<NavigationManager>(1.0f);
 
         auto playerInputManager = CreateGameObject<GameObject>("PlayerInputManager");
         playerInputManager->AddComponent<PlayerInputManager>();
@@ -44,13 +51,13 @@ namespace Game
 		auto bunny = CreateGameObject<GameObject>("Bunny");
         bunny->SetTag(ObjectTag::Player);
         bunny->AddComponent<Game::PlayerController>();
-        bunny->transform.SetLocalPosition(Vector3(-20.0f, 0.0f, 0.0f));
+        bunny->transform.SetLocalPosition(Vector3(0.0f, 0.0f, -50.0f));
 		bunny->transform.SetLocalScale(Vector3(0.1f, 0.1f, 0.1f));
 		bunny->transform.SetLocalRotation(Vector3(0.0f, 180.0f, 0.0f));
 		bunny->AddComponent<SkinnedRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Chibi_Rabbit"));
 
         auto bunnyRigidbody = bunny->AddComponent<Rp3dRigidbody>(1.0f, BodyType::DYNAMIC, true);
-        bunnyRigidbody->SetAngularLock(false, true, false); // Lock Y-axis rotation
+        bunnyRigidbody->SetAngularLock(false, false, false); //  Lock angular rotation
         auto bunnyCollider = bunny->AddComponent<Rp3dCapsuleCollider>(4.5f, 6.0f);
         bunnyCollider->SetLocalPosition(Vector3(0.0f, 7.6f, 0.0f));
         bunnyCollider->SetFriction(1.0f);
@@ -59,6 +66,7 @@ namespace Game
 
 		auto animator = bunny->AddComponent<Animator>();
 		animator->RegistAnimation("IdleA", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_IdleA").get());
+        animator->RegistAnimation("IdleB", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_IdleB").get());
 		animator->RegistAnimation("IdleC", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_IdleC").get());
         animator->RegistAnimation("Idle03", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Idle03").get());
         animator->RegistAnimation("Walk", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Walk").get());
@@ -68,11 +76,18 @@ namespace Game
         animator->RegistAnimation("Fall", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Fall").get());
         animator->RegistAnimation("Dash", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Dash").get());
         animator->RegistAnimation("Attack", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Attack").get());
+        animator->RegistAnimation("Damage", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_Damage").get());
+        animator->RegistAnimation("DeathA", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_DeathA").get());
+        animator->RegistAnimation("DeathB", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_DeathB").get());
+        animator->RegistAnimation("DeathC", ResourceManager::GetInstance().GetAnimation("Chibi_Rabbit_DeathC").get());
 
         auto bunnySocket = bunny->AddComponent<SocketComponent>();
         bunnySocket->Attach("Weapon", 22, staff, Vector3(0.0f), Vector3(0.0f, 0.0f, 2.5f), Vector3(1.0f));
         bunnySocket->Attach("Helmet", 42, earmuff, Vector3(0.0f), Vector3(1.7f, -1.45f, -3.0f), Vector3(1.0f));
         bunnySocket->Attach("Cape", 10, scarf, Vector3(3.0f, 0.0f, 0.0f), Vector3(4.75f, 0.0f, -1.5f), Vector3(1.0f));
+
+        auto bunnyHealth = bunny->AddComponent<Health>();
+        bunnyHealth->SetMaxHealth(100);
         
         // Camera
         // -------------------------------------------------------------------------------------------------------
@@ -88,6 +103,44 @@ namespace Game
         camera2Renderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
 
         SetMainCamera(cameraComponent);
+
+
+        // Monster
+        // -------------------------------------------------------------------------------------------------------
+        //auto slime = CreateGameObject<GameObject>("Slime");
+        //slime->transform.SetLocalScale(Vector3(0.1f));
+        //slime->AddComponent<SkinnedRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Monster_Slime"));
+
+        //auto slimeAnimator = slime->AddComponent<Animator>();
+        //slimeAnimator->RegistAnimation("Idle", ResourceManager::GetInstance().GetAnimation("Monster_Slime_Idle").get());
+
+        auto turtleShell = CreateGameObject<GameObject>("TurtleShell");
+        turtleShell->SetTag(ObjectTag::Enemy);
+        turtleShell->transform.SetLocalPosition(Vector3(-50.0f, -45.0f, 50.0f));
+        turtleShell->transform.SetLocalScale(Vector3(0.1f));
+        turtleShell->AddComponent<SkinnedRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Monster_TurtleShell"));
+        
+        auto turtleShellController = turtleShell->AddComponent<EnemyController>();
+        turtleShellController->SetTarget(bunny);
+        turtleShell->AddComponent<EnemyBehaviorTree>(turtleShellController);
+
+        auto turtleShellRigidbody = turtleShell->AddComponent<Rp3dRigidbody>(1.0f, BodyType::DYNAMIC, true);
+        turtleShellRigidbody->SetAngularLock(false, false, false); // Lock angular rotation
+        auto turtleShellCollider = turtleShell->AddComponent<Rp3dCapsuleCollider>(5.0f, 0.5f);
+        turtleShellCollider->SetLocalPosition(Vector3(0.0f, 5.5f, 0.0f));
+        turtleShellCollider->SetFriction(1.0f);
+        turtleShellCollider->SetBounciness(0.0f);
+        turtleShellCollider->SetCollisionLayer(CollisionLayer::Enemy);
+
+        auto turtleShellAnimator = turtleShell->AddComponent<Animator>();
+        turtleShellAnimator->RegistAnimation("Idle", ResourceManager::GetInstance().GetAnimation("Monster_TurtleShell_Idle").get());
+        turtleShellAnimator->RegistAnimation("Walk", ResourceManager::GetInstance().GetAnimation("Monster_TurtleShell_Walk").get());
+        turtleShellAnimator->RegistAnimation("Attack", ResourceManager::GetInstance().GetAnimation("Monster_TurtleShell_Attack").get());
+        turtleShellAnimator->RegistAnimation("Damage", ResourceManager::GetInstance().GetAnimation("Monster_TurtleShell_Damage").get()); 
+        turtleShellAnimator->RegistAnimation("Death", ResourceManager::GetInstance().GetAnimation("Monster_TurtleShell_Death").get());
+
+        auto turtleShellHealth = turtleShell->AddComponent<Health>();
+        turtleShellHealth->SetMaxHealth(50);
 
         // Floor
         // -------------------------------------------------------------------------------------------------------
@@ -127,6 +180,7 @@ namespace Game
         wallFrontCollider->SetSize(Vector3(1500.0f, 250.0f, 300.0f));
         wallFrontCollider->SetCollisionLayer(CollisionLayer::Wall);
         wallFrontCollider->SetFriction(0.0f);
+        RegistObstacleCollider(wallFrontCollider);
         
         auto frontRock1 = wallFront->CreateGameObject<GameObject>("frontRock1Collider");
         frontRock1->transform.SetLocalPosition(Vector3(-180.0f, 33.0f, -195.0f));
@@ -136,6 +190,7 @@ namespace Game
         frontRockCollider1->SetSize(Vector3(60.0f, 75.0f, 60.0f));
         frontRockCollider1->SetCollisionLayer(CollisionLayer::Object);
         frontRockCollider1->SetFriction(0.0f);
+        // RegistObstacleCollider(frontRockCollider1);
 
         auto frontRock2 = wallFront->CreateGameObject<GameObject>("frontRock2Collider");
         frontRock2->transform.SetLocalPosition(Vector3(110.0f, -33.0f, -220.0f));
@@ -145,6 +200,7 @@ namespace Game
         frontRockCollider2->SetSize(Vector3(55.0f, 50.0f, 55.0f));
         frontRockCollider2->SetCollisionLayer(CollisionLayer::Object);
         frontRockCollider2->SetFriction(0.0f);
+        RegistObstacleCollider(frontRockCollider2);
 
         auto frontRock3 = wallFront->CreateGameObject<GameObject>("frontRock3Collider");
         frontRock3->transform.SetLocalPosition(Vector3(200.0f, -7.5f, -215.0f));
@@ -154,6 +210,7 @@ namespace Game
         frontRockCollider3->SetSize(Vector3(55.0f, 85.0f, 65.0f));
         frontRockCollider3->SetCollisionLayer(CollisionLayer::Object);
         frontRockCollider3->SetFriction(0.0f);
+        RegistObstacleCollider(frontRockCollider3);
 
         auto frontWall1 = wallFront->CreateGameObject<GameObject>("FrontWall1");
         frontWall1->transform.SetLocalPosition(Vector3(-450.0f, 300.0f, 50.0f));
@@ -180,6 +237,7 @@ namespace Game
         wallBackCollider->SetSize(Vector3(1500.0f, 250.0f, 300.0f));
         wallBackCollider->SetCollisionLayer(CollisionLayer::Wall);
         wallBackCollider->SetFriction(0.0f);
+        RegistObstacleCollider(wallBackCollider);
 
         auto backWall1 = wallBack->CreateGameObject<GameObject>("BackWall1");
         backWall1->transform.SetLocalPosition(Vector3(-510.0f, 120.0f, 0.0f));
@@ -207,6 +265,7 @@ namespace Game
         wallRightCollider->SetSize(Vector3(1500.0f, 250.0f, 300.0f));
         wallRightCollider->SetCollisionLayer(CollisionLayer::Wall);
         wallRightCollider->SetFriction(0.0f);
+        RegistObstacleCollider(wallRightCollider);
 
         auto rightRock1 = wallRight->CreateGameObject<GameObject>("rightRock1Collider");
         rightRock1->transform.SetLocalPosition(Vector3(-80.0f, -35.0f, -220.0f));
@@ -216,6 +275,7 @@ namespace Game
         rightRockCollider1->SetSize(Vector3(50.0f, 55.0f, 50.0f));
         rightRockCollider1->SetCollisionLayer(CollisionLayer::Object);
         rightRockCollider1->SetFriction(0.0f);
+        RegistObstacleCollider(rightRockCollider1);
 
         auto rightRock2 = wallRight->CreateGameObject<GameObject>("rightRock2Collider");
         rightRock2->transform.SetLocalPosition(Vector3(295.0f, -27.0f, -160.0f));
@@ -225,6 +285,7 @@ namespace Game
         rightRockCollider2->SetSize(Vector3(58.0f, 50.0f, 55.0f));
         rightRockCollider2->SetCollisionLayer(CollisionLayer::Object);
         rightRockCollider2->SetFriction(0.0f);
+        RegistObstacleCollider(rightRockCollider2);
 
         auto rightRock3 = wallRight->CreateGameObject<GameObject>("rightRock3Collider");
         rightRock3->transform.SetLocalPosition(Vector3(460.0f, -41.5f, -185.5f));
@@ -234,6 +295,7 @@ namespace Game
         rightRockCollider3->SetSize(Vector3(40.0f, 35.0f, 47.0f));
         rightRockCollider3->SetCollisionLayer(CollisionLayer::Object);
         rightRockCollider3->SetFriction(0.0f);
+        RegistObstacleCollider(rightRockCollider3);
 
         auto rightWall1 = wallRight->CreateGameObject<GameObject>("RightWall1");
         rightWall1->transform.SetLocalPosition(Vector3(-435.0f, 300.0f, 60.0f));
@@ -261,6 +323,7 @@ namespace Game
         wallLeftCollider->SetSize(Vector3(1500.0f, 250.0f, 300.0f));
         wallLeftCollider->SetCollisionLayer(CollisionLayer::Wall);
         wallLeftCollider->SetFriction(0.0f);
+        RegistObstacleCollider(wallLeftCollider);
 
         auto leftRock1 = wallLeft->CreateGameObject<GameObject>("leftRock1Collider");
         leftRock1->transform.SetLocalPosition(Vector3(-85.0f, -35.0f, -215.0f));
@@ -270,6 +333,7 @@ namespace Game
         leftLockCollider1->SetSize(Vector3(55.0f, 50.0f, 55.0f));
         leftLockCollider1->SetCollisionLayer(CollisionLayer::Object);
         leftLockCollider1->SetFriction(0.0f);
+        RegistObstacleCollider(leftLockCollider1);
 
         auto leftRock2 = wallLeft->CreateGameObject<GameObject>("leftRock2Collider");
         leftRock2->transform.SetLocalPosition(Vector3(300.0f, -33.0f, -160.0f));
@@ -279,6 +343,7 @@ namespace Game
         leftRockCollider2->SetSize(Vector3(55.0f, 50.0f, 55.0f));
         leftRockCollider2->SetCollisionLayer(CollisionLayer::Object);
         leftRockCollider2->SetFriction(0.0f);
+        RegistObstacleCollider(leftRockCollider2);
 
         auto leftWall1 = wallLeft->CreateGameObject<GameObject>("LeftWall1");
         leftWall1->transform.SetLocalPosition(Vector3(-435.0f, 300.0f, 140.0f));
@@ -348,11 +413,13 @@ namespace Game
         starTreeCollider1->SetLocalPosition(Vector3(0.0f, 15.0f, 0.0f));
         starTreeCollider1->SetSize(Vector3(10.0f, 30.0f, 10.0f));
         starTreeCollider1->SetFriction(0.0f);
+        RegistObstacleCollider(starTreeCollider1);
         auto starTreeCollider2 = starTree->AddComponent<Rp3dBoxCollider>();
         starTreeCollider2->SetCollisionLayer(CollisionLayer::Object);
         starTreeCollider2->SetLocalPosition(Vector3(0.0f, 65.0f, 0.0f));
         starTreeCollider2->SetSize(Vector3(50.0f, 70.0f, 50.0f));
         starTreeCollider2->SetFriction(0.0f);
+        // RegistObstacleCollider(starTreeCollider2);
         auto starLight = starTree->CreateGameObject<GameObject>("PointLight");
         starLight->transform.SetLocalPosition(Vector3(0.0f, 550.0f, 0.0f));
         starLight->AddComponent<MeshRenderer>()->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
@@ -382,6 +449,7 @@ namespace Game
         giftACollider->SetLocalPosition(Vector3(0.0f, -4.0f, 0.0f));
         giftACollider->SetSize(Vector3(22.0f, 20.5f, 22.0f));
         giftACollider->SetFriction(0.0f);
+        RegistObstacleCollider(giftACollider);
 
         auto giftB = bigGifts->CreateGameObject<GameObject>("GiftB");
         giftB->SetTag(ObjectTag::Object);
@@ -395,41 +463,10 @@ namespace Game
         giftBCollider->SetLocalPosition(Vector3(0.0f, -4.0f, 0.0f));
         giftBCollider->SetSize(Vector3(22.0f, 20.5f, 22.0f));
         giftBCollider->SetFriction(0.0f);
+        RegistObstacleCollider(giftBCollider);
 
         createGift(bigGifts, "GiftC", 0, Vector3(18.0f, -5.0f, -15.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.3f));
         createGift(bigGifts, "GiftD", 2, Vector3(14.0f, 15.5f, 5.0f), Vector3(0.0f, -10.0f, 0.0f), Vector3(0.3f));
-
-        //auto cube1 = CreateGameObject<GameObject>("Cube1");
-        //auto cube1Renderer = cube1->AddComponent<MeshRenderer>();
-        //cube1Renderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
-        //cube1Renderer->GetMaterial(0)->SetColor(Vector4(1.0f, 1.0f, 5.0f, 1.0f));
-        //auto cube1PointLight = cube1->AddComponent<Light>();
-        //cube1PointLight->type = LightType::Point;
-        //cube1PointLight->color = Vector4(1.0f, 1.0f, 5.0f, 100.0f);
-
-        //cube1->transform.SetLocalPosition(Vector3(20.0f, 5.0f, 10.0f));
-        //cube1->transform.SetLocalScale(Vector3(2.5f, 2.5f, 2.5f));
-
-        //auto cube2 = CreateGameObject<GameObject>("Cube2");
-        //auto cube2Renderer = cube2->AddComponent<MeshRenderer>();
-        //cube2Renderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
-        //cube2Renderer->GetMaterial(0)->SetColor(Vector4(5.0f, 1.0f, 1.0f, 1.0f));
-        //auto cube2PointLight = cube2->AddComponent<Light>();
-        //cube2PointLight->type = LightType::Point;
-        //cube2PointLight->color = Vector4(5.0f, 1.0f, 1.0f, 100.0f);
-
-        //cube2->transform.SetLocalPosition(Vector3(-20.0f, 5.0f, -10.0f));
-        //cube2->transform.SetLocalScale(Vector3(2.5f, 2.5f, 2.5f));
-
-        //auto cube3 = CreateGameObject<GameObject>("PointLight");
-        //auto cube3Renderer = cube3->AddComponent<MeshRenderer>();
-        //cube3Renderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
-        //cube3Renderer->GetMaterial(0)->SetColor(Vector4(1.0f, 5.0f, 1.0f, 1.0f));
-        //auto cube3PointLight = cube3->AddComponent<Light>();
-        //cube3PointLight->type = LightType::Point;
-        //cube3PointLight->color = Vector4(1.0f, 5.0f, 1.0f, 1000.0f);
-        //cube3->transform.SetLocalPosition(Vector3(0.0f, 15.0f, 10.0f));
-        //cube3->transform.SetLocalScale(Vector3(5.0f, 5.0f, 5.0f));
 	}
 
     void DemoScene1::createTree(GameObject* parent, const std::string& name, const Vector3& pos, const Vector3& scale)
@@ -444,11 +481,13 @@ namespace Game
         treeCollider1->SetFriction(0.0f);
         treeCollider1->SetLocalPosition(Vector3(0.0f, 20.0f, 0.0f));
         treeCollider1->SetSize(Vector3(15.0f, 40.0f, 15.0f));
+        RegistObstacleCollider(treeCollider1);
         auto treeCollider2 = tree->AddComponent<Rp3dBoxCollider>();
         treeCollider2->SetCollisionLayer(CollisionLayer::Wall);
         treeCollider2->SetFriction(0.0f);
         treeCollider2->SetLocalPosition(Vector3(0.0f, 90.0f, 0.0f));
         treeCollider2->SetSize(Vector3(85.0f, 100.0f, 85.0f));
+        // RegistObstacleCollider(treeCollider2);
     }
 
     void DemoScene1::createGift(GameObject* parent, const std::string& name, int type, const Vector3& pos, const Vector3& rot, const Vector3& scale)
@@ -474,5 +513,6 @@ namespace Game
         giftCollider->SetFriction(0.0f);
         giftCollider->SetLocalPosition(Vector3(0.0f, -1.5f, 0.0f));
         giftCollider->SetSize(Vector3(12.5f, 12.5f, 12.5f));
+        RegistObstacleCollider(giftCollider);
     }
 }

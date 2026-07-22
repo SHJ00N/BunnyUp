@@ -6,6 +6,7 @@
 #include "PhysicsSystem.h"
 #include "Log.h"
 #include "ImGuiClass.h"
+#include "DebugRenderer.h"
 
 namespace Engine
 {
@@ -19,6 +20,16 @@ namespace Engine
 	Rp3dCollider::Rp3dCollider(const Vector3& position, const Quaternion& rotation, float friction, float bounciness, bool trigger, CollisionLayer layer)
 		: m_center(position), m_rotation(rotation), m_friction(friction), m_bounciness(bounciness), m_isTrigger(trigger), m_layer(layer)
 	{
+	}
+
+	Vector3 Rp3dCollider::GetWorldCenter() const
+	{
+		return ownerGameObject->transform.GetWorldPosition() + (m_center * ownerGameObject->transform.GetRotationMatrix());
+	}
+
+	Quaternion Rp3dCollider::GetWorldRotation() const
+	{
+		return m_rotation * ownerGameObject->transform.GetWorldRotationQuaternion();
 	}
 
 	void Rp3dCollider::OnDestroy()
@@ -39,6 +50,11 @@ namespace Engine
 		uint16_t mask = m_rigidbody->GetPhysicsSystem()->GetCollisionMatrix().GetCollisionMask(m_layer);
 		m_collider->setCollisionCategoryBits(1 << static_cast<uint32_t>(m_layer));
 		m_collider->setCollideWithMaskBits(mask);
+	}
+
+	void Rp3dCollider::SetEnable(bool value)
+	{
+		m_collider->setIsSimulationCollider(value);
 	}
 
 	void Rp3dCollider::SetLocalPosition(const Vector3& position)
@@ -107,7 +123,9 @@ namespace Engine
 			"Ground",
 			"Wall",
 			"Object",
-			"Trigger"
+			"Trigger",
+			"EnemyTrigger",
+			"PlayerTrigger"
 		};
 
 		int currentType = static_cast<int>(m_layer);
@@ -135,6 +153,9 @@ namespace Engine
 		{
 			SetTrigger(m_isTrigger);
 		}
+
+		Vector3 worldPos = GetWorldCenter();
+		ImGui::LabelText("WorldCenter", "%f, %f, %f", worldPos.x, worldPos.y, worldPos.z);
 	}
 
 	// --------------------------------------------------------------------------------
@@ -201,6 +222,32 @@ namespace Engine
 		{
 			m_shape->setHalfExtents(rp3d::Vector3(m_size.x * 0.5f, m_size.y * 0.5f, m_size.z * 0.5f));
 		}
+	}
+
+	AABB Rp3dBoxCollider::GetBounds() const
+	{
+		Vector3 halfExtents = m_size * 0.5f;
+		Matrix4x4 rotation = Rotation(GetWorldRotation());
+
+		Matrix3x3 absR;
+		for (int r = 0; r < 3; r++)
+		{
+			for (int c = 0; c < 3; c++)
+			{
+				absR.m[r][c] = std::abs(rotation.m[r][c]);
+			}
+		}
+
+		Vector3 aabbExtents = halfExtents * absR;
+
+		return AABB(GetWorldCenter(), aabbExtents.x, aabbExtents.y, aabbExtents.z);
+	}
+
+	void Rp3dBoxCollider::BuildDebugRender(DebugRenderer* renderer) const
+	{
+		// Draw aabb bounds
+		const auto bounds = GetBounds();
+		renderer->AddAABB(&bounds, Vector4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 
 	void Rp3dBoxCollider::OnImGui()
@@ -276,6 +323,19 @@ namespace Engine
 			m_shape->setRadius(radius);
 		}
 	}
+
+	AABB Rp3dSphereCollider::GetBounds() const
+	{
+		return AABB(GetWorldCenter(), m_radius, m_radius, m_radius);
+	}
+
+	void Rp3dSphereCollider::BuildDebugRender(DebugRenderer* renderer) const
+	{
+		// Draw aabb bounds
+		const auto bounds = GetBounds();
+		renderer->AddAABB(&bounds, Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+	}
+
 
 	void Rp3dSphereCollider::OnImGui()
 	{
@@ -359,6 +419,32 @@ namespace Engine
 		{
 			m_shape->setHeight(height);
 		}
+	}
+
+	AABB Rp3dCapsuleCollider::GetBounds() const
+	{
+		Vector3 halfExtents = Vector3(m_radius, m_height * 0.5f + m_radius, m_radius);
+		Matrix4x4 rotation = Rotation(GetWorldRotation());
+
+		Matrix3x3 absR;
+		for (int r = 0; r < 3; r++)
+		{
+			for (int c = 0; c < 3; c++)
+			{
+				absR.m[r][c] = std::abs(rotation.m[r][c]);
+			}
+		}
+
+		Vector3 aabbExtents = halfExtents * absR;
+
+		return AABB(GetWorldCenter(), aabbExtents.x, aabbExtents.y, aabbExtents.z);
+	}
+
+	void Rp3dCapsuleCollider::BuildDebugRender(DebugRenderer* renderer) const
+	{
+		// Draw aabb bounds
+		const auto bounds = GetBounds();
+		renderer->AddAABB(&bounds, Vector4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 
 	void Rp3dCapsuleCollider::OnImGui()

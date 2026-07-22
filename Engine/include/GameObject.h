@@ -63,6 +63,7 @@ namespace Engine
 		}
 
 		std::unique_ptr<GameObject> RemoveChild(GameObject* node);
+		void DestroyObject();
 
 		// Accessors
 		std::vector<std::unique_ptr<GameObject>>& GetChildren() { return children; }

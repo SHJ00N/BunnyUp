@@ -2,6 +2,7 @@
 #include "Player/PlayerState.h"
 #include "Input/PlayerInputManager.h"
 #include "Player/IdleState.h"
+#include "Common/Health.h"
 
 namespace Game
 {
@@ -10,8 +11,11 @@ namespace Game
         m_animator = ownerGameObject->GetComponent<Animator>();
         m_rigidbody = ownerGameObject->GetComponent<Rp3dRigidbody>();
         m_collider = ownerGameObject->GetComponent<Rp3dCapsuleCollider>();
+        m_health = ownerGameObject->GetComponent<Health>();
 
         m_rigidbody->SetLinearDamping(PlayerDefaultDamping);
+
+        m_attackState.Initialize(*this);
     }
 
     void PlayerController::Update(float dt)
@@ -100,6 +104,7 @@ namespace Game
         ImGui::DragFloat("Dash", &dashSpeed, 1.0f, 0.0f, 1000.0f);
         ImGui::DragFloat("Jump", &jumpImpulse, 1.0f, 0.0f, 1000.0f);
         ImGui::DragFloat("JumpAttack", &jumpAttackImpulse, 1.0f, 0.0f, 1000.0f);
+        ImGui::DragInt("AttackPower", &attackPower, 1, 0, 1000);
 
         ImGui::Checkbox("IsGrounded", &isGrounded);
     }

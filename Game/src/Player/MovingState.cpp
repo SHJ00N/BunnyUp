@@ -7,6 +7,7 @@ namespace Game
 {
     bool MovingState::HandleInput(PlayerController& playerController, const PlayerInputState& inputState)
     {
+        if (OnGroundState::HandleInput(playerController, inputState)) return true;
         if (CanJump(playerController, inputState)) return true;
         if (CanFall(playerController)) return true;
         if (CanDash(playerController, inputState)) return true;
@@ -15,7 +16,14 @@ namespace Game
         if (!inputState.moveForward && !inputState.moveBackward && !inputState.moveLeft && !inputState.moveRight)
         {
             // Transition to IdleState
-            playerController.ChangeState(playerController.GetIdleState());
+            if (playerController.isCombat)
+            {
+                playerController.ChangeState(playerController.GetCombatState());
+            }
+            else
+            {
+                playerController.ChangeState(playerController.GetIdleState());
+            }
             return true;
         }
 

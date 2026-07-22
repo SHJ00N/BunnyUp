@@ -1,9 +1,28 @@
 #include "Player/PlayerController.h"
 #include "Input/PlayerInputManager.h"
 #include "Player/OnAirState.h"
+#include "Common/Health.h"
 
 namespace Game
 {
+    bool OnAirState::HandleInput(PlayerController& playerController, const PlayerInputState& inputState)
+    {
+        if (playerController.GetHealth()->IsDeath())
+        {
+            playerController.ChangeState(playerController.GetDeathState());
+            return true;
+        }
+
+
+        if (playerController.hasDamage)
+        {
+            playerController.ChangeState(playerController.GetDamageState());
+            return true;
+        }
+
+        return false;
+    }
+
     bool OnAirState::IsGround(PlayerController& playerController, const PlayerInputState& inputState)
     {
         if (playerController.isGrounded)
@@ -14,7 +33,14 @@ namespace Game
 
             if (Length(movementInput) <= 0.0f)
             {
-                playerController.ChangeState(playerController.GetIdleState());
+                if (playerController.isCombat)
+                {
+                    playerController.ChangeState(playerController.GetCombatState());
+                }
+                else
+                {
+                    playerController.ChangeState(playerController.GetIdleState());
+                }
             }
             else
             {

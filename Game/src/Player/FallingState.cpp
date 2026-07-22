@@ -7,6 +7,7 @@ namespace Game
 {
     bool FallingState::HandleInput(PlayerController& playerController, const PlayerInputState& inputState)
     {
+        if (OnAirState::HandleInput(playerController, inputState)) return true;
         if (IsGround(playerController, inputState)) return true;
         if (CanAttack(playerController, inputState)) return true;
 
@@ -15,13 +16,13 @@ namespace Game
 
     void FallingState::Enter(PlayerController& playerController)
     {
-        LOG_INFO("Entering Falling State");
+        // LOG_INFO("Entering Falling State");
         playerController.GetAnimator()->PlayAnimation("Fall");
     }
 
     void FallingState::Exit(PlayerController& playerController)
     {
         OnAirState::Exit(playerController);
-        LOG_INFO("Exiting Falling State");
+        // LOG_INFO("Exiting Falling State");
     }
 }

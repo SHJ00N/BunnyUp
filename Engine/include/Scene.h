@@ -1,7 +1,7 @@
 #pragma once
 
-#include "GameObject.h"
 #include "ConstantBuffer.h"
+#include "GameObject.h"
 
 #include <memory>
 
@@ -12,6 +12,12 @@ namespace Engine
 	class Collider;
 	class EnvironmentMap;
 	class PhysicsSystem;
+
+	struct ObjectCreateRequest
+	{
+		GameObject* parent;
+		std::unique_ptr<GameObject> object;
+	};
 
 	class Scene
 	{
@@ -27,6 +33,7 @@ namespace Engine
 		void SceneExit();
 
 
+		void RequestCreateObject(GameObject* parent, std::unique_ptr<GameObject> object);
 		void FlushCreateObjectRequest();
 
 		void Render(class ConstantBufferManager& cbManager);
@@ -48,8 +55,22 @@ namespace Engine
 			T* ptr = object.get(); 
 			
 			// Set parent-child relationship
-			// m_root->AddChild(std::move(object));
-			m_requstedCreateObject.emplace_back(std::move(object));
+			m_requstedCreateObject.emplace_back(m_root.get(), std::move(object));
+			return ptr;
+		}
+
+		template<typename T, typename... Args>
+		T* CreateChildGameObject(GameObject* parent, Args&&... args)
+		{
+			// Ensure T is derived from SceneNode
+			static_assert(std::is_base_of<GameObject, T>(), "T must be a GameObject");
+
+			// Create a new GameObject and add it to the root
+			auto object = std::make_unique<T>(std::forward<Args>(args)...);
+			T* ptr = object.get();
+
+			// Set parent-child relationship
+			m_requstedCreateObject.emplace_back(parent, std::move(object));
 			return ptr;
 		}
 
@@ -73,9 +94,9 @@ namespace Engine
 		void UpdateLightBuffer(ConstantBufferManager& cbManager);
 
 		// collider management
-		void RegisterCollider(Collider* collider);
-		void UnregisterCollider(Collider* collider);
-		const std::vector<Collider*>& GetColliders() const { return m_colliders; }
+		void RegistObstacleCollider(Rp3dCollider* collider);
+		void UnregistObstacleCollider(Rp3dCollider* collider);
+		const std::vector<Rp3dCollider*>& GetObstacleColliders() const { return m_navObstacleColliders; }
 
 		// environment map management
 		void SetEnvironmentMap(std::shared_ptr<EnvironmentMap> envMap) { m_environmentMap = envMap; }
@@ -89,7 +110,7 @@ namespace Engine
 	private:
 		// scene graph root
 		std::unique_ptr<GameObject> m_root;
-		std::vector<std::unique_ptr<GameObject>> m_requstedCreateObject;
+		std::vector<ObjectCreateRequest> m_requstedCreateObject;
 		// cameras in the scene
 		std::vector<Camera*> m_cameras;
 		Camera* m_mainCamera = nullptr;
@@ -98,7 +119,7 @@ namespace Engine
 		std::vector<Light*> m_lights;
 		ConstantBufferPerLight m_cbPerLight;
 		// colliders in the scene
-		std::vector<Collider*> m_colliders;
+		std::vector<Rp3dCollider*> m_navObstacleColliders;
 		// environment map
 		std::shared_ptr<EnvironmentMap> m_environmentMap;
 

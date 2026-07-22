@@ -15,6 +15,8 @@ namespace Engine
 		Wall,
 		Trigger,
 		Object,
+		EnemyTrigger,
+		PlayerTrigger,
 		Count // layer counter
 	};
 

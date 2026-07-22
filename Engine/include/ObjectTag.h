@@ -10,6 +10,8 @@ namespace Engine
 		Ground,
 		Wall,
 		Trigger,
-		Object
+		Object,
+		EnemyHitBox,
+		PlayerHitBox,
 	};
 }

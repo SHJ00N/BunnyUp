@@ -7,6 +7,7 @@ namespace Game
 {
     bool IdleState::HandleInput(PlayerController& playerController, const PlayerInputState& inputState)
     {
+        if (OnGroundState::HandleInput(playerController, inputState)) return true;
         if (CanJump(playerController, inputState)) return true;
         if (CanFall(playerController)) return true;
         if (CanDash(playerController, inputState)) return true;
@@ -24,7 +25,8 @@ namespace Game
 
     void IdleState::Enter(PlayerController& playerController)
     {
-        LOG_INFO("Entering Idle State");
+        // LOG_INFO("Entering Idle State");
+        playerController.isCombat = false;
         playerController.GetAnimator()->PlayAnimation("Idle03");
     }
 
@@ -35,6 +37,6 @@ namespace Game
 
     void IdleState::Exit(PlayerController& playerController)
     {
-        LOG_INFO("Exiting Idle State");
+        // LOG_INFO("Exiting Idle State");
     }
 }

@@ -295,7 +295,10 @@ namespace Engine
 	void PhysicsSystem::customizeCollisionMatrix()
 	{
 		SetCollisionLayer(CollisionLayer::Player, CollisionLayer::Player, false);
+		SetCollisionLayer(CollisionLayer::Player, CollisionLayer::Enemy, false);
+		SetCollisionLayer(CollisionLayer::Player, CollisionLayer::PlayerTrigger, false);
 		SetCollisionLayer(CollisionLayer::Enemy, CollisionLayer::Enemy, false);
+		SetCollisionLayer(CollisionLayer::Enemy, CollisionLayer::EnemyTrigger, false);
 		SetCollisionLayer(CollisionLayer::Ground, CollisionLayer::Ground, false);
 		SetCollisionLayer(CollisionLayer::Wall, CollisionLayer::Wall, false);
 		SetCollisionLayer(CollisionLayer::Ground, CollisionLayer::Wall, false);

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "GameObject.h"
+#include "EventBus.h"
 
 namespace Engine
 {
@@ -10,7 +11,6 @@ namespace Engine
 
 	GameObject::~GameObject()
 	{
-		Destroy();
 	}
 
 	std::unique_ptr<GameObject> GameObject::RemoveChild(GameObject* node)
@@ -38,6 +38,21 @@ namespace Engine
 		}
 
 		return nullptr;
+	}
+
+	void GameObject::DestroyObject()
+	{
+		while (!children.empty())
+		{
+			children.back()->DestroyObject();
+		}
+
+		EventBus::GetInstance().Publish<ObjectDestroyedEvent>({ this });
+
+		if (parent)
+		{
+			parent->RemoveChild(this);
+		}
 	}
 
 	void GameObject::SetScene(Scene* scene)
@@ -95,6 +110,11 @@ namespace Engine
 			for (const auto& component : m_components)
 			{
 				component->Destroy();
+			}
+
+			for (const auto& child : children)
+			{
+				child->Destroy();
 			}
 		}
 	}

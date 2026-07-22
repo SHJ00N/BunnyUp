@@ -6,7 +6,9 @@ namespace Game
 {
     bool DashState::HandleInput(PlayerController& playerController, const PlayerInputState& inputState)
     {
-        if (Elapsed(0.1f) && CanJump(playerController, inputState)) return true;
+        if (OnGroundState::HandleInput(playerController, inputState)) return true;
+
+        if (Elapsed(0.5f) && CanJump(playerController, inputState)) return true;
         
         // cancel dash
         if (Elapsed(0.7f))
@@ -30,7 +32,15 @@ namespace Game
         // dash end
         if (Elapsed(1.0f))
         {
-            playerController.ChangeState(playerController.GetIdleState());
+            if (playerController.isCombat)
+            {
+                playerController.ChangeState(playerController.GetCombatState());
+            }
+            else
+            {
+                playerController.ChangeState(playerController.GetIdleState());
+            }
+
             return true;
         }
 
@@ -39,7 +49,8 @@ namespace Game
 
     void DashState::Enter(PlayerController& playerController)
     {
-        LOG_INFO("Entering Dash state");
+        // LOG_INFO("Entering Dash state");
+        playerController.isInvincible = true;
         playerController.GetAnimator()->PlayAnimation("Dash", true);
         ResetTimer();
 
@@ -48,7 +59,7 @@ namespace Game
 
     void DashState::Exit(PlayerController& playerController)
     {
-        LOG_INFO("Exit Dash state");
+        // LOG_INFO("Exit Dash state");
         auto rigidbody = playerController.GetRigidbody();
         auto velocity = rigidbody->GetLinearVelocity();
         rigidbody->SetLinearVelocity(Vector3(0.0f, velocity.y, 0.0f));
@@ -58,6 +69,11 @@ namespace Game
     void DashState::OnUpdate(float deltaTime, PlayerController& playerController, const PlayerInputState& inputState)
     {
         // dash process
+        if (Elapsed(0.2f))
+        {
+            playerController.isInvincible = false;
+        }
+
         auto rigidbody = playerController.GetRigidbody();
         if (!Elapsed(0.3f))
         {

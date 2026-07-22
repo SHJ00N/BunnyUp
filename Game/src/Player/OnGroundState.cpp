@@ -1,9 +1,27 @@
 #include "Player/PlayerController.h"
 #include "Input/PlayerInputManager.h"
 #include "Player/OnGroundState.h"
+#include "Common/Health.h"
 
 namespace Game
 {
+    bool OnGroundState::HandleInput(PlayerController& playerController, const PlayerInputState& inputState)
+    {
+        if (playerController.GetHealth()->IsDeath())
+        {
+            playerController.ChangeState(playerController.GetDeathState());
+            return true;
+        }
+
+        if (playerController.hasDamage)
+        {
+            playerController.ChangeState(playerController.GetDamageState());
+            return true;
+        }
+
+        return false;
+    }
+
     bool OnGroundState::CanJump(PlayerController& playerController, const struct PlayerInputState& inputState)
     {
         // Transition to Jumping state

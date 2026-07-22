@@ -7,6 +7,8 @@ namespace Game
 {
     bool JumpAttackState::HandleInput(PlayerController& playerController, const PlayerInputState& inputState)
     {
+        if (OnAirState::HandleInput(playerController, inputState)) return true;
+
         if (Elapsed(0.2f))
         {
             if (IsGround(playerController, inputState)) return true;
@@ -17,7 +19,7 @@ namespace Game
 
     void JumpAttackState::Enter(PlayerController& playerController)
     {
-        LOG_INFO("Entering JumpAttack State");
+        // LOG_INFO("Entering JumpAttack State");
         playerController.GetAnimator()->PlayAnimation("Fall");
 
         auto rigidbody = playerController.GetRigidbody();
@@ -31,7 +33,7 @@ namespace Game
     void JumpAttackState::Exit(PlayerController& playerController)
     {
         OnAirState::Exit(playerController);
-        LOG_INFO("Exiting JumpAttack State");
+        // LOG_INFO("Exiting JumpAttack State");
     }
 
     void JumpAttackState::OnUpdate(float deltaTime, PlayerController& playerController, const PlayerInputState& inputState)

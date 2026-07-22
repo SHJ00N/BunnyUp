@@ -23,7 +23,7 @@ namespace Game
 
     void RunningState::Enter(PlayerController& playerController)
     {
-        LOG_INFO("Entering Running State");
+        // LOG_INFO("Entering Running State");
         playerController.GetAnimator()->PlayAnimation("Run");
         playerController.isRunning = true;
     }
@@ -31,6 +31,6 @@ namespace Game
     void RunningState::Exit(PlayerController& playerController)
     {
         MovingState::Exit(playerController);
-        LOG_INFO("Exiting Running State");
+        // LOG_INFO("Exiting Running State");
     }
 }

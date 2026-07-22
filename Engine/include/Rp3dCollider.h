@@ -8,11 +8,13 @@
 #include "Component.h"
 #include "MathHelper.h"
 #include "CollisionMask.h"
+#include "BoundingVolume.h"
 
 #include <reactphysics3d/reactphysics3d.h>
 
 namespace Engine
 {
+	class DebugRenderer;
 	class Rp3dRigidbody;
 	class Rp3dCollider : public Component
 	{
@@ -25,6 +27,7 @@ namespace Engine
 		void OnImGui() override;
 
 		// setter
+		void SetEnable(bool value);
 		void SetLocalPosition(const Vector3& position);
 		void SetLocalRotation(const Quaternion& rotation);
 		void SetFriction(float friction);
@@ -37,6 +40,11 @@ namespace Engine
 		float GetBounciness() const { return m_bounciness; }
 		CollisionLayer GetCollisionLayer() const { return m_layer; }
 		Vector3 GetLocalPosition() const { return m_center; }
+		Vector3 GetWorldCenter() const;
+		Quaternion GetWorldRotation() const;
+
+		virtual void BuildDebugRender(DebugRenderer* renderer) const = 0;
+		virtual AABB GetBounds() const = 0;
 
 		void UpdateCollisionMask();
 
@@ -68,6 +76,8 @@ namespace Engine
 		Rp3dBoxCollider(const Vector3& pos, const Quaternion& rot, const Vector3& size, float friction, float bounce, bool trigger, CollisionLayer layer = CollisionLayer::Default);
 		// override
 		void OnImGui() override;
+		AABB GetBounds() const override;
+		void BuildDebugRender(DebugRenderer* renderer) const override;
 
 		void SetSize(const Vector3& size);
 		Vector3 GetSize() const { return m_size; }
@@ -90,6 +100,8 @@ namespace Engine
 
 		// override
 		void OnImGui() override;
+		AABB GetBounds() const override;
+		void BuildDebugRender(DebugRenderer* renderer) const override;
 
 		void SetRadius(float radius);
 		float GetRadius(float radius) const { return m_radius; }
@@ -111,6 +123,8 @@ namespace Engine
 		Rp3dCapsuleCollider(const Vector3& pos, const Quaternion& rot, float radius, float height, float friction, float bounce, bool trigger, CollisionLayer layer = CollisionLayer::Default);
 		// override
 		void OnImGui() override;
+		AABB GetBounds() const override;
+		void BuildDebugRender(DebugRenderer* renderer) const override;
 
 		void SetRadius(float radius);
 		void SetHeight(float height);

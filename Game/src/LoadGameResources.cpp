@@ -31,16 +31,22 @@ void LoadGameResources()
 	resourceManager.LoadTexture("T_Chibi_Emo_21", "resources\\models\\Chibi_Rabbit\\Emotion\\T_Chibi_Emo_21.png", Engine::TextureType::Albedo);
 
 	// Animations
-	resourceManager.LoadAnimation("Chibi_Rabbit_IdleA", "resources\\animations\\Anim_Chibi@IdleA.fbx", bunnyModel.get(), true);
-	resourceManager.LoadAnimation("Chibi_Rabbit_IdleC", "resources\\animations\\Anim_Chibi@IdleC.fbx", bunnyModel.get(), true);
-    resourceManager.LoadAnimation("Chibi_Rabbit_Idle03", "resources\\animations\\Anim_Chibi@Idle03.fbx", bunnyModel.get(), true);
-	resourceManager.LoadAnimation("Chibi_Rabbit_Walk", "resources\\animations\\Anim_Chibi@Walk.fbx", bunnyModel.get(), true);
-	resourceManager.LoadAnimation("Chibi_Rabbit_Run", "resources\\animations\\Anim_Chibi@Run.fbx", bunnyModel.get(), true);
-    resourceManager.LoadAnimation("Chibi_Rabbit_Jump", "resources\\animations\\Anim_Chibi@Jump.fbx", bunnyModel.get(), false);
-    resourceManager.LoadAnimation("Chibi_Rabbit_Jump_Place", "resources\\animations\\Anim_Chibi@Jump_In_Place.fbx", bunnyModel.get(), false);
-    resourceManager.LoadAnimation("Chibi_Rabbit_Fall", "resources\\animations\\Anim_Chibi@Quadruped_Chiling.fbx", bunnyModel.get(), true);
-    resourceManager.LoadAnimation("Chibi_Rabbit_Dash", "resources\\animations\\Anim_Chibi@Dash.fbx", bunnyModel.get(), false);
-    resourceManager.LoadAnimation("Chibi_Rabbit_Attack", "resources\\animations\\Anim_Chibi@NormalATK.fbx", bunnyModel.get(), false);
+	resourceManager.LoadAnimation("Chibi_Rabbit_IdleA", "resources\\animations\\Chibi_Rabbit\\Anim_Chibi@IdleA.fbx", bunnyModel.get(), true);
+    resourceManager.LoadAnimation("Chibi_Rabbit_IdleB", "resources\\animations\\Chibi_Rabbit\\Anim_Chibi@IdleB.fbx", bunnyModel.get(), true);
+	resourceManager.LoadAnimation("Chibi_Rabbit_IdleC", "resources\\animations\\Chibi_Rabbit\\Anim_Chibi@IdleC.fbx", bunnyModel.get(), true);
+    resourceManager.LoadAnimation("Chibi_Rabbit_Idle03", "resources\\animations\\Chibi_Rabbit\\Anim_Chibi@Idle03.fbx", bunnyModel.get(), true);
+	resourceManager.LoadAnimation("Chibi_Rabbit_Walk", "resources\\animations\\Chibi_Rabbit\\Anim_Chibi@Walk.fbx", bunnyModel.get(), true);
+	resourceManager.LoadAnimation("Chibi_Rabbit_Run", "resources\\animations\\Chibi_Rabbit\\Anim_Chibi@Run.fbx", bunnyModel.get(), true);
+    resourceManager.LoadAnimation("Chibi_Rabbit_Jump", "resources\\animations\\Chibi_Rabbit\\Anim_Chibi@Jump.fbx", bunnyModel.get(), false);
+    resourceManager.LoadAnimation("Chibi_Rabbit_Jump_Place", "resources\\animations\\Chibi_Rabbit\\Anim_Chibi@Jump_In_Place.fbx", bunnyModel.get(), false);
+    resourceManager.LoadAnimation("Chibi_Rabbit_Fall", "resources\\animations\\Chibi_Rabbit\\Anim_Chibi@Quadruped_Chiling.fbx", bunnyModel.get(), true);
+    resourceManager.LoadAnimation("Chibi_Rabbit_Dash", "resources\\animations\\Chibi_Rabbit\\Anim_Chibi@Dash.fbx", bunnyModel.get(), false);
+    resourceManager.LoadAnimation("Chibi_Rabbit_Attack", "resources\\animations\\Chibi_Rabbit\\Anim_Chibi@NormalATK.fbx", bunnyModel.get(), false);
+    resourceManager.LoadAnimation("Chibi_Rabbit_Damage", "resources\\animations\\Chibi_Rabbit\\Anim_Chibi@Damage.fbx", bunnyModel.get(), false);
+    resourceManager.LoadAnimation("Chibi_Rabbit_DeathA", "resources\\animations\\Chibi_Rabbit\\Anim_Chibi@DieA.fbx", bunnyModel.get(), false);
+    resourceManager.LoadAnimation("Chibi_Rabbit_DeathB", "resources\\animations\\Chibi_Rabbit\\Anim_Chibi@DieB.fbx", bunnyModel.get(), false);
+    resourceManager.LoadAnimation("Chibi_Rabbit_DeathC", "resources\\animations\\Chibi_Rabbit\\Anim_Chibi@DieC.fbx", bunnyModel.get(), false);
+
 
     // Winter Fell
     // ---------------------------------------------------------------------------------------------------
@@ -69,4 +75,18 @@ void LoadGameResources()
     resourceManager.LoadTexture("Snow_Floor_Normal", "resources\\textures\\Snow_Floor\\snow_01_normal_dx_2k.png", Engine::TextureType::Normal);
     resourceManager.LoadTexture("Snow_Floor_Roughness", "resources\\textures\\Snow_Floor\\snow_01_roughness_2k.png", Engine::TextureType::Default);
     resourceManager.LoadTexture("Snow_Floor_Ambient_Occlusion", "resources\\textures\\Snow_Floor\\snow_01_ambient_occlusion_2k.png", Engine::TextureType::Default);
+
+    // Monster
+    // ---------------------------------------------------------------------------------------------------
+    // Models
+    auto slime = resourceManager.LoadModel("Monster_Slime", "resources\\models\\Monster\\SlimeMesh.fbx");
+    auto turtleShell = resourceManager.LoadModel("Monster_TurtleShell", "resources\\models\\Monster\\TurtleShellMesh.fbx");
+
+    // Animations
+    resourceManager.LoadAnimation("Monster_Slime_Idle", "resources\\animations\\Monster\\Slime\\IdleNormal_Slime_Anim.fbx", slime.get(), true);
+    resourceManager.LoadAnimation("Monster_TurtleShell_Idle", "resources\\animations\\Monster\\TurtleShell\\IdleBattle_TurtleShell_Anim.fbx", turtleShell.get(), true);
+    resourceManager.LoadAnimation("Monster_TurtleShell_Walk", "resources\\animations\\Monster\\TurtleShell\\Walk_TurtleShell_Anim.fbx", turtleShell.get(), true);
+    resourceManager.LoadAnimation("Monster_TurtleShell_Attack", "resources\\animations\\Monster\\TurtleShell\\Attack01_TurtleShell_Anim.fbx", turtleShell.get(), false);
+    resourceManager.LoadAnimation("Monster_TurtleShell_Damage", "resources\\animations\\Monster\\TurtleShell\\GetHit_TurtleShell_Anim.fbx", turtleShell.get(), false);
+    resourceManager.LoadAnimation("Monster_TurtleShell_Death", "resources\\animations\\Monster\\TurtleShell\\Die_TurtleShell_Anim.fbx", turtleShell.get(), false);
 }

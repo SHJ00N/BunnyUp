@@ -158,6 +158,9 @@ namespace Engine
 				}
 			}
 
+			// clear debug drawing list
+			DebugRenderer::GetInstance().Clear();
+
 			// Update scene
 			// Fixed Update
 			while (TimeClass::ShouldPerformFixedUpdate())

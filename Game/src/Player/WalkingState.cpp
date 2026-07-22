@@ -23,7 +23,7 @@ namespace Game
 
     void WalkingState::Enter(PlayerController& playerController)
     {
-        LOG_INFO("Entering Walking State");
+        // LOG_INFO("Entering Walking State");
         playerController.GetAnimator()->PlayAnimation("Walk");
         playerController.isRunning = false;
     }
@@ -31,6 +31,6 @@ namespace Game
     void WalkingState::Exit(PlayerController& playerController)
     {
         MovingState::Exit(playerController);
-        LOG_INFO("Exiting Walking State");
+        // LOG_INFO("Exiting Walking State");
     }
 }

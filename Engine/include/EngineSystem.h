@@ -14,6 +14,7 @@
 #include "RandomClass.h"
 #include "ImGuiClass.h"
 #include "PhysicsSystem.h"
+#include "DebugRenderer.h"
 
 // Component system
 #include "Component.h"
