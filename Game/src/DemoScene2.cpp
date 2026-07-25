@@ -3,6 +3,9 @@
 #include "DemoScene2.h"
 #include "CubeController.h"
 #include "CubeGenerator.h"
+#include "Effect/EffectPoolManager.h"
+#include "Input/PlayerInputManager.h"
+#include "Enemy/NavigationManager.h"
 
 namespace Game
 {
@@ -33,8 +36,26 @@ namespace Game
         auto floorCollider = floor->AddComponent<Rp3dBoxCollider>();
         floorCollider->SetSize(Vector3(500.0f, 500.0f, 1.0f));
 
-        auto cubeGenerator = CreateGameObject<GameObject>("CubeGenerator");
-        cubeGenerator->AddComponent<Game::CubeGenerator>();
-        cubeGenerator->transform.SetLocalPosition(Vector3(0.0f, 50.0f, 0.0f));
+        // test
+        auto A = CreateGameObject<GameObject>("Hit_Effect_A");
+        A->transform.SetLocalScale(Vector3(100.0f));
+        auto ARenderer = A->AddComponent<EffectRenderer>(EffectType::Billboard);
+        ARenderer->SetSpriteSheet(ResourceManager::GetInstance().GetTexture("AHit_Effect"), 4, 4);
+        auto AEffect = A->AddComponent<EffectComponent>();
+        AEffect->SetLoop(true);
+
+        auto B = CreateGameObject<GameObject>("Hit_Effect_B");
+        B->transform.SetLocalScale(Vector3(100.0f));
+        auto BRenderer = B->AddComponent<EffectRenderer>(EffectType::Billboard);
+        BRenderer->SetSpriteSheet(ResourceManager::GetInstance().GetTexture("BHit_Effect"), 4, 4);
+        auto BEffect = B->AddComponent<EffectComponent>();
+        BEffect->SetLoop(true);
+
+        auto C = CreateGameObject<GameObject>("Smoke_Effect");
+        C->transform.SetLocalScale(Vector3(100.0f));
+        auto CRenderer = C->AddComponent<EffectRenderer>(EffectType::Normal);
+        CRenderer->SetSpriteSheet(ResourceManager::GetInstance().GetTexture("Dust_Effect"), 5, 5);
+        auto CEffect = C->AddComponent<EffectComponent>();
+        CEffect->SetLoop(true);
 	}
 }

@@ -31,6 +31,7 @@ namespace Engine
 		void SetHasRoughnessMap(bool value) { m_cbPerMaterial.hasRoughness = value; }
 		void SetHasMetallicMap(bool value) { m_cbPerMaterial.hasMetallic = value; }
 		void SetHasAOMap(bool value) { m_cbPerMaterial.hasAmbientOcclusion = value; }
+		void SetTransparent(bool value) { m_isTransparent = value; }
 
 		const std::string& GetName() const { return m_name; }
 		std::shared_ptr<Texture2D> GetTexture(UINT slot) const;
@@ -38,6 +39,7 @@ namespace Engine
 		Vector4 GetColor() const { return m_cbPerMaterial.color; }
 		float GetMetallic() const { return m_cbPerMaterial.metallic; }
 		float GetRoughness() const { return m_cbPerMaterial.roughness; }
+		bool IsTransparent() const { return m_isTransparent; }
 		
 		std::shared_ptr<Material> CreateClone() const;
 		void SetTexture(UINT slot, std::shared_ptr<Texture2D> texture);
@@ -52,6 +54,7 @@ namespace Engine
 
 		// render states
 		RenderState m_renderState;
+		bool m_isTransparent = false;
 
 		// default color
 		ConstantBufferPerMaterial m_cbPerMaterial;

@@ -24,7 +24,11 @@ namespace Engine
 		// mesh shader
 		LoadShader<VertexPNUT>("Default_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\BasicShader.hlsl");
 		LoadShader<VertexPNUT>("Textured_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\TextureShader.hlsl");
+		LoadShader<VertexPNUT>("Forward_Textured_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\ForwardTexturedShader.hlsl");
+		LoadShader<VertexPNUT>("Screen_Billboard_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\ScreenBillboardShader.hlsl");
+		LoadShader<VertexPNUT>("Normal_Effect_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\NormalEffectShader.hlsl");
 		LoadShader<VertexSkin>("Skinning_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\SkinningShader.hlsl");
+		LoadShader<VertexSkin>("Forward_Skinning_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\ForwardSkinningShader.hlsl");
 		// render target shader
 		LoadShader<VertexPU>("PBR_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\PBR_ToonShader.hlsl");
 		LoadShader<VertexPU>("PostProcess_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\PostProcessShader.hlsl");
@@ -50,11 +54,31 @@ namespace Engine
 		CreateMesh<VertexPNUT>("Primitive_cube", cubeData.vertices, cubeData.indices);
 		auto fullScreenQuadData = PrimitiveMeshFactory::CreateFullScreenQuad();
 		CreateMesh<VertexPU>("Primitive_fullscreen_quad", fullScreenQuadData.vertices, fullScreenQuadData.indices);
+		auto floorQuadData = PrimitiveMeshFactory::CreateFloorQuad();
+		CreateMesh<VertexPNUT>("Primitive_floor_quad", floorQuadData.vertices, floorQuadData.indices);
 
 		// Create materials
 		auto defaultMaterial = CreateMaterial("Default_material");
 		defaultMaterial->SetShader(GetShader("Default_shader"));
 		defaultMaterial->SetRenderState(RenderStateManager::GetInstance().GetState("Opaque"));
+
+		auto	transparentMaterial = CreateMaterial("Transparent_material");
+		transparentMaterial->SetShader(GetShader("Forward_Textured_shader"));
+		transparentMaterial->SetRenderState(RenderStateManager::GetInstance().GetState("Transparent"));
+		transparentMaterial->SetTransparent(true);
+		// set default map
+		transparentMaterial->SetTexture(0, ResourceManager::GetInstance().GetTexture("Default_White"));	// albedo
+		transparentMaterial->SetSampler(0, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+		transparentMaterial->SetTexture(1, ResourceManager::GetInstance().GetTexture("Default_Normal"));		// normal
+		transparentMaterial->SetSampler(1, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+		transparentMaterial->SetTexture(2, ResourceManager::GetInstance().GetTexture("Default_White"));	// roughness
+		transparentMaterial->SetSampler(2, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+		transparentMaterial->SetTexture(3, ResourceManager::GetInstance().GetTexture("Default_Black"));	// metallic
+		transparentMaterial->SetSampler(3, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+		transparentMaterial->SetTexture(4, ResourceManager::GetInstance().GetTexture("Default_White"));	// ambient occlusion
+		transparentMaterial->SetSampler(4, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+		transparentMaterial->SetTexture(5, ResourceManager::GetInstance().GetTexture("Default_White"));	// opacity
+		transparentMaterial->SetSampler(5, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
 
 		auto texturedMaterial = CreateMaterial("Textured_material");
 		texturedMaterial->SetShader(GetShader("Textured_shader"));
@@ -72,6 +96,22 @@ namespace Engine
 		texturedMaterial->SetSampler(4, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
 		texturedMaterial->SetTexture(5, ResourceManager::GetInstance().GetTexture("Default_White"));	// opacity
 		texturedMaterial->SetSampler(5, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+
+		// screen billboard material
+		auto screenBillboardMaterial = CreateMaterial("Screen_Billboard_material");
+		screenBillboardMaterial->SetShader(GetShader("Screen_Billboard_shader"));
+		screenBillboardMaterial->SetRenderState(RenderStateManager::GetInstance().GetState("Transparent"));
+		screenBillboardMaterial->SetTransparent(true);
+		screenBillboardMaterial->SetTexture(0, ResourceManager::GetInstance().GetTexture("Default_White"));
+		screenBillboardMaterial->SetSampler(0, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
+
+		// horizontal billboard material
+		auto normalEffectMaterial = CreateMaterial("Normal_Effect_material");
+		normalEffectMaterial->SetShader(GetShader("Normal_Effect_shader"));
+		normalEffectMaterial->SetRenderState(RenderStateManager::GetInstance().GetState("Transparent"));
+		normalEffectMaterial->SetTransparent(true);
+		normalEffectMaterial->SetTexture(0, ResourceManager::GetInstance().GetTexture("Default_White"));
+		normalEffectMaterial->SetSampler(0, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
 	}
 
 	void ResourceManager::Clear()

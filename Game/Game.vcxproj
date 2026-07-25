@@ -34,6 +34,8 @@
     <ClCompile Include="src\CubeController.cpp" />
     <ClCompile Include="src\CubeGenerator.cpp" />
     <ClCompile Include="src\DemoScene2.cpp" />
+    <ClCompile Include="src\Effect\EffectObject.cpp" />
+    <ClCompile Include="src\Effect\EffectPoolManager.cpp" />
     <ClCompile Include="src\Enemy\AStar.cpp" />
     <ClCompile Include="src\Enemy\BAttack.cpp" />
     <ClCompile Include="src\Enemy\BChaseTarget.cpp" />
@@ -79,12 +81,14 @@
     <ClInclude Include="include\BehaviorTree\Selector.h" />
     <ClInclude Include="include\BehaviorTree\Sequence.h" />
     <ClInclude Include="include\CameraController.h" />
+    <ClInclude Include="include\Effect\EffectPoolManager.h" />
     <ClInclude Include="include\Common\Health.h" />
     <ClInclude Include="include\Common\HitBox.h" />
     <ClInclude Include="include\CubeController.h" />
     <ClInclude Include="include\CubeGenerator.h" />
     <ClInclude Include="include\DemoScene1.h" />
     <ClInclude Include="include\DemoScene2.h" />
+    <ClInclude Include="include\Effect\EffectObject.h" />
     <ClInclude Include="include\Enemy\AStar.h" />
     <ClInclude Include="include\BehaviorTree\BehaviorNode.h" />
     <ClInclude Include="include\BehaviorTree\BehaviorTree.h" />

@@ -45,6 +45,7 @@ namespace Engine
 		void SetLinearDamping(float value);
 		void SetAngularLock(bool x, bool y, bool z);
 		void SetMass(float mass);
+		void SetActive(bool value);
 
 		const uint64_t GetId() const { return id; }
 		BodyType GetType() const { return m_type; }

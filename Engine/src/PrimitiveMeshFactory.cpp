@@ -26,6 +26,29 @@ namespace Engine
         return data;
 	}
 
+    PrimitiveMeshData<VertexPNUT> PrimitiveMeshFactory::CreateFloorQuad()
+    {
+        // Create quad geometry
+        std::vector<VertexPNUT> Vertices =
+        {
+            {Vector3{-0.5f,  0.0f, -0.5f}, Vector3{ 0.0f,  1.0f,  0.0f}, Vector2{0, 1}, Vector4{ 1.0f,  0.0f,  0.0f,  1.0f}},
+            {Vector3{-0.5f,  0.0f,  0.5f}, Vector3{ 0.0f,  1.0f,  0.0f}, Vector2{0, 0}, Vector4{ 1.0f,  0.0f,  0.0f,  1.0f}},
+            {Vector3{ 0.5f,  0.0f,  0.5f}, Vector3{ 0.0f,  1.0f,  0.0f}, Vector2{1, 0}, Vector4{ 1.0f,  0.0f,  0.0f,  1.0f}},
+            {Vector3{ 0.5f,  0.0f, -0.5f}, Vector3{ 0.0f,  1.0f,  0.0f}, Vector2{1, 1}, Vector4{ 1.0f,  0.0f,  0.0f,  1.0f}}
+        };
+        // Create index buffer based on counter-clock wise
+        std::vector<uint32_t> Indices =
+        {
+            0, 2, 1,
+            2, 0, 3
+        };
+
+        PrimitiveMeshData<VertexPNUT> data;
+        data.vertices = Vertices;
+        data.indices = Indices;
+        return data;
+    }
+
 	PrimitiveMeshData<VertexPNUT> PrimitiveMeshFactory::CreateCube()
 	{
         // Create cube geometry

@@ -2,6 +2,7 @@
 #include "Player/PlayerController.h"
 #include "Player/MovingState.h"
 #include "Input/PlayerInputManager.h"
+#include "Effect/EffectPoolManager.h"
 
 namespace Game
 {
@@ -28,6 +29,13 @@ namespace Game
         rigidbody->SetLinearVelocity(Vector3(0.0f, 0.0f, 0.0f));
         float impulse = playerController.jumpAttackImpulse;
         playerController.GetRigidbody()->AddImpulse(Vector3(forward.x * impulse, impulse, forward.z * impulse));
+
+        const auto& transform = playerController.ownerGameObject->transform;
+        Vector3 position = transform.GetWorldPosition();
+        position.y += 7.5f;
+        Quaternion rotation = transform.GetWorldRotationQuaternion();
+        rotation = rotation * AngleAxis(-90.0f, transform.GetRight());
+        EffectPoolManager::GetInstance().GetPool(EffectObjectType::Dust, position, QuaternionToEuler(rotation), Vector3(20.0f));
     }
 
     void JumpAttackState::Exit(PlayerController& playerController)

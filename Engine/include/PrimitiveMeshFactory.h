@@ -17,6 +17,7 @@ namespace Engine
 	{
 	public:
 		static PrimitiveMeshData<VertexPNUT> CreateQuad();
+		static PrimitiveMeshData<VertexPNUT> CreateFloorQuad();
 		static PrimitiveMeshData<VertexPNUT> CreateCube();
 		static PrimitiveMeshData<VertexPU> CreateFullScreenQuad();
 	};

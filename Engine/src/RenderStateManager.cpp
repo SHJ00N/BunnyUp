@@ -79,8 +79,8 @@ namespace Engine
 		// Transparent
 		RenderState transparent;
 		transparent.blend = m_blendStates[BlendType::Alpha];
-		transparent.depth = m_depthStates[DepthType::ReadWrite];
-		transparent.raster = m_rasterStates[RasterType::Back];
+		transparent.depth = m_depthStates[DepthType::Read];
+		transparent.raster = m_rasterStates[RasterType::None];
 		m_states["Transparent"] = transparent;
 
 		// disable depth and cull

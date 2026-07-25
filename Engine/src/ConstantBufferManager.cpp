@@ -46,6 +46,10 @@ namespace Engine
         CD3D11_BUFFER_DESC cbPrefilteredEnvMapDesc(sizeof(ConstantBufferPrefilteredEnvMap), D3D11_BIND_CONSTANT_BUFFER);
         hr = device->CreateBuffer(&cbPrefilteredEnvMapDesc, nullptr, m_pConstantBufferPrefilteredEnvMap.GetAddressOf());
         if (FAILED(hr)) return hr;
+
+        CD3D11_BUFFER_DESC cbPerSpriteSheetDesc(sizeof(ConstantBufferPerSpriteSheet), D3D11_BIND_CONSTANT_BUFFER);
+        hr = device->CreateBuffer(&cbPerSpriteSheetDesc, nullptr, m_pConstantBufferPerSpriteSheet.GetAddressOf());
+        if (FAILED(hr)) return hr;
         
 		return hr;
 	}
@@ -78,5 +82,10 @@ namespace Engine
     void ConstantBufferManager::UpdatePrefilteredEnvMap(const ConstantBufferPrefilteredEnvMap& data)
     {
         UpdateConstantBuffer(m_pConstantBufferPrefilteredEnvMap.Get(), CbSlot::PrefilteredEnvMap, data);
+    }
+
+    void ConstantBufferManager::UpdatePerSpriteSheet(const ConstantBufferPerSpriteSheet& data)
+    {
+        UpdateConstantBuffer(m_pConstantBufferPerSpriteSheet.Get(), CbSlot::PerSpriteSheet, data);
     }
 }

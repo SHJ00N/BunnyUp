@@ -38,7 +38,7 @@ namespace Engine
 			return nullptr;
 		}
 
-		int GetSceneCount() const { return m_registryIndex.size(); }
+		int GetSceneCount() const { return static_cast<int>(m_registryIndex.size()); }
 		std::string GetSceneName(int index)
 		{
 			assert(index < m_registryIndex.size() && "Index is out of range");

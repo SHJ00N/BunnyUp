@@ -59,4 +59,23 @@ namespace Engine
 			context->DrawIndexed(static_cast<UINT>(sub.indexCount), sub.indexStart, 0);
 		}
 	}
+
+	void Mesh::RenderSubMesh(size_t subMeshIndex, const std::vector<std::shared_ptr<Material>>& materials, ConstantBufferManager& cbManager) const
+	{
+		assert(m_pVertexBuffer && m_pIndexBuffer);
+		assert(subMeshIndex < subMeshes.size());
+
+		ID3D11DeviceContext* context = D3DManager::GetInstance().GetDeviceContext();
+		UINT offset = 0;
+
+		context->IASetVertexBuffers(0, 1, m_pVertexBuffer.GetAddressOf(), &m_stride, &offset);
+		context->IASetIndexBuffer(m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+		const auto& sub = subMeshes[subMeshIndex];
+		auto& mat = materials[sub.materialIndex];
+		mat->Bind(cbManager);
+
+		context->IASetPrimitiveTopology(sub.topology);
+		context->DrawIndexed(static_cast<UINT>(sub.indexCount), sub.indexStart, 0);
+	}
 }

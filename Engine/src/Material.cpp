@@ -24,6 +24,7 @@ namespace Engine
 		mat->m_renderState = m_renderState;
         mat->m_samplers = m_samplers;
         mat->m_name = m_name;
+        mat->m_isTransparent = m_isTransparent;
 
         mat->SetColor(m_cbPerMaterial.color);
         mat->SetMetallic(m_cbPerMaterial.metallic);

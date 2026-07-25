@@ -121,6 +121,8 @@ namespace Engine
 		bool IsAncestorOf(const GameObject* node) const;
 		GameObject* GetParent() const { return parent; }
 		ObjectTag GetTag() const { return m_tag; }
+		void SetActive(bool value);
+		bool IsActive() const { return m_isActive; }
 
 		// physics event handlers
 		void OnTriggerEnter(Rp3dCollider* other);
@@ -140,6 +142,7 @@ namespace Engine
 
 	protected:
 		std::string m_name;
+		bool m_isActive = true;
 		bool m_isDestroyed = false;
 
 		ObjectTag m_tag = ObjectTag::None;

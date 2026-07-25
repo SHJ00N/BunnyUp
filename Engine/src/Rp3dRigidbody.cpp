@@ -137,6 +137,11 @@ namespace Engine
 		m_mass = mass;
 	}
 
+	void Rp3dRigidbody::SetActive(bool value)
+	{
+		m_body->setIsActive(value);
+	}
+
 	void Rp3dRigidbody::AddForce(const Vector3& force)
 	{
 		m_body->applyLocalForceAtCenterOfMass(rp3d::Vector3(force.x, force.y, force.z));

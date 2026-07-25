@@ -65,10 +65,15 @@ float4 PSMain(PS_INPUT input) : SV_TARGET
     float2 texelSize = 1.0f / screenSize;
     
     float3 sceneColor = fullScreenQuad.Sample(linearClamp, input.UV).xyz;
+     // HDR tonemapping
+    sceneColor = sceneColor / (sceneColor + 1.0f);
+    // gamma correct
+    sceneColor = pow(sceneColor, 1.0f / 2.2f);
+    
     // apply Sobel filter to calculate edge strength
     float edgeStrength = CalculateSobelFilter(input.UV, texelSize);
     edgeStrength = smoothstep(0.05f, 0.25f, edgeStrength);
     float3 finalColor = lerp(sceneColor, float3(0.3f, 0.3f, 0.3f), edgeStrength);
-    
+
     return float4(finalColor, 1.0f);
 }

@@ -15,7 +15,6 @@ namespace Engine
 		void CurrentSceneUpdate(float dt);
 		void CurrentSceneFixedUpdate(float fdt);
 		void CurrentSceneObjectDestroy();
-		void CurrentSceneRender(class ConstantBufferManager& cbManager);
 
 		void Initialize();
 		void Clear();

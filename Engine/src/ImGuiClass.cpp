@@ -163,6 +163,11 @@ namespace Engine
 		{
 			ImGui::Text("Name: %s", m_selectedGameObject->GetName().c_str());
 
+			// active
+			bool isActive = m_selectedGameObject->IsActive();
+			ImGui::Checkbox("Active", &isActive);
+			m_selectedGameObject->SetActive(isActive);
+
 			// Tag
 			const char* tags[] =
 			{

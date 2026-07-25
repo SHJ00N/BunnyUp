@@ -7,6 +7,11 @@ void LoadGameResources()
     // Environment map
     resourceManager.LoadEnvironmentMap("Sky_EnvMap", "resources\\textures\\FS002_Day_Sunless.PNG");
 
+    // Effect
+    resourceManager.LoadTexture("AHit_Effect", "resources\\textures\\Hit-Yellow-A.png");
+    resourceManager.LoadTexture("BHit_Effect", "resources\\textures\\Hit-Yellow-B.png");
+    resourceManager.LoadTexture("Dust_Effect", "resources\\textures\\vapor_cloud.png");
+
     // Chibi_Rabbit
     // ---------------------------------------------------------------------------------------------------
     // Models

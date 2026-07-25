@@ -85,7 +85,7 @@ namespace Engine
 
 	void Scene::traverseUpdate(GameObject* node, float dt)
 	{
-		if (!node || node->IsDestroyed())
+		if (!node || node->IsDestroyed() || !node->IsActive())
 		{
 			return;
 		}
@@ -99,7 +99,7 @@ namespace Engine
 
 	void Scene::traverseFixedUpdate(GameObject* node, float fdt)
 	{
-		if(!node || node->IsDestroyed())
+		if(!node || node->IsDestroyed() || !node->IsActive())
 		{
 			return;
 		}
@@ -152,8 +152,11 @@ namespace Engine
 		m_requstedCreateObject.clear();
 	}
 
-	void Scene::Render(ConstantBufferManager& cbManager)
+	void Scene::CollectRenderCall(ConstantBufferManager& cbManager)
 	{
+		// clear render queue
+		m_renderQueue.Clear();
+
 		if (!m_mainCamera)
 		{
 			// LOG_WARNING("Main camera does not exist");
@@ -165,14 +168,35 @@ namespace Engine
 
 		UpdateLightBuffer(cbManager);
 
+		// collect draw call from renderer component
 		for (auto& child : m_root->GetChildren())
 		{
-			traverseRender(child.get(), cbManager, camFrustum);
+			traverseRender(child.get(), camFrustum);
 		}
 	}
 
-	void Scene::traverseRender(GameObject* node, ConstantBufferManager& cbManager, Frustum& camFrustum)
+	void Scene::RenderOpaque(ConstantBufferManager& cbManager)
 	{
+		// draw opaque meshes
+		for (const auto& opaqueItem : m_renderQueue.GetOpaqueQueue())
+		{
+			opaqueItem.renderer->Draw(opaqueItem, cbManager);
+		}
+	}
+
+	void Scene::RenderTransparent(ConstantBufferManager& cbManager)
+	{
+		// draw transparent meshes
+		for (const auto& transparentItem : m_renderQueue.GetTransparentQueue())
+		{
+			transparentItem.renderer->Draw(transparentItem, cbManager);
+		}
+	}
+
+	void Scene::traverseRender(GameObject* node, Frustum& camFrustum)
+	{
+		if (!node->IsActive()) return;
+
 		for (auto& component : node->GetComponents())
 		{
 			auto renderable = dynamic_cast<RendererComponent*>(component.get());
@@ -182,13 +206,13 @@ namespace Engine
 
 				if (!bound || bound->IsOnFrustum(camFrustum, renderable->ownerGameObject->transform))
 				{
-					renderable->Render(cbManager);
+					renderable->Submit(m_renderQueue);
 				}
 			}
 		}
 		for (auto& child : node->GetChildren())
 		{
-			traverseRender(child.get(), cbManager, camFrustum);
+			traverseRender(child.get(), camFrustum);
 		}
 	}
 

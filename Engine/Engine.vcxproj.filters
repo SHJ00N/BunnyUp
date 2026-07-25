@@ -25,9 +25,6 @@
     <Filter Include="소스 파일\RenderPipeline">
       <UniqueIdentifier>{20f699d3-2752-48b3-9640-b06791257c05}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\RenderPipeline\RenderPasses">
-      <UniqueIdentifier>{f8142412-eb69-460d-b7fb-f484cd6f7df4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="헤더 파일\RenderPipeline">
       <UniqueIdentifier>{c79692c3-70b1-4193-bdb4-5a5ed4c3b9aa}</UniqueIdentifier>
     </Filter>
@@ -279,6 +276,18 @@
     <ClInclude Include="include\Socket.h">
       <Filter>헤더 파일\Components</Filter>
     </ClInclude>
+    <ClInclude Include="include\EffectRenderer.h">
+      <Filter>헤더 파일\Components\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderQueue.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SpriteSheet.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EffectComponent.h">
+      <Filter>헤더 파일\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\D3DManager.cpp">
@@ -452,6 +461,18 @@
     <ClCompile Include="src\Socket.cpp">
       <Filter>소스 파일\Components</Filter>
     </ClCompile>
+    <ClCompile Include="src\EffectRenderer.cpp">
+      <Filter>소스 파일\Components\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RendererComponent.cpp">
+      <Filter>소스 파일\Components\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpriteSheet.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EffectComponent.cpp">
+      <Filter>소스 파일\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\BasicShader.hlsl">
@@ -487,5 +508,22 @@
     <FxCompile Include="shaders\TextureShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\ScreenBillboardShader.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\ForwardTexturedShader.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\ForwardSkinningShader.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\NormalEffectShader.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\Common\Lighting.hlsli">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 
 #include "ConstantBuffer.h"
 #include "GameObject.h"
+#include "RenderQueue.h"
 
 #include <memory>
 
@@ -12,6 +13,7 @@ namespace Engine
 	class Collider;
 	class EnvironmentMap;
 	class PhysicsSystem;
+	class ConstantBufferManager;
 
 	struct ObjectCreateRequest
 	{
@@ -35,9 +37,11 @@ namespace Engine
 
 		void RequestCreateObject(GameObject* parent, std::unique_ptr<GameObject> object);
 		void FlushCreateObjectRequest();
-
-		void Render(class ConstantBufferManager& cbManager);
-
+		
+		void CollectRenderCall(ConstantBufferManager& cbManager);
+		void RenderOpaque(ConstantBufferManager& cbManager);
+		void RenderTransparent(ConstantBufferManager& cbManager);
+			
 		GameObject* GetRoot() { return m_root.get(); }
 		// Read-only version for external access
 		const GameObject* GetRoot() const { return m_root.get(); }
@@ -129,12 +133,15 @@ namespace Engine
 		// physics system
 		std::unique_ptr<PhysicsSystem> m_physicsSystem;
 
+		// Render queue
+		RenderQueue m_renderQueue;
+
 		// Helper functions for traversing the scene graph
 		void traverseAwake(GameObject* node);
 		void traverseStart(GameObject* node);
 		void traverseUpdate(GameObject* node, float dt);
 		void traverseFixedUpdate(GameObject* node, float fdt);
-		void traverseRender(GameObject* node, ConstantBufferManager& renderer, struct Frustum& camFrustum);
+		void traverseRender(GameObject* node, struct Frustum& camFrustum);
 		void traverseDestroyed(GameObject* node);
 	};
 }

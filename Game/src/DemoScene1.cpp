@@ -9,6 +9,7 @@
 #include "Enemy/EnemyBehaviorTree.h"
 #include "Enemy/EnemyController.h"
 #include "Common/Health.h"
+#include "Effect/EffectPoolManager.h"
 
 namespace Game
 {
@@ -29,6 +30,9 @@ namespace Game
 
         auto playerInputManager = CreateGameObject<GameObject>("PlayerInputManager");
         playerInputManager->AddComponent<PlayerInputManager>();
+
+        auto effectPoolManager = CreateGameObject<GameObject>("EffectPoolManager");
+        effectPoolManager->AddComponent<EffectPoolManager>();
 
         // Directional Light
         auto directionalLight = CreateGameObject<GameObject>("DirectionalLight");

@@ -2,6 +2,7 @@
 #include "Player/PlayerController.h"
 #include "Enemy/EnemyController.h"
 #include "Common/Health.h"
+#include "Effect/EffectPoolManager.h"
 
 namespace Game
 {
@@ -33,6 +34,12 @@ namespace Game
                 if (!playerHealth) return;
                 
                 playerHealth->TakeDamage(enemyController->attackPower);
+
+                // effect
+                const auto& transform = playerController->ownerGameObject->transform;
+                auto position = transform.GetWorldPosition();
+                position.y += 10.0f;
+                EffectPoolManager::GetInstance().GetPool(EffectObjectType::PlayerHit, position, Vector3(0.0f), Vector3(25.0f));
             }
         }
     }

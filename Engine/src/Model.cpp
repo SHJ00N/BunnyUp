@@ -193,8 +193,6 @@ namespace Engine
 			aiMaterial* aiMat = scene->mMaterials[i];
 			auto mat = std::make_unique<Material>();
 
-			bool isTransparent = false;
-
 			// set default map
 			mat->SetTexture(0, ResourceManager::GetInstance().GetTexture("Default_White"));	// albedo
 			mat->SetSampler(0, SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp));
@@ -263,17 +261,24 @@ namespace Engine
 			// Opacity
 			if (aiMat->GetTexture(aiTextureType_OPACITY, 0, &path) == AI_SUCCESS)
 			{
-				isTransparent = true;
+				mat->SetTransparent(true);
 
 				std::string fullPath = m_directory + '\\' + path.C_Str();
 				loadMaterialTexture(mat.get(), fullPath, 5, TextureType::Default);
 			}
 
-			// set shader
-			mat->SetShader(m_boneCounter ? ResourceManager::GetInstance().GetShader("Skinning_shader") : ResourceManager::GetInstance().GetShader("Textured_shader"));
-			// set render state
-			mat->SetRenderState(RenderStateManager::GetInstance().GetState(isTransparent ? "Transparent" : "Opaque"));
-
+			// set shader and render state
+			if (mat->IsTransparent())
+			{
+				mat->SetShader(m_boneCounter ? ResourceManager::GetInstance().GetShader("Forward_Skinning_shader") : ResourceManager::GetInstance().GetShader("Forward_Textured_shader"));
+				mat->SetRenderState(RenderStateManager::GetInstance().GetState("Transparent"));
+			}
+			else
+			{
+				mat->SetShader(m_boneCounter ? ResourceManager::GetInstance().GetShader("Skinning_shader") : ResourceManager::GetInstance().GetShader("Textured_shader"));
+				mat->SetRenderState(RenderStateManager::GetInstance().GetState("Opaque"));
+			}
+			
 			m_materials[i] = std::move(mat);
 		}
 	}

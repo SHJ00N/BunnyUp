@@ -2,6 +2,7 @@
 #include "Player/PlayerController.h"
 #include "Player/MovingState.h"
 #include "Input/PlayerInputManager.h"
+#include "Effect/EffectPoolManager.h"
 
 namespace Game
 {
@@ -20,6 +21,11 @@ namespace Game
         playerController.GetAnimator()->PlayAnimation("Jump_Place");
         playerController.GetRigidbody()->AddImpulse(Vector3(0.0f, playerController.jumpImpulse, 0.0f)); // Apply upward impulse for jump
         playerController.isGrounded = false;
+
+        const auto& transform = playerController.ownerGameObject->transform;
+        auto position = transform.GetWorldPosition();
+        position.y += 1.0f;
+        EffectPoolManager::GetInstance().GetPool(EffectObjectType::Dust, position, Vector3(0.0f), Vector3(20.0f));
     }
 
     void JumpingState::Exit(PlayerController& playerController)

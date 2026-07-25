@@ -10,6 +10,24 @@ cbuffer ViewProjectionConstantBuffer : register(b0)
     matrix InvProjection; // inverse projection matrix
 };
 
+cbuffer ModelConstantBuffer : register(b1)
+{
+    matrix mWorld;
+    matrix mNormalMatrix;
+}
+
+cbuffer MaterialConstantBuffer : register(b3)
+{
+    float4 mColor;
+    float mRoughness;
+    float Metallic;
+    uint HasNormal;
+    uint HasRougness;
+    uint HasMetallic;
+    uint HasAmbientOcclusion;
+    float PaddingMat[2];
+}
+
 cbuffer LightConstantBuffer : register(b4)
 {
     Light Lights[256];
@@ -28,52 +46,93 @@ cbuffer PrefilteredEnvMapConstantBuffer : register(b5)
 struct VS_INPUT
 {
     float3 vPos : POSITION;
+    float3 vNormal : NORMAL;
     float2 vUV : TEXCOORD0;
+    float4 vTangent : TANGENT;
 };
 
 struct PS_INPUT
 {
     float4 Position : SV_POSITION; // interpolated vertex position (system value)
     float2 UV : TEXCOORD0; // interpolated diffuse color
+    float3 Normal : TEXCOORD1;
+    float3 Tangent : TEXCOORD2;
+    float3 Bitangent : TEXCOORD3;
+    float4 WorldPosition : TEXCOORD4;
 };
 
-PS_INPUT VSMain(VS_INPUT input)
+PS_INPUT VSMain(VS_INPUT input) // main is the default function name
 {
     PS_INPUT Output;
+
+    float4 pos = float4(input.vPos, 1.0f);
+
+    // Transform the position from object space to homogeneous projection space
+    pos = mul(pos, mWorld);
+    Output.WorldPosition = pos;
+    pos = mul(pos, View);
+    pos = mul(pos, Projection);
+    Output.Position = pos;
+
+    // Just pass through the color data
     Output.UV = input.vUV;
-    Output.Position = float4(input.vPos, 1.0f);
     
+    // texture coordinate
+    Output.UV = input.vUV;
+
+    // normal, tangent, bitanget
+    float3 N = mul(input.vNormal, (float3x3) mNormalMatrix);
+    float3 T = mul(input.vTangent.xyz, (float3x3) mNormalMatrix);
+    
+    N = normalize(N);
+    T = normalize(T - dot(T, N) * N);
+    float3 B = cross(N, T) * input.vTangent.w;
+    
+    Output.Normal = N;
+    Output.Tangent = T;
+    Output.Bitangent = B;
+
     return Output;
 }
 
-Texture2D positionMap : register(t0);
+Texture2D texture0 : register(t0);
+SamplerState sampler0 : register(s0);
 Texture2D normalMap : register(t1);
-Texture2D albedoMap : register(t2);
-Texture2D metallicRoughnessAoMap : register(t3);
-Texture2D depthMap : register(t4);
-TextureCube irradianceMap : register(t5);
-TextureCube prefilteredMap : register(t6);
-Texture2D brdfLUT : register(t7);
-SamplerState linearClamp : register(s0);
-SamplerState pointClamp : register(s1);
+SamplerState sampler1 : register(s1);
+Texture2D roughnessMap : register(t2);
+SamplerState sampler2 : register(s2);
+Texture2D metallicMap : register(t3);
+SamplerState sampler3 : register(s3);
+Texture2D ambientOcclusionMap : register(t4);
+SamplerState sampler4 : register(s4);
+Texture2D opacityMap : register(t5);
+SamplerState sampler5 : register(s5);
+
+TextureCube irradianceMap : register(t10);
+TextureCube prefilteredMap : register(t11);
+Texture2D brdfLUT : register(t12);
+SamplerState linearClamp : register(s10);
 
 float4 PSMain(PS_INPUT input) : SV_TARGET
 {
-    float depth = depthMap.Sample(pointClamp, input.UV).r;
-    if(depth >= 1.0f) // if depth is 1.0, it means this pixel is background, discard it for better performance
-        discard;
+    // lighting value
+    float3 albedo = texture0.Sample(sampler0, input.UV).rgb;
+    float alpha = opacityMap.Sample(sampler5, input.UV).a;
+    float metallic = HasMetallic == 1 ? metallicMap.Sample(sampler3, input.UV).r : Metallic;
+    float roughness = HasRougness == 1 ? clamp(roughnessMap.Sample(sampler2, input.UV).r, 0.04f, 1.0f) : mRoughness;
+    float ao = HasAmbientOcclusion == 1 ? ambientOcclusionMap.Sample(sampler4, input.UV).r : 1.0f;
     
-    float4 sampledAlbedo = albedoMap.Sample(linearClamp, input.UV);
-    float3 albedo = sampledAlbedo.rgb;
-    float alpha = sampledAlbedo.a;
-    float metallic = metallicRoughnessAoMap.Sample(linearClamp, input.UV).r;
-    float roughness = clamp(metallicRoughnessAoMap.Sample(linearClamp, input.UV).g, 0.04f, 1.0f);
-    float ao = metallicRoughnessAoMap.Sample(linearClamp, input.UV).b;
-    
-    // get world position from position map
-    float3 worldPos = positionMap.Sample(linearClamp, input.UV).rgb;
-    // get normal from normal map
-    float3 normal = normalize(normalMap.Sample(linearClamp, input.UV).xyz * 2.0f - 1.0f);
+    float3 worldPos = input.WorldPosition.xyz;
+    float3 normal;
+    if (HasNormal == 1)
+    {
+        normal = normalize(normalMap.Sample(sampler1, input.UV).rgb * 2.0f - 1.0f); // convert from [0, 1] to [-1, 1]
+        normal = normalize(mul(normal, float3x3(input.Tangent, input.Bitangent, input.Normal)));
+    }
+    else
+    {
+        normal = normalize(float3(input.Normal));
+    }
     float3 viewDir = normalize(CameraPosition.xyz - worldPos);
     float3 reflection = reflect(-viewDir, normal);
     

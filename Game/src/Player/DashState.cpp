@@ -1,6 +1,7 @@
 #include "Player/DashState.h"
 #include "Player/PlayerController.h"
 #include "Input/PlayerInputManager.h"
+#include "Effect/EffectPoolManager.h"
 
 namespace Game
 {
@@ -55,6 +56,13 @@ namespace Game
         ResetTimer();
 
         m_direction = playerController.ownerGameObject->transform.GetForward();
+
+        const auto& transform = playerController.ownerGameObject->transform;
+        Vector3 position = transform.GetWorldPosition();
+        position.y += 7.5f;
+        Quaternion rotation = transform.GetWorldRotationQuaternion();
+        rotation = rotation * AngleAxis(-90.0f, transform.GetRight());
+        EffectPoolManager::GetInstance().GetPool(EffectObjectType::Dust, position, QuaternionToEuler(rotation), Vector3(20.0f));
     }
 
     void DashState::Exit(PlayerController& playerController)

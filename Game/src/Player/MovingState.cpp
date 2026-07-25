@@ -2,6 +2,7 @@
 #include "Player/PlayerController.h"
 #include "Player/IdleState.h"
 #include "Input/PlayerInputManager.h"
+#include "Effect/EffectPoolManager.h"
 
 namespace Game
 {
@@ -53,6 +54,15 @@ namespace Game
             const auto& currentRotation = transform.GetLocalQuaternionRotation();
             auto rotation = Slerp(currentRotation, targetRotation, 10.0f * deltaTime);
             transform.SetLocalRotation(rotation);
+        }
+
+        if (Elapsed(playerController.isRunning ? 0.2f : 0.5f))
+        {
+            const auto& transform = playerController.ownerGameObject->transform;
+            auto position = transform.GetWorldPosition();
+            position.y += 1.0f;
+            EffectPoolManager::GetInstance().GetPool(EffectObjectType::Dust, position, Vector3(0.0f), Vector3(7.5f));
+            ResetTimer();
         }
     }
 

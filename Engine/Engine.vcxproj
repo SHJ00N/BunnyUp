@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\EffectRenderer.h" />
     <ClInclude Include="include\BoundingVolume.h" />
     <ClInclude Include="include\BVHNode.h" />
     <ClInclude Include="include\Collider_Legacy.h" />
@@ -28,6 +29,7 @@
     <ClInclude Include="include\Collision_Legacy.h" />
     <ClInclude Include="include\ObjectTag.h" />
     <ClInclude Include="include\Raycast.h" />
+    <ClInclude Include="include\RenderQueue.h" />
     <ClInclude Include="include\Rp3dCollisionPair.h" />
     <ClInclude Include="include\Contact_Legacy.h" />
     <ClInclude Include="include\DebugRenderer.h" />
@@ -80,6 +82,7 @@
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\SkinnedRenderer.h" />
     <ClInclude Include="include\Socket.h" />
+    <ClInclude Include="include\SpriteSheet.h" />
     <ClInclude Include="include\stb_image.h" />
     <ClInclude Include="include\System.h" />
     <ClInclude Include="include\D3DManager.h" />
@@ -129,6 +132,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClInclude Include="include\RenderGraph.h" />
+    <ClInclude Include="include\EffectComponent.h" />
     <ClCompile Include="src\Animation.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
@@ -141,6 +145,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\EffectRenderer.cpp" />
     <ClCompile Include="src\Bone.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
@@ -173,6 +178,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\EffectComponent.cpp" />
     <ClCompile Include="src\PhysicsEventListener.cpp" />
     <ClCompile Include="src\Collision_Legacy.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
@@ -309,6 +315,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\RendererComponent.cpp" />
     <ClCompile Include="src\RenderGraph.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
@@ -394,6 +401,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Socket.cpp" />
+    <ClCompile Include="src\SpriteSheet.cpp" />
     <ClCompile Include="src\stb_image.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -438,9 +446,13 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\BasicShader.hlsl" />
+    <FxCompile Include="shaders\NormalEffectShader.hlsl" />
+    <FxCompile Include="shaders\ScreenBillboardShader.hlsl" />
     <FxCompile Include="shaders\BrdfShader.hlsl" />
     <FxCompile Include="shaders\DebugShader.hlsl" />
     <FxCompile Include="shaders\EnvironmentCubeShader.hlsl" />
+    <FxCompile Include="shaders\ForwardSkinningShader.hlsl" />
+    <FxCompile Include="shaders\ForwardTexturedShader.hlsl" />
     <FxCompile Include="shaders\IrradianceMapShader.hlsl" />
     <FxCompile Include="shaders\PBR_ToonShader.hlsl" />
     <FxCompile Include="shaders\PostProcessShader.hlsl" />
@@ -448,6 +460,14 @@
     <FxCompile Include="shaders\SkinningShader.hlsl" />
     <FxCompile Include="shaders\SkyboxShader.hlsl" />
     <FxCompile Include="shaders\TextureShader.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\Common\Lighting.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

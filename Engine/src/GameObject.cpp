@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "GameObject.h"
 #include "EventBus.h"
+#include "Rp3dRigidbody.h"
 
 namespace Engine
 {
@@ -11,6 +12,7 @@ namespace Engine
 
 	GameObject::~GameObject()
 	{
+		Destroy();
 	}
 
 	std::unique_ptr<GameObject> GameObject::RemoveChild(GameObject* node)
@@ -62,6 +64,16 @@ namespace Engine
 		for (auto& child : children)
 		{
 			child->SetScene(scene);
+		}
+	}
+
+	void GameObject::SetActive(bool value)
+	{
+		m_isActive = value;
+		auto* rigidbody = GetComponent<Rp3dRigidbody>();
+		if (rigidbody)
+		{
+			rigidbody->SetActive(value);
 		}
 	}
 

@@ -26,7 +26,6 @@ namespace Engine
 	class Mesh
 	{
 	public:
-
 		std::vector<SubMesh> subMeshes;
 		
 		Mesh();
@@ -84,6 +83,7 @@ namespace Engine
 
 		void Render();
 		void Render(const std::vector<std::shared_ptr<Material>>& materials, ConstantBufferManager& cbManager) const;
+		void RenderSubMesh(size_t subMeshIndex, const std::vector<std::shared_ptr<Material>>& materials, ConstantBufferManager& cbManager) const;
 	private:
 		// cpu vertex data
 		std::vector<Vector3> m_positions;

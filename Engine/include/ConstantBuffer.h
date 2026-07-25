@@ -14,6 +14,7 @@ namespace Engine
 		PerMaterial = 3,
 		PerLight = 4,
 		PrefilteredEnvMap = 5,
+		PerSpriteSheet = 6
 	};
 
 	struct ConstantBufferPerCamera
@@ -62,7 +63,7 @@ namespace Engine
 	{
 		LightBuffer lights[MaxLights];
 		uint32_t lightCount = 0;
-		uint32_t padding[3];
+		uint32_t padding[3] = { 0, 0, 0 };
 	};
 
 	// IBL prefiltered environment map
@@ -72,5 +73,11 @@ namespace Engine
 		float resolution;
 		unsigned int maxMip;
 		float padding; // Padding to align to 16 bytes
+	};
+
+	struct ConstantBufferPerSpriteSheet
+	{
+		Vector2 frameSize;
+		Vector2 frameOffset;
 	};
 }
