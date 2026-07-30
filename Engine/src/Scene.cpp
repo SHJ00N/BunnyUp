@@ -85,7 +85,7 @@ namespace Engine
 
 	void Scene::traverseUpdate(GameObject* node, float dt)
 	{
-		if (!node || node->IsDestroyed() || !node->IsActive())
+		if (!node || node->IsDestroyed() || !node->IsEnable())
 		{
 			return;
 		}
@@ -99,7 +99,7 @@ namespace Engine
 
 	void Scene::traverseFixedUpdate(GameObject* node, float fdt)
 	{
-		if(!node || node->IsDestroyed() || !node->IsActive())
+		if(!node || node->IsDestroyed() || !node->IsEnable())
 		{
 			return;
 		}
@@ -195,7 +195,7 @@ namespace Engine
 
 	void Scene::traverseRender(GameObject* node, Frustum& camFrustum)
 	{
-		if (!node->IsActive()) return;
+		if (!node->IsEnable()) return;
 
 		for (auto& component : node->GetComponents())
 		{

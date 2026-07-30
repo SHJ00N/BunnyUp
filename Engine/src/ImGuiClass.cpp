@@ -164,9 +164,18 @@ namespace Engine
 			ImGui::Text("Name: %s", m_selectedGameObject->GetName().c_str());
 
 			// active
-			bool isActive = m_selectedGameObject->IsActive();
-			ImGui::Checkbox("Active", &isActive);
-			m_selectedGameObject->SetActive(isActive);
+			bool isEnable = m_selectedGameObject->IsEnable();
+			if (ImGui::Checkbox("Active", &isEnable))
+			{
+				if (isEnable)
+				{
+					m_selectedGameObject->Enable();
+				}
+				else
+				{
+					m_selectedGameObject->Disable();
+				}
+			}
 
 			// Tag
 			const char* tags[] =
@@ -177,7 +186,9 @@ namespace Engine
 				"Ground",
 				"Wall",
 				"Trigger",
-				"Object"
+				"Object",
+				"EnemyHitBox",
+				"PlayerHitBox"
 			};
 
 			int currentTag = static_cast<int>(m_selectedGameObject->GetTag());

@@ -16,6 +16,7 @@ namespace Game
 
         void UpdatePath(EnemyController& controller, AStar& aStar);  // find path
         void Stop(EnemyController& controller);
+        void SetSpeed(float speed) { m_moveSpeed = speed; }
         bool IsArrived() const { return m_isArrived; }
         
         void DebugDraw(EnemyController& controller) const;

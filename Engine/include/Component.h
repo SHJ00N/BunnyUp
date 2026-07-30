@@ -24,7 +24,8 @@ namespace Engine
 		virtual void FixedUpdate(float fdt) { }
 		
 		bool isEnabled() const { return m_isEnabled; }
-		void SetEnabled(bool value) { m_isEnabled = value; }
+		void Enable();
+		void Disable();
 
 		// physics methods
 		virtual void OnCollisionEnter(CollisionData data) { }
@@ -50,6 +51,9 @@ namespace Engine
 		virtual void OnAwake() { }
 		virtual void OnStart() { }
 		virtual void OnDestroy() { }
+
+		virtual void OnEnable() { }
+		virtual void OnDisable() { }
 
 	private:
 		bool m_isEnabled = true;

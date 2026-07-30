@@ -9,14 +9,11 @@ namespace Game
         m_rigidbody->SetLinearDamping(1.0f);
         m_animator = ownerGameObject->GetComponent<Engine::Animator>();
         m_health = ownerGameObject->GetComponent<Health>();
-
-        m_attack.Initialize(*this);
     }
 
     void EnemyController::Update(float dt)
-    {
-        // update timer 
-        m_attack.UpdateTimer(dt);
+    { 
+        OnUpdate(dt);
         m_movement.UpdatePath(*this, m_aStar);
 
         if (!m_currentState)
@@ -30,7 +27,7 @@ namespace Game
         if (debugDraw)
         {
             m_movement.DebugDraw(*this);
-            m_attack.DebugDraw(*this);
+            OnDebug();
         }
     }
 
@@ -53,6 +50,7 @@ namespace Game
         ImGui::Checkbox("Debug Draw", &debugDraw);
         ImGui::DragInt("AttackPower", &attackPower, 1, 0, 1000);
         m_movement.EditorGui();
-        m_attack.EditorGui();
+        
+        OnGui();
     }
 }

@@ -9,6 +9,7 @@ namespace Game
     {
         m_hitBox = HitBox::CreateHitBox<PlayerAttackHitBox>(playerController.ownerGameObject, Vector3(0.0f, 7.5f, 8.0f), Vector3(15.0f, 15.0f, 15.0f), "AttackHitBox");
         m_hitBox->SetLayer(Engine::CollisionLayer::PlayerTrigger);
+        m_hitBox->ownerGameObject->SetTag(Engine::ObjectTag::PlayerHitBox);
     }
 
     bool AttackState::HandleInput(PlayerController& playerController, const PlayerInputState& inputState)

@@ -1,15 +1,18 @@
 #include "Enemy/EnemyAttack.h"
 #include "Enemy/EnemyController.h"
-#include "Enemy/EnemyAttackHitBox.h"
 
 namespace Game
 {
     using namespace Engine;
 
-    void EnemyAttack::Initialize(EnemyController& controller)
+    void EnemyAttack::Reset()
     {
-        m_hitBox = HitBox::CreateHitBox<EnemyAttackHitBox>(controller.ownerGameObject, Vector3(0.0f, 4.0f, 6.0f), Vector3(11.0f, 7.5f, 10.0f), "AttackHitBox");
-        m_hitBox->SetLayer(Engine::CollisionLayer::EnemyTrigger);
+        m_isAttacking = false;
+        m_isAttacked = false;
+        m_attackTimer = 0.0f;
+        m_attackCoolTimer = 0.0f;
+
+        OnReset();
     }
 
     bool EnemyAttack::IsTargetInRange(EnemyController& controller) const 
@@ -41,13 +44,8 @@ namespace Game
         m_isAttacked = false;
         m_attackCoolTimer = m_attackCoolTime;
         m_attackTimer = 0.0f;
-        
-        // set animation to attack anim
-        auto* animator = controller.GetAnimator();
-        if (animator)
-        {
-            animator->PlayAnimation("Attack", true);
-        }
+
+        EnterAttack(controller);
     }
 
     void EnemyAttack::Exit(EnemyController& controller)
@@ -55,7 +53,8 @@ namespace Game
         m_isAttacking = false;
         
         m_attackTimer = 0.0f;
-        m_hitBox->Disable();
+        
+        ExitAttack(controller);
     }
 
     void EnemyAttack::OnUpdate(EnemyController& controller, float dt)
@@ -66,15 +65,12 @@ namespace Game
         if (m_attackTimer >= 0.3f && !m_isAttacked)
         {
             m_isAttacked = true;
-            m_hitBox->Enable();
+            StartAttack(controller);
         }
 
         if (m_attackTimer >= 0.6f && m_isAttacked)
         {
-            if (m_hitBox->IsEnable())
-            {
-                m_hitBox->Disable();
-            }
+            EndAttack(controller);
         }
 
         auto* animator = controller.GetAnimator();
@@ -100,7 +96,7 @@ namespace Game
 
     void EnemyAttack::EditorGui()
     {
-        ImGui::DragFloat("AttackRange", &m_attackRange, 0.1f, 1.0f, 100.0f);
+        ImGui::DragFloat("AttackRange", &m_attackRange, 0.1f, 1.0f, 1000.0f);
         ImGui::DragFloat("AttackCoolTime", &m_attackCoolTime, 0.1f, 1.0f, 100.0f);
     }
 }

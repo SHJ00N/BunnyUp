@@ -3,13 +3,12 @@
 #include "DemoScene1.h"
 #include "CameraController.h"
 #include "Player/PlayerController.h"
-#include "CubeController.h"
 #include "Input/PlayerInputManager.h"
 #include "Enemy/NavigationManager.h"
-#include "Enemy/EnemyBehaviorTree.h"
-#include "Enemy/EnemyController.h"
 #include "Common/Health.h"
 #include "Effect/EffectPoolManager.h"
+#include "Common/ObjectPoolManager.h"
+#include "Enemy/EnemySpawnManager.h"
 
 namespace Game
 {
@@ -26,13 +25,44 @@ namespace Game
         SetEnvironmentMap(ResourceManager::GetInstance().GetEnvironmentMap("Sky_EnvMap"));
 
         auto navigationManager = CreateGameObject<GameObject>("NavigationManager");
-        navigationManager->AddComponent<NavigationManager>(1.0f);
+        navigationManager->AddComponent<NavigationManager>(5.0f);
 
         auto playerInputManager = CreateGameObject<GameObject>("PlayerInputManager");
         playerInputManager->AddComponent<PlayerInputManager>();
 
         auto effectPoolManager = CreateGameObject<GameObject>("EffectPoolManager");
         effectPoolManager->AddComponent<EffectPoolManager>();
+
+        auto objectPoolManager = CreateGameObject<GameObject>("ObjectPoolManager");
+        auto objPool = objectPoolManager->AddComponent<ObjectPoolManager>();
+
+        // Enemy Spawn 
+        auto enemySpawnManager = CreateGameObject<GameObject>("EnemySpawnManager");
+        auto enemySpawn = enemySpawnManager->AddComponent<EnemySpawnManager>();
+
+        auto waypoint1 = CreateGameObject<GameObject>("Waypoint1");
+        waypoint1->transform.SetLocalPosition(Vector3(-300.0f, -48.0f, 50.0f));
+        enemySpawn->AddWayPoint(waypoint1);
+
+        auto waypoint2 = CreateGameObject<GameObject>("Waypoint2");
+        waypoint2->transform.SetLocalPosition(Vector3(-150.0f, -48.0f, 200.0f));
+        enemySpawn->AddWayPoint(waypoint2);
+
+        auto waypoint3 = CreateGameObject<GameObject>("Waypoint3");
+        waypoint3->transform.SetLocalPosition(Vector3(0.0f, -48.0f, 250.0f));
+        enemySpawn->AddWayPoint(waypoint3);
+
+        auto waypoint4 = CreateGameObject<GameObject>("Waypoint4");
+        waypoint4->transform.SetLocalPosition(Vector3(150.0f, -48.0f, 200.0f));
+        enemySpawn->AddWayPoint(waypoint4);
+
+        auto waypoint5 = CreateGameObject<GameObject>("Waypoint5");
+        waypoint5->transform.SetLocalPosition(Vector3(300.0f, -48.0f, 50.0f));
+        enemySpawn->AddWayPoint(waypoint5);
+
+        auto bossWayPoint = CreateGameObject<GameObject>("BossWaypoint");
+        bossWayPoint->transform.SetLocalPosition(Vector3(0.0f, -48.0f, -85.0f));
+        enemySpawn->AddWayPoint(bossWayPoint);
 
         // Directional Light
         auto directionalLight = CreateGameObject<GameObject>("DirectionalLight");
@@ -92,6 +122,8 @@ namespace Game
 
         auto bunnyHealth = bunny->AddComponent<Health>();
         bunnyHealth->SetMaxHealth(100);
+
+        enemySpawn->SetTarget(bunny);
         
         // Camera
         // -------------------------------------------------------------------------------------------------------
@@ -107,44 +139,6 @@ namespace Game
         camera2Renderer->SetMesh(ResourceManager::GetInstance().GetMesh("Primitive_cube"));
 
         SetMainCamera(cameraComponent);
-
-
-        // Monster
-        // -------------------------------------------------------------------------------------------------------
-        //auto slime = CreateGameObject<GameObject>("Slime");
-        //slime->transform.SetLocalScale(Vector3(0.1f));
-        //slime->AddComponent<SkinnedRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Monster_Slime"));
-
-        //auto slimeAnimator = slime->AddComponent<Animator>();
-        //slimeAnimator->RegistAnimation("Idle", ResourceManager::GetInstance().GetAnimation("Monster_Slime_Idle").get());
-
-        auto turtleShell = CreateGameObject<GameObject>("TurtleShell");
-        turtleShell->SetTag(ObjectTag::Enemy);
-        turtleShell->transform.SetLocalPosition(Vector3(-50.0f, -45.0f, 50.0f));
-        turtleShell->transform.SetLocalScale(Vector3(0.1f));
-        turtleShell->AddComponent<SkinnedRenderer>()->SetMesh(ResourceManager::GetInstance().GetModel("Monster_TurtleShell"));
-        
-        auto turtleShellController = turtleShell->AddComponent<EnemyController>();
-        turtleShellController->SetTarget(bunny);
-        turtleShell->AddComponent<EnemyBehaviorTree>(turtleShellController);
-
-        auto turtleShellRigidbody = turtleShell->AddComponent<Rp3dRigidbody>(1.0f, BodyType::DYNAMIC, true);
-        turtleShellRigidbody->SetAngularLock(false, false, false); // Lock angular rotation
-        auto turtleShellCollider = turtleShell->AddComponent<Rp3dCapsuleCollider>(5.0f, 0.5f);
-        turtleShellCollider->SetLocalPosition(Vector3(0.0f, 5.5f, 0.0f));
-        turtleShellCollider->SetFriction(1.0f);
-        turtleShellCollider->SetBounciness(0.0f);
-        turtleShellCollider->SetCollisionLayer(CollisionLayer::Enemy);
-
-        auto turtleShellAnimator = turtleShell->AddComponent<Animator>();
-        turtleShellAnimator->RegistAnimation("Idle", ResourceManager::GetInstance().GetAnimation("Monster_TurtleShell_Idle").get());
-        turtleShellAnimator->RegistAnimation("Walk", ResourceManager::GetInstance().GetAnimation("Monster_TurtleShell_Walk").get());
-        turtleShellAnimator->RegistAnimation("Attack", ResourceManager::GetInstance().GetAnimation("Monster_TurtleShell_Attack").get());
-        turtleShellAnimator->RegistAnimation("Damage", ResourceManager::GetInstance().GetAnimation("Monster_TurtleShell_Damage").get()); 
-        turtleShellAnimator->RegistAnimation("Death", ResourceManager::GetInstance().GetAnimation("Monster_TurtleShell_Death").get());
-
-        auto turtleShellHealth = turtleShell->AddComponent<Health>();
-        turtleShellHealth->SetMaxHealth(50);
 
         // Floor
         // -------------------------------------------------------------------------------------------------------

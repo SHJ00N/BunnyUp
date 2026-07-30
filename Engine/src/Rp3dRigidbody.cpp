@@ -45,6 +45,18 @@ namespace Engine
 		m_physics->AddRigidbody(this);
 	}
 
+	void Rp3dRigidbody::OnEnable()
+	{
+		if (!m_body) return;
+		m_body->setIsActive(true);
+	}
+
+	void Rp3dRigidbody::OnDisable()
+	{
+		if (!m_body) return;
+		m_body->setIsActive(false);
+	}
+
 	void Rp3dRigidbody::OnDestroy()
 	{
 		auto* world = m_physics->GetPhysicsWorld();

@@ -1,8 +1,9 @@
-#include "Enemy/EnemyBehaviorTree.h"
+#include "Enemy/RangedEnemyBehaviorTree.h"
+#include "Enemy/RangedEnemyController.h"
 #include "Enemy/BIdle.h"
 #include "Enemy/BChaseTarget.h"
-#include "Enemy/BCheckTargetInAttackRange.h"
-#include "Enemy/BAttack.h"
+#include "Enemy/BCheckTargetInRangedAttackRange.h"
+#include "Enemy/BRangedAttack.h"
 #include "Enemy/BDamaged.h"
 #include "Enemy/BDeath.h"
 
@@ -10,11 +11,11 @@ namespace Game
 {
     using namespace Behavior;
 
-    EnemyBehaviorTree::EnemyBehaviorTree(EnemyController* controller) : m_controller(controller)
+    RangedEnemyBehaviorTree::RangedEnemyBehaviorTree(RangedEnemyController* controller) : m_controller(controller)
     {
     }
 
-    std::unique_ptr<BehaviorNode> EnemyBehaviorTree::SetupTree()
+    std::unique_ptr<BehaviorNode> RangedEnemyBehaviorTree::SetupTree()
     {
         std::vector<std::unique_ptr<BehaviorNode>> children;
 
@@ -26,8 +27,8 @@ namespace Game
 
         // attack sequence
         auto attackSeq = std::vector<std::unique_ptr<BehaviorNode>>();
-        attackSeq.push_back(std::make_unique<BCheckTargetInAttackRange>(m_controller));
-        attackSeq.push_back(std::make_unique<BAttack>(m_controller));
+        attackSeq.push_back(std::make_unique<BCheckTargetInRangedAttackRange>(m_controller));
+        attackSeq.push_back(std::make_unique<BRangedAttack>(m_controller));
         children.push_back(std::make_unique<Sequence>(std::move(attackSeq)));
 
         // chase target node

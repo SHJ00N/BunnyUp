@@ -1,15 +1,15 @@
-#include "Enemy/BAttack.h"
-#include "Enemy/EnemyController.h"
+#include "Enemy/BBossRangedAttack.h"
+#include "Enemy/BossEnemyController.h"
 
 namespace Game
 {
     using namespace Behavior;
 
-    BAttack::BAttack(EnemyController* controller) : m_controller(controller)
+    BBossRangedAttack::BBossRangedAttack(BossEnemyController* controller) : m_controller(controller)
     {
     }
 
-    NodeState BAttack::Evaluate(float dt)
+    NodeState BBossRangedAttack::Evaluate(float dt)
     {
         if (!m_controller)
         {
@@ -22,7 +22,7 @@ namespace Game
             return NodeState::Failure;
         }
 
-        auto* attack = m_controller->GetAttack();
+        auto* attack = m_controller->GetRangedAttack();
         if (attack->IsAttacking())
         {
             return NodeState::Running;

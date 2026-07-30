@@ -4,7 +4,6 @@
 #include "Enemy/AStar.h"
 #include "Enemy/EnemyState.h"
 #include "Enemy/EnemyMovement.h"
-#include "Enemy/EnemyAttack.h"
 #include "Enemy/EnemyIdle.h"
 #include "Enemy/EnemyDamaged.h"
 #include "Enemy/EnemyDeath.h"
@@ -32,7 +31,6 @@ namespace Game
         EnemyState* GetCurrentState() const { return m_currentState; }
         EnemyIdle* GetIdle() { return&m_idle; }
         EnemyMovement* GetMovement() { return &m_movement; }
-        EnemyAttack* GetAttack() { return &m_attack; }
         EnemyDamaged* GetDamaged() { return &m_damaged; }
         EnemyDeath* GetDeath() { return &m_death; }
         
@@ -41,7 +39,11 @@ namespace Game
         
 
     protected:
-        void OnStart() override;
+        virtual void OnStart() override;
+
+        virtual void OnUpdate(float dt) { }
+        virtual void OnDebug() { }
+        virtual void OnGui() { }
 
     private:
          AStar m_aStar;  // calculate path to target position
@@ -55,7 +57,6 @@ namespace Game
         EnemyState* m_currentState = nullptr;
         EnemyIdle m_idle;
         EnemyMovement m_movement;
-        EnemyAttack m_attack;
         EnemyDamaged m_damaged;
         EnemyDeath m_death;
     };

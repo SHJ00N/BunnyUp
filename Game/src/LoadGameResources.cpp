@@ -89,9 +89,19 @@ void LoadGameResources()
 
     // Animations
     resourceManager.LoadAnimation("Monster_Slime_Idle", "resources\\animations\\Monster\\Slime\\IdleNormal_Slime_Anim.fbx", slime.get(), true);
+    resourceManager.LoadAnimation("Monster_Slime_Walk", "resources\\animations\\Monster\\Slime\\Walk_Slime_Anim.fbx", turtleShell.get(), true);
+    resourceManager.LoadAnimation("Monster_Slime_Attack", "resources\\animations\\Monster\\Slime\\Attack01_Slime_Anim.fbx", turtleShell.get(), false);
+    resourceManager.LoadAnimation("Monster_Slime_Damage", "resources\\animations\\Monster\\Slime\\GetHit_Slime_Anim.fbx", turtleShell.get(), false);
+    resourceManager.LoadAnimation("Monster_Slime_Death", "resources\\animations\\Monster\\Slime\\Die_Slime_Anim.fbx", turtleShell.get(), false);
+
     resourceManager.LoadAnimation("Monster_TurtleShell_Idle", "resources\\animations\\Monster\\TurtleShell\\IdleBattle_TurtleShell_Anim.fbx", turtleShell.get(), true);
     resourceManager.LoadAnimation("Monster_TurtleShell_Walk", "resources\\animations\\Monster\\TurtleShell\\Walk_TurtleShell_Anim.fbx", turtleShell.get(), true);
-    resourceManager.LoadAnimation("Monster_TurtleShell_Attack", "resources\\animations\\Monster\\TurtleShell\\Attack01_TurtleShell_Anim.fbx", turtleShell.get(), false);
+    resourceManager.LoadAnimation("Monster_TurtleShell_Attack1", "resources\\animations\\Monster\\TurtleShell\\Attack01_TurtleShell_Anim.fbx", turtleShell.get(), false);
+    resourceManager.LoadAnimation("Monster_TurtleShell_Attack2", "resources\\animations\\Monster\\TurtleShell\\Attack02_TurtleShell_Anim.fbx", turtleShell.get(), false);
     resourceManager.LoadAnimation("Monster_TurtleShell_Damage", "resources\\animations\\Monster\\TurtleShell\\GetHit_TurtleShell_Anim.fbx", turtleShell.get(), false);
     resourceManager.LoadAnimation("Monster_TurtleShell_Death", "resources\\animations\\Monster\\TurtleShell\\Die_TurtleShell_Anim.fbx", turtleShell.get(), false);
+
+    // Weapon
+    // Model
+    resourceManager.LoadModel("Thron", "resources\\models\\Weapon\\Thron.fbx");
 }

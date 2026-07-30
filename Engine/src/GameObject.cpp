@@ -67,13 +67,25 @@ namespace Engine
 		}
 	}
 
-	void GameObject::SetActive(bool value)
+	void GameObject::Enable()
 	{
-		m_isActive = value;
-		auto* rigidbody = GetComponent<Rp3dRigidbody>();
-		if (rigidbody)
+		if (m_isEnabled) return;
+
+		m_isEnabled = true;
+		for (const auto& component : m_components)
 		{
-			rigidbody->SetActive(value);
+			component->Enable();
+		}
+	}
+
+	void GameObject::Disable()
+	{
+		if (!m_isEnabled) return;
+
+		m_isEnabled = false;
+		for (const auto& component : m_components)
+		{
+			component->Disable();
 		}
 	}
 

@@ -11,11 +11,15 @@ namespace Game
     class EnemyAttack : public EnemyState
     {
     public:
-        void Initialize(EnemyController& controller);
+        virtual void Initialize(EnemyController& controller) { }
+        void Reset();
 
         // override function
         void Enter(EnemyController& controller) override;
         void Exit(EnemyController& controller) override;
+
+        void SetAttackCoolTime(float coolTime) { m_attackCoolTime = coolTime; }
+        void SetAttackRange(float range) { m_attackRange = range; }
         
         void UpdateTimer(float dt);
         bool IsTargetInRange(EnemyController& controller) const;
@@ -27,10 +31,14 @@ namespace Game
 
     protected:
         void OnUpdate(EnemyController& controller, float dt) override;
+        
+        virtual void OnReset() { }
+        virtual void EnterAttack(EnemyController& controller) { }
+        virtual void ExitAttack(EnemyController& controller) { }
+        virtual void StartAttack(EnemyController& controller) { }
+        virtual void EndAttack(EnemyController& controller) { }
 
     private:
-        EnemyAttackHitBox* m_hitBox = nullptr;
-
         float m_attackRange = 15.0f;
 
         float m_attackCoolTime = 2.5f;

@@ -12,8 +12,13 @@ namespace Game
         void RecoveryHealth(int amount);
 
         void SetMaxHealth(int max);
+        int GetMaxHealth() const { return m_maxHealth; }
+        int GetCurrentHealth() const { return m_health; }
 
         bool IsDeath() const { return m_health <= 0; }
+
+    protected:
+        void OnEnable() override;
 
     private:
         int m_health;

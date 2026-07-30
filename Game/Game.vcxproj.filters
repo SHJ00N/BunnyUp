@@ -129,9 +129,6 @@
     <ClCompile Include="src\BehaviorTree\Sequence.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="src\Enemy\EnemyBehaviorTree.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="src\Enemy\BChaseTarget.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -141,13 +138,13 @@
     <ClCompile Include="src\Enemy\EnemyController.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="src\Enemy\BCheckTargetInAttackRange.cpp">
+    <ClCompile Include="src\Enemy\BCheckTargetInMeleeAttackRange.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="src\Enemy\EnemyAttack.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="src\Enemy\BAttack.cpp">
+    <ClCompile Include="src\Enemy\BMeleeAttack.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="src\Enemy\EnemyIdle.cpp">
@@ -190,6 +187,63 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="src\Effect\EffectPoolManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\MeleeEnemyAttack.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\MeleeEnemyController.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\Thron.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\RangedEnemyAttack.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\RangedEnemyController.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Common\ObjectFactory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Common\ObjectPoolManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\EnemySpawnManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\MeleeEnemyBehaviorTree.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\BRangedAttack.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\RangedEnemyBehaviorTree.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\BCheckTargetInRangedAttackRange.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\BossEnemyController.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\BossEnemyBehaviorTree.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\BBossMeleeAttack.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\BBossRangedAttack.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\BCheckTargetInBossMeleeRange.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\BCheckTargetInBossRangedRange.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Enemy\BossRangedAttack.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -287,9 +341,6 @@
     <ClInclude Include="include\BehaviorTree\Sequence.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="include\Enemy\EnemyBehaviorTree.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="include\Enemy\BChaseTarget.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -299,13 +350,13 @@
     <ClInclude Include="include\Enemy\EnemyMovement.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="include\Enemy\BCheckTargetInAttackRange.h">
+    <ClInclude Include="include\Enemy\BCheckTargetInMeleeAttackRange.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="include\Enemy\EnemyAttack.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="include\Enemy\BAttack.h">
+    <ClInclude Include="include\Enemy\BMeleeAttack.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="include\Enemy\EnemyState.h">
@@ -354,6 +405,63 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="include\Effect\EffectObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\MeleeEnemyAttack.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\MeleeEnemyController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\Thron.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\RangedEnemyAttack.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\RangedEnemyController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Common\ObjectPoolManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Common\ObjectFactory.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\EnemySpawnManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\BossEnemyController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\MeleeEnemyBehaviorTree.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\RangedEnemyBehaviorTree.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\BRangedAttack.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\BCheckTargetInRangedAttackRange.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\BossEnemyBehaviorTree.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\BBossMeleeAttack.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\BBossRangedAttack.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\BCheckTargetInBossMeleeRange.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\BCheckTargetInBossRangedRange.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy\BossRangedAttack.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

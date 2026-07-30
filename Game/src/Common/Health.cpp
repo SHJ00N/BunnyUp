@@ -20,6 +20,11 @@ namespace Game
     void Health::SetMaxHealth(int max)
     {
         m_maxHealth = max;
-        m_health = std::min(m_health, m_maxHealth);
+        m_health = m_maxHealth;
     };
+
+    void Health::OnEnable()
+    {
+        m_health = m_maxHealth;
+    }
 }

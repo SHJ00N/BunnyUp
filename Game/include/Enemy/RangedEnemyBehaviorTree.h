@@ -6,16 +6,16 @@
 
 namespace Game
 {
-    class EnemyController;
-    class EnemyBehaviorTree : public Behavior::BehaviorTree
+    class RangedEnemyController;
+    class RangedEnemyBehaviorTree : public Behavior::BehaviorTree
     {
     public:
-        EnemyBehaviorTree(EnemyController* controller = nullptr);
+        RangedEnemyBehaviorTree(RangedEnemyController* controller = nullptr);
 
     protected:
         std::unique_ptr<Behavior::BehaviorNode> SetupTree() override;
 
     private:
-        EnemyController* m_controller = nullptr;
+        RangedEnemyController* m_controller = nullptr;
     };
 }

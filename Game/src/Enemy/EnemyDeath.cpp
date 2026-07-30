@@ -1,5 +1,6 @@
 #include "Enemy/EnemyDeath.h"
 #include "Enemy/EnemyController.h"
+#include "Common/ObjectPoolManager.h"
 
 namespace Game
 {
@@ -7,7 +8,7 @@ namespace Game
     {
         if (Elapsed(3.0f))
         {
-            controller.ownerGameObject->Destroy();
+            ObjectPoolManager::GetInstance().ReturnPool(controller.ownerGameObject);
         }
     }
 

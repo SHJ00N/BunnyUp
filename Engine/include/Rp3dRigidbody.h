@@ -68,6 +68,9 @@ namespace Engine
 		void OnAwake() override;	// initialized rigidbody
 		void OnDestroy() override;		// destroy rp3d rigidbody from rp3d physics world
 
+		void OnEnable() override;
+		void OnDisable() override;
+
 	private:
 		PhysicsSystem* m_physics;		// physics system pointer
 

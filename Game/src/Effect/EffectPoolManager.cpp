@@ -25,14 +25,14 @@ namespace Game
         effect->ownerGameObject->transform.SetLocalRotation(rotation);
         effect->ownerGameObject->transform.SetLocalScale(scale);
         // Set effect state
-        effect->ownerGameObject->SetActive(true);
+        effect->ownerGameObject->Enable();
 
         return effect;
     }
 
     void EffectPoolManager::ReturnPool(EffectObject* object)
     {
-        object->ownerGameObject->SetActive(false);
+        object->ownerGameObject->Disable();
         m_pools[object->GetType()].push(object);
     }
 
@@ -42,7 +42,7 @@ namespace Game
         {
         case EffectObjectType::PlayerHit:
         {
-            auto* object =  ownerGameObject->CreateGameObject<GameObject>("PlayerHitEffect");
+            auto* object =  ownerGameObject->scene->CreateChildGameObject<GameObject>(ownerGameObject, "PlayerHitEffect");
             auto* renderer = object->AddComponent<EffectRenderer>(EffectType::Billboard);
             renderer->SetSpriteSheet(ResourceManager::GetInstance().GetTexture("BHit_Effect"), 4, 4);
             auto* effect = object->AddComponent<EffectComponent>();
@@ -51,7 +51,7 @@ namespace Game
         }
         case EffectObjectType::EnemyHit:
         {
-            auto* object = ownerGameObject->CreateGameObject<GameObject>("EnemyHitEffect");
+            auto* object = ownerGameObject->scene->CreateChildGameObject<GameObject>(ownerGameObject, "EnemyHitEffect");
             auto* renderer = object->AddComponent<EffectRenderer>(EffectType::Billboard);
             renderer->SetSpriteSheet(ResourceManager::GetInstance().GetTexture("AHit_Effect"), 4, 4);
             renderer->GetMaterial(0)->SetColor(Vector4(1.0f, 0.0f, 1.0f, 1.0f));
@@ -61,7 +61,7 @@ namespace Game
         }
         case EffectObjectType::Dust:
         {
-            auto* object = ownerGameObject->CreateGameObject<GameObject>("Dust");
+            auto* object = ownerGameObject->scene->CreateChildGameObject<GameObject>(ownerGameObject, "Dust");
             auto* renderer = object->AddComponent<EffectRenderer>(EffectType::Normal);
             renderer->SetSpriteSheet(ResourceManager::GetInstance().GetTexture("Dust_Effect"), 5, 5);
             auto* effect = object->AddComponent<EffectComponent>();

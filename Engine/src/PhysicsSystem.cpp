@@ -302,6 +302,9 @@ namespace Engine
 		SetCollisionLayer(CollisionLayer::Ground, CollisionLayer::Ground, false);
 		SetCollisionLayer(CollisionLayer::Wall, CollisionLayer::Wall, false);
 		SetCollisionLayer(CollisionLayer::Ground, CollisionLayer::Wall, false);
+		
+		SetCollisionLayer(CollisionLayer::Trigger, CollisionLayer::PlayerTrigger, false);
+		SetCollisionLayer(CollisionLayer::Trigger, CollisionLayer::EnemyTrigger, false);
 	}
 
 	bool PhysicsSystem::Raycast(const Vector3& origin, const Vector3& direction, float maxDistance, RaycastHit& outHitInfo)

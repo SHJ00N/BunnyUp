@@ -29,4 +29,22 @@ namespace Engine
 			m_isDestroyed = true;
 		}
 	}
+
+	void Component::Enable()
+	{
+		if (!m_isEnabled)
+		{
+			m_isEnabled = true;
+			OnEnable();
+		}
+	}
+
+	void Component::Disable()
+	{
+		if (m_isEnabled)
+		{
+			m_isEnabled = false;
+			OnDisable();
+		}
+	}
 }
