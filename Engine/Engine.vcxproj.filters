@@ -28,9 +28,6 @@
     <Filter Include="헤더 파일\RenderPipeline">
       <UniqueIdentifier>{c79692c3-70b1-4193-bdb4-5a5ed4c3b9aa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일\RenderPipeline\RenderPasses">
-      <UniqueIdentifier>{156e7e00-9234-447d-8e7a-113d33e6ee6c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="헤더 파일\Components\Camera">
       <UniqueIdentifier>{3f2a5944-965d-4ef2-b513-25076592d3a4}</UniqueIdentifier>
     </Filter>
@@ -57,6 +54,9 @@
     </Filter>
     <Filter Include="소스 파일\Legacy">
       <UniqueIdentifier>{0c5fdcd9-fa33-4c60-b46e-f49869b5114b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\FreeType">
+      <UniqueIdentifier>{685fb434-415f-4081-9bdf-dd56ad5393a1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -167,9 +167,6 @@
     </ClInclude>
     <ClInclude Include="include\RenderPipeline.h">
       <Filter>헤더 파일\RenderPipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="include\RenderPass.h">
-      <Filter>헤더 파일\RenderPipeline\RenderPasses</Filter>
     </ClInclude>
     <ClInclude Include="include\RenderCommandList.h">
       <Filter>헤더 파일\RenderPipeline</Filter>
@@ -287,6 +284,156 @@
     </ClInclude>
     <ClInclude Include="include\EffectComponent.h">
       <Filter>헤더 파일\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Font.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ft2build.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftwinfnt.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\otsvg.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\t1tables.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ttnameid.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\tttables.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\tttags.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\freetype.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftadvanc.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftbbox.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftbdf.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftbitmap.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftbzip2.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftcache.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftchapters.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftcid.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftcolor.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftdriver.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\fterrdef.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\fterrors.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftfntfmt.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftgasp.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftglyph.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftgxval.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftgzip.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftimage.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftincrem.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftlcdfil.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftlist.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftlogging.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftlzw.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftmac.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftmm.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftmodapi.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftmoderr.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftotval.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftoutln.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftparams.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftpfr.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftrender.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftsizes.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftsnames.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftstroke.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftsynth.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\ftsystem.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\fttrigon.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\freetype\fttypes.h">
+      <Filter>헤더 파일\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TextComponent.h">
+      <Filter>헤더 파일\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TextRenderer.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -473,6 +620,18 @@
     <ClCompile Include="src\EffectComponent.cpp">
       <Filter>소스 파일\Components</Filter>
     </ClCompile>
+    <ClCompile Include="src\Font.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextRenderer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextComponent.cpp">
+      <Filter>소스 파일\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\ImGui\misc\cpp\imgui_stdlib.cpp">
+      <Filter>소스 파일\ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\BasicShader.hlsl">
@@ -518,6 +677,12 @@
       <Filter>리소스 파일</Filter>
     </FxCompile>
     <FxCompile Include="shaders\NormalEffectShader.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\TextShader.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\BackBufferShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
   </ItemGroup>

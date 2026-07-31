@@ -90,6 +90,43 @@ namespace Engine
 		return hr;
 	}
 
+	HRESULT Texture2D::CreateFromMemory(const std::string& name, uint32_t width, uint32_t height, DXGI_FORMAT format, const void* data, uint32_t rowPitch)
+	{
+		HRESULT hr = S_OK;
+
+		// Create a texture description
+		D3D11_TEXTURE2D_DESC desc = { };
+		desc.Width = static_cast<UINT>(width);
+		desc.Height = static_cast<UINT>(height);
+		desc.MipLevels = 1;
+		desc.ArraySize = 1;
+		desc.Format = format;
+		desc.SampleDesc.Count = 1;
+		desc.Usage = D3D11_USAGE_DEFAULT;
+		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+
+		// resource data
+		D3D11_SUBRESOURCE_DATA initData = { };
+		initData.pSysMem = data;
+		initData.SysMemPitch = rowPitch;
+
+		// Create the texture
+		const auto& device = D3DManager::GetInstance().GetDevice();
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> texture;
+		hr = device->CreateTexture2D(&desc, &initData, texture.GetAddressOf());
+		if (FAILED(hr))
+		{
+			return hr;
+		}
+
+		// Create shader resource view
+		hr = device->CreateShaderResourceView(texture.Get(), nullptr, m_pShaderResourceView.GetAddressOf());
+
+		m_name = name;
+
+		return hr;
+	}
+
 	void Texture2D::Bind(UINT slot) const
 	{
 		//assert(m_shaderResourceView != nullptr);

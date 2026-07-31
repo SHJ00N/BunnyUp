@@ -32,6 +32,8 @@ namespace Engine
 		void UpdatePerLight(const ConstantBufferPerLight& data);
 		void UpdatePrefilteredEnvMap(const ConstantBufferPrefilteredEnvMap& data);
 		void UpdatePerSpriteSheet(const ConstantBufferPerSpriteSheet& data);
+		void UpdatePerText(const ConstantBufferPerText& data);
+		void UpdatePerScreen(const ConstantBufferPerScreen& data);
 		
 	private:
 		// constant buffers
@@ -42,5 +44,7 @@ namespace Engine
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferPerLight;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferPrefilteredEnvMap;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferPerSpriteSheet;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferPerText;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBufferPerScreen;
 	};
 }

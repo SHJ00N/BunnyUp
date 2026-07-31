@@ -50,6 +50,14 @@ namespace Engine
         CD3D11_BUFFER_DESC cbPerSpriteSheetDesc(sizeof(ConstantBufferPerSpriteSheet), D3D11_BIND_CONSTANT_BUFFER);
         hr = device->CreateBuffer(&cbPerSpriteSheetDesc, nullptr, m_pConstantBufferPerSpriteSheet.GetAddressOf());
         if (FAILED(hr)) return hr;
+
+        CD3D11_BUFFER_DESC cbPerTextDesc(sizeof(ConstantBufferPerText), D3D11_BIND_CONSTANT_BUFFER);
+        hr = device->CreateBuffer(&cbPerTextDesc, nullptr, m_pConstantBufferPerText.GetAddressOf());
+        if (FAILED(hr)) return hr;
+
+        CD3D11_BUFFER_DESC cbPerScreenDesc(sizeof(ConstantBufferPerScreen), D3D11_BIND_CONSTANT_BUFFER);
+        hr = device->CreateBuffer(&cbPerScreenDesc, nullptr, m_pConstantBufferPerScreen.GetAddressOf());
+        if (FAILED(hr)) return hr;
         
 		return hr;
 	}
@@ -87,5 +95,15 @@ namespace Engine
     void ConstantBufferManager::UpdatePerSpriteSheet(const ConstantBufferPerSpriteSheet& data)
     {
         UpdateConstantBuffer(m_pConstantBufferPerSpriteSheet.Get(), CbSlot::PerSpriteSheet, data);
+    }
+
+    void ConstantBufferManager::UpdatePerText(const ConstantBufferPerText& data)
+    {
+        UpdateConstantBuffer(m_pConstantBufferPerText.Get(), CbSlot::PerText, data);
+    }
+
+    void ConstantBufferManager::UpdatePerScreen(const ConstantBufferPerScreen& data)
+    {
+        UpdateConstantBuffer(m_pConstantBufferPerScreen.Get(), CbSlot::PerScreen, data);
     }
 }

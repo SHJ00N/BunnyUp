@@ -43,6 +43,16 @@ namespace Engine
 		return Vector3(worldMatrix.m30, worldMatrix.m31, worldMatrix.m32);
 	}
 
+	const Vector3 Transform::GetWorldScale() const
+	{
+		if (parentTransform == nullptr)
+		{
+			return m_scale;
+		}
+
+		return parentTransform->GetWorldScale() * m_scale;
+	}
+
 	const Vector3 Transform::GetLossyScale() const
 	{
 		const auto& world = GetWorldMatrix();

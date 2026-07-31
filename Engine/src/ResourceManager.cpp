@@ -6,6 +6,7 @@
 #include "PrimitiveMeshFactory.h"
 #include "EnvironmentMap.h"
 #include "SamplerStateManager.h"
+#include "Font.h"
 
 namespace Engine
 {
@@ -27,12 +28,14 @@ namespace Engine
 		LoadShader<VertexPNUT>("Forward_Textured_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\ForwardTexturedShader.hlsl");
 		LoadShader<VertexPNUT>("Screen_Billboard_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\ScreenBillboardShader.hlsl");
 		LoadShader<VertexPNUT>("Normal_Effect_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\NormalEffectShader.hlsl");
+		LoadShader<VertexPNUT>("Text_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\TextShader.hlsl");
 		LoadShader<VertexSkin>("Skinning_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\SkinningShader.hlsl");
 		LoadShader<VertexSkin>("Forward_Skinning_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\ForwardSkinningShader.hlsl");
 		// render target shader
 		LoadShader<VertexPU>("PBR_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\PBR_ToonShader.hlsl");
 		LoadShader<VertexPU>("PostProcess_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\PostProcessShader.hlsl");
 		LoadShader<VertexPU>("Skybox_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\SkyboxShader.hlsl");
+		LoadShader<VertexPU>("BackBuffer_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\BackBufferShader.hlsl");
 		// IBL shader
 		LoadShader<VertexPNUT>("EnvCubeMap_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\EnvironmentCubeShader.hlsl");
 		LoadShader<VertexPNUT>("IrradianceMap_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\IrradianceMapShader.hlsl");
@@ -121,6 +124,7 @@ namespace Engine
 		m_shaders.clear();
 		m_meshes.clear();
 		m_materials.clear();
+		m_fonts.clear();
 	}
 
 	std::shared_ptr<Shader> ResourceManager::GetShader(const std::string& name)
@@ -297,6 +301,35 @@ namespace Engine
 		if (it == m_environmentMaps.end())
 		{
 			LOG_ERROR("Environment map not found: %s", name.c_str());
+			return nullptr;
+		}
+		return it->second;
+	}
+
+	std::shared_ptr<Font> ResourceManager::LoadFont(const std::string& name, const std::string& filePath)
+	{
+		if (m_fonts.find(name) != m_fonts.end())
+		{
+			LOG_WARNING("Font already exists: %s", name.c_str());
+			return m_fonts[name];
+		}
+		auto font = std::make_shared<Font>();
+		if (!font->Load(filePath))
+		{
+			LOG_ERROR("Failed to load font : %s", filePath.c_str());
+			return nullptr;
+		}
+		m_fonts[name] = font;
+		LOG_INFO("Font loaded: %s", filePath.c_str());
+		return font;
+	}
+
+	std::shared_ptr<Font> ResourceManager::GetFont(const std::string& name)
+	{
+		auto it = m_fonts.find(name);
+		if (it == m_fonts.end())
+		{
+			LOG_ERROR("Font not found: %s", name.c_str());
 			return nullptr;
 		}
 		return it->second;

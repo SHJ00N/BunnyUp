@@ -24,6 +24,54 @@
     <ClInclude Include="include\BVHNode.h" />
     <ClInclude Include="include\Collider_Legacy.h" />
     <ClInclude Include="include\CollisionData.h" />
+    <ClInclude Include="include\Font.h" />
+    <ClInclude Include="include\freetype\freetype.h" />
+    <ClInclude Include="include\freetype\ftadvanc.h" />
+    <ClInclude Include="include\freetype\ftbbox.h" />
+    <ClInclude Include="include\freetype\ftbdf.h" />
+    <ClInclude Include="include\freetype\ftbitmap.h" />
+    <ClInclude Include="include\freetype\ftbzip2.h" />
+    <ClInclude Include="include\freetype\ftcache.h" />
+    <ClInclude Include="include\freetype\ftchapters.h" />
+    <ClInclude Include="include\freetype\ftcid.h" />
+    <ClInclude Include="include\freetype\ftcolor.h" />
+    <ClInclude Include="include\freetype\ftdriver.h" />
+    <ClInclude Include="include\freetype\fterrdef.h" />
+    <ClInclude Include="include\freetype\fterrors.h" />
+    <ClInclude Include="include\freetype\ftfntfmt.h" />
+    <ClInclude Include="include\freetype\ftgasp.h" />
+    <ClInclude Include="include\freetype\ftglyph.h" />
+    <ClInclude Include="include\freetype\ftgxval.h" />
+    <ClInclude Include="include\freetype\ftgzip.h" />
+    <ClInclude Include="include\freetype\ftimage.h" />
+    <ClInclude Include="include\freetype\ftincrem.h" />
+    <ClInclude Include="include\freetype\ftlcdfil.h" />
+    <ClInclude Include="include\freetype\ftlist.h" />
+    <ClInclude Include="include\freetype\ftlogging.h" />
+    <ClInclude Include="include\freetype\ftlzw.h" />
+    <ClInclude Include="include\freetype\ftmac.h" />
+    <ClInclude Include="include\freetype\ftmm.h" />
+    <ClInclude Include="include\freetype\ftmodapi.h" />
+    <ClInclude Include="include\freetype\ftmoderr.h" />
+    <ClInclude Include="include\freetype\ftotval.h" />
+    <ClInclude Include="include\freetype\ftoutln.h" />
+    <ClInclude Include="include\freetype\ftparams.h" />
+    <ClInclude Include="include\freetype\ftpfr.h" />
+    <ClInclude Include="include\freetype\ftrender.h" />
+    <ClInclude Include="include\freetype\ftsizes.h" />
+    <ClInclude Include="include\freetype\ftsnames.h" />
+    <ClInclude Include="include\freetype\ftstroke.h" />
+    <ClInclude Include="include\freetype\ftsynth.h" />
+    <ClInclude Include="include\freetype\ftsystem.h" />
+    <ClInclude Include="include\freetype\fttrigon.h" />
+    <ClInclude Include="include\freetype\fttypes.h" />
+    <ClInclude Include="include\freetype\ftwinfnt.h" />
+    <ClInclude Include="include\freetype\otsvg.h" />
+    <ClInclude Include="include\freetype\t1tables.h" />
+    <ClInclude Include="include\freetype\ttnameid.h" />
+    <ClInclude Include="include\freetype\tttables.h" />
+    <ClInclude Include="include\freetype\tttags.h" />
+    <ClInclude Include="include\ft2build.h" />
     <ClInclude Include="include\PhysicsEventListener.h" />
     <ClInclude Include="include\CollisionMask.h" />
     <ClInclude Include="include\Collision_Legacy.h" />
@@ -65,7 +113,6 @@
     <ClInclude Include="include\PrimitiveMeshFactory.h" />
     <ClInclude Include="include\ConstantBufferManager.h" />
     <ClInclude Include="include\RendererComponent.h" />
-    <ClInclude Include="include\RenderPass.h" />
     <ClInclude Include="include\RenderPipeline.h" />
     <ClInclude Include="include\RenderStateManager.h" />
     <ClInclude Include="include\RenderTargetResource.h" />
@@ -88,6 +135,8 @@
     <ClInclude Include="include\D3DManager.h" />
     <ClInclude Include="include\InputManager.h" />
     <ClInclude Include="include\Singleton.h" />
+    <ClInclude Include="include\TextComponent.h" />
+    <ClInclude Include="include\TextRenderer.h" />
     <ClInclude Include="include\Texture2D.h" />
     <ClInclude Include="include\TimeClass.h" />
     <ClInclude Include="include\Transform.h" />
@@ -133,6 +182,10 @@
     </ClCompile>
     <ClInclude Include="include\RenderGraph.h" />
     <ClInclude Include="include\EffectComponent.h" />
+    <ClCompile Include="..\external\ImGui\misc\cpp\imgui_stdlib.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\Animation.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
@@ -179,6 +232,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\EffectComponent.cpp" />
+    <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\PhysicsEventListener.cpp" />
     <ClCompile Include="src\Collision_Legacy.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
@@ -414,6 +468,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\TextComponent.cpp" />
+    <ClCompile Include="src\TextRenderer.cpp" />
     <ClCompile Include="src\Texture2D.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
@@ -445,6 +501,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="shaders\BackBufferShader.hlsl" />
     <FxCompile Include="shaders\BasicShader.hlsl" />
     <FxCompile Include="shaders\NormalEffectShader.hlsl" />
     <FxCompile Include="shaders\ScreenBillboardShader.hlsl" />
@@ -459,6 +516,7 @@
     <FxCompile Include="shaders\PrefilteredEnvMapShader.hlsl" />
     <FxCompile Include="shaders\SkinningShader.hlsl" />
     <FxCompile Include="shaders\SkyboxShader.hlsl" />
+    <FxCompile Include="shaders\TextShader.hlsl" />
     <FxCompile Include="shaders\TextureShader.hlsl" />
   </ItemGroup>
   <ItemGroup>

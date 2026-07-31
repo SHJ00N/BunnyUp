@@ -14,7 +14,9 @@ namespace Engine
 		PerMaterial = 3,
 		PerLight = 4,
 		PrefilteredEnvMap = 5,
-		PerSpriteSheet = 6
+		PerSpriteSheet = 6,
+		PerText = 7,
+		PerScreen = 8
 	};
 
 	struct ConstantBufferPerCamera
@@ -79,5 +81,21 @@ namespace Engine
 	{
 		Vector2 frameSize;
 		Vector2 frameOffset;
+	};
+
+	struct ConstantBufferPerText
+	{
+		Vector2 position;
+		Vector2 scale;
+		Vector2 uvMin;
+		Vector2 uvMax;
+		Vector4 color;
+	};
+
+	struct ConstantBufferPerScreen
+	{
+		unsigned int width;
+		unsigned int height;
+		Vector2 padding;
 	};
 }

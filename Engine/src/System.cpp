@@ -78,9 +78,6 @@ namespace Engine
 		{
 			return hr;
 		}
-		// Initialize RenderPipline instance
-		m_pRenderPipeline = std::make_unique<RenderPipeline>();
-		m_pRenderPipeline->Initialize(&ConstantBufferManager::GetInstance());
 
 		// Initialize DebugRenderer instance
 		DebugRenderer::CreateInstance();
@@ -94,6 +91,10 @@ namespace Engine
 		ResourceManager::CreateInstance();
 		ResourceManager::GetInstance().LoadDefaultResources();
 		LoadGameResources();
+
+		// Initialize RenderPipline instance
+		m_pRenderPipeline = std::make_unique<RenderPipeline>();
+		m_pRenderPipeline->Initialize(&ConstantBufferManager::GetInstance());
 
 		// Initialize input
 		InputManager::CreateInstance();
@@ -173,6 +174,9 @@ namespace Engine
 			// delete destroyed object
 			SceneManager::GetInstance().CurrentSceneObjectDestroy();
 			// Render
+			auto rect = m_pWindowClass->GetWindowRect();
+			ConstantBufferPerScreen data = { static_cast<unsigned int>((rect.right - rect.left)), static_cast<unsigned int>((rect.bottom - rect.top)) };
+			ConstantBufferManager::GetInstance().UpdatePerScreen(data);
 			render();
 		}
 

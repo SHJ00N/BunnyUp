@@ -36,6 +36,14 @@ namespace Game
         auto objectPoolManager = CreateGameObject<GameObject>("ObjectPoolManager");
         auto objPool = objectPoolManager->AddComponent<ObjectPoolManager>();
 
+        auto helloWorld = CreateGameObject<GameObject>("Hello World!");
+        helloWorld->transform.SetLocalPosition(Vector3(100.0f, 100.0f, 0.0f));
+
+        auto helloWorldText = helloWorld->AddComponent<TextComponent>();
+        helloWorldText->SetText("Hello World!");
+        helloWorldText->SetFont(ResourceManager::GetInstance().GetFont("Poly"));
+
+
         // Enemy Spawn 
         auto enemySpawnManager = CreateGameObject<GameObject>("EnemySpawnManager");
         auto enemySpawn = enemySpawnManager->AddComponent<EnemySpawnManager>();

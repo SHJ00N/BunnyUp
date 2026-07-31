@@ -18,6 +18,7 @@ namespace Engine
 		const Vector3 GetRight() const;
 		const Vector3 GetUp() const;
 		const Vector3 GetWorldPosition() const;
+		const Vector3 GetWorldScale() const;
 		const Vector3 GetLossyScale() const;
 		const Matrix3x3 GetRotationMatrix() const;
 		const Quaternion GetWorldRotationQuaternion() const;

@@ -9,12 +9,24 @@
 #include "SamplerStateManager.h"
 #include "EnvironmentMap.h"
 #include "RenderStateManager.h"
+#include "TextRenderer.h"
 
 namespace Engine
 {
+    RenderPipeline::RenderPipeline()
+    {
+    }
+
+    RenderPipeline::~RenderPipeline()
+    {
+    }
+
     void RenderPipeline::Initialize(ConstantBufferManager* cbManager)
     {
         m_cbManager = cbManager;
+
+        m_textRenderer = std::make_unique<TextRenderer>();
+        m_textRenderer->Initialize();
     }
 
 	void RenderPipeline::Render(Scene* scene)
@@ -253,11 +265,12 @@ namespace Engine
 
         // Post-process pass
 		// ----------------------------------------------------------------
+        ResourceHandle postProcessPassOutput = graph.Create("PostProcessPassOutput", ResourceDesc::CreateColorTarget(backBufferDesc.width, backBufferDesc.height, backBufferDesc.format));
 		RenderPassParameter postProcessPassParams;
 		postProcessPassParams.reads.push_back(forwardPassOutput);
 		postProcessPassParams.reads.push_back(normalBuffer);
 		postProcessPassParams.reads.push_back(depthBuffer);
-		postProcessPassParams.writes.push_back(backBuffer);
+		postProcessPassParams.writes.push_back(postProcessPassOutput);
 		// get shader
 		Shader* postProcessShader = ResourceManager::GetInstance().GetShader("PostProcess_shader").get();
 		// add post-process pass
@@ -265,22 +278,22 @@ namespace Engine
             "PostProcessPass",
             PassType::Graphics,
             postProcessPassParams,
-            [forwardPassOutput, backBuffer, normalBuffer, depthBuffer, postProcessShader, & graph, this](RenderCommandList& cmd)
+            [forwardPassOutput, postProcessPassOutput, normalBuffer, depthBuffer, postProcessShader, & graph, this](RenderCommandList& cmd)
             {
                 // get resources
                 auto* forwardPassOutputRes = graph.GetResource(forwardPassOutput);
 				auto* normalRes = graph.GetResource(normalBuffer);
 				auto* depthRes = graph.GetResource(depthBuffer);
-                auto* backBufferRes = graph.GetResource(backBuffer);
+                auto* postProcessPassOutputRes = graph.GetResource(postProcessPassOutput);
 				// Clear backBuffer
 				const float clearColor[4] = { 0.1f, 0.1f, 0.3f, 1.0f };
-                cmd.ClearRenderTarget(backBufferRes->GetRenderTargetView(), clearColor);
+                cmd.ClearRenderTarget(postProcessPassOutputRes->GetRenderTargetView(), clearColor);
                 // Set RenderTargets
-                ID3D11RenderTargetView* rtvs[] = { backBufferRes->GetRenderTargetView() };
+                ID3D11RenderTargetView* rtvs[] = { postProcessPassOutputRes->GetRenderTargetView() };
                 cmd.SetRenderTargets(rtvs, nullptr);
                 // Set viewport
-                const auto& bbDesc = graph.GetResourceDesc(backBuffer);
-                cmd.SetViewport(static_cast<float>(bbDesc.width), static_cast<float>(bbDesc.height));
+                const auto& ppDesc = graph.GetResourceDesc(postProcessPassOutput);
+                cmd.SetViewport(static_cast<float>(ppDesc.width), static_cast<float>(ppDesc.height));
                 // Set shader resources
                 ID3D11ShaderResourceView* srvs[3] = { forwardPassOutputRes->GetShaderResourceView(), normalRes->GetShaderResourceView(), depthRes->GetShaderResourceView() };
                 cmd.SetShaderResource(0, srvs, 3);
@@ -296,6 +309,50 @@ namespace Engine
 				cmd.SetShaderResource(0, nullSRVs, 3);
             },
             postProcessShader
+        );
+
+        // UI pass
+        // ----------------------------------------------------------------
+        RenderPassParameter UIPassParams;
+        UIPassParams.reads.push_back(postProcessPassOutput);
+        UIPassParams.writes.push_back(backBuffer);
+        // get shader
+        Shader* backBufferShader = ResourceManager::GetInstance().GetShader("BackBuffer_shader").get();
+        // add post-process pass
+        graph.AddPass(
+            "UIPass",
+            PassType::Graphics,
+            UIPassParams,
+            [postProcessPassOutput, backBuffer, backBufferShader, &graph, scene, this](RenderCommandList& cmd)
+            {
+                // get resources
+                auto* postProcessPassOutputRes = graph.GetResource(postProcessPassOutput);
+                auto* backBufferRes = graph.GetResource(backBuffer);
+                // Clear backBuffer
+                const float clearColor[4] = { 0.1f, 0.1f, 0.3f, 1.0f };
+                cmd.ClearRenderTarget(backBufferRes->GetRenderTargetView(), clearColor);
+                // Set RenderTargets
+                ID3D11RenderTargetView* rtvs[] = { backBufferRes->GetRenderTargetView() };
+                cmd.SetRenderTargets(rtvs, nullptr);
+                // Set viewport
+                const auto& bbDesc = graph.GetResourceDesc(backBuffer);
+                cmd.SetViewport(static_cast<float>(bbDesc.width), static_cast<float>(bbDesc.height));
+                // Set shader resources
+                ID3D11ShaderResourceView* srvs[1] = { postProcessPassOutputRes->GetShaderResourceView() };
+                cmd.SetShaderResource(0, srvs, 1);
+                SamplerStateManager::GetInstance().GetSampler(SamplerType::LinearClamp)->Bind(0);
+
+                // bind shader and draw fullscreen quad
+                backBufferShader->Bind();
+                cmd.DrawFullScreenQuad();
+
+                // Unbind resources after rendering to avoid hazard in next pass
+                ID3D11ShaderResourceView* nullSRVs[1] = { nullptr };
+                cmd.SetShaderResource(0, nullSRVs, 1);
+
+                m_textRenderer->Render(scene->GetTexts(), m_cbManager);
+            },
+            backBufferShader
         );
 
         // copy gDepth pass

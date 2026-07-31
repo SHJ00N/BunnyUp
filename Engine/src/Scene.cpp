@@ -292,4 +292,17 @@ namespace Engine
 			m_navObstacleColliders.end()
 		);
 	}
+
+	void Scene::RegistText(TextComponent* text)
+	{
+		m_texts.push_back(text);
+	}
+
+	void Scene::UnregistText(TextComponent* text)
+	{
+		m_texts.erase(
+			std::remove(m_texts.begin(), m_texts.end(), text),
+			m_texts.end()
+		);
+	}
 }

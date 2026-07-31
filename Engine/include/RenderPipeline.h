@@ -9,14 +9,19 @@ namespace Engine
 	class Scene;
 	class RenderGraph;
 	class ConstantBufferManager;
+	class TextRenderer;
 	class RenderPipeline
 	{
 	public:
+		RenderPipeline();
+		~RenderPipeline();
+
 		void Initialize(ConstantBufferManager* cbManager);
 		void Render(Scene* scene);
 	private:
 		void build(RenderGraph& graph, Scene* scene);
 
+		std::unique_ptr<TextRenderer> m_textRenderer;
 		ConstantBufferManager *m_cbManager = nullptr;
 	};
 }

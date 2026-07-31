@@ -15,6 +15,7 @@ namespace Engine
 	class Texture2D;
 	class Animation;
 	class EnvironmentMap;
+	class Font;
 
 	class ResourceManager : public Singleton<ResourceManager>
 	{
@@ -61,6 +62,10 @@ namespace Engine
 		std::shared_ptr<EnvironmentMap> LoadEnvironmentMap(const std::string& name, const std::string& filePath);
 		std::shared_ptr<EnvironmentMap> GetEnvironmentMap(const std::string& name);
 		const std::unordered_map<std::string, std::shared_ptr<EnvironmentMap>>& GetEnvironmentMaps() const { return m_environmentMaps; }
+
+		std::shared_ptr<Font> LoadFont(const std::string& name, const std::string& filePath);
+		std::shared_ptr<Font> GetFont(const std::string& name);
+		const std::unordered_map<std::string, std::shared_ptr<Font>>& GetFonts() const { return m_fonts; }
 
 		// Mesh for caching (e.g. primitive)
 		template<typename VertexType>
@@ -113,5 +118,6 @@ namespace Engine
 		std::unordered_map<std::string, std::shared_ptr<Mesh>> m_meshes;	// primitive meshes
 		std::unordered_map<std::string, std::shared_ptr<Material>> m_materials;
 		std::unordered_map<std::string, std::shared_ptr<EnvironmentMap>> m_environmentMaps;
+		std::unordered_map<std::string, std::shared_ptr<Font>> m_fonts;
 	};
 }

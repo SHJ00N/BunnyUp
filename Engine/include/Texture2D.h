@@ -20,6 +20,7 @@ namespace Engine
 
 		HRESULT CreateFromFile(const std::string& filePath, TextureType type);
 		HRESULT CreateHDRFromFile(const std::string& filePath);
+		HRESULT CreateFromMemory(const std::string& name, uint32_t width, uint32_t height, DXGI_FORMAT format, const void* data, uint32_t rowPitch);
 		const std::string& GetName() const { return m_name; }
 
 		void Bind(UINT slot = 0) const;

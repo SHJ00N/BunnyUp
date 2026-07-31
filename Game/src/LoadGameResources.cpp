@@ -7,6 +7,9 @@ void LoadGameResources()
     // Environment map
     resourceManager.LoadEnvironmentMap("Sky_EnvMap", "resources\\textures\\FS002_Day_Sunless.PNG");
 
+    // Font
+    resourceManager.LoadFont("Poly", "resources\\fonts\\Poly-Regular.otf");
+
     // Effect
     resourceManager.LoadTexture("AHit_Effect", "resources\\textures\\Hit-Yellow-A.png");
     resourceManager.LoadTexture("BHit_Effect", "resources\\textures\\Hit-Yellow-B.png");

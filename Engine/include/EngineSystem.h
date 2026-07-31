@@ -28,3 +28,4 @@
 #include "Rp3dCollider.h"
 #include "Socket.h"
 #include "EffectComponent.h"
+#include "TextComponent.h"

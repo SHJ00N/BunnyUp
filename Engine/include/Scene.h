@@ -14,6 +14,7 @@ namespace Engine
 	class EnvironmentMap;
 	class PhysicsSystem;
 	class ConstantBufferManager;
+	class TextComponent;
 
 	struct ObjectCreateRequest
 	{
@@ -102,6 +103,11 @@ namespace Engine
 		void UnregistObstacleCollider(Rp3dCollider* collider);
 		const std::vector<Rp3dCollider*>& GetObstacleColliders() const { return m_navObstacleColliders; }
 
+		// text management
+		void RegistText(TextComponent* text);
+		void UnregistText(TextComponent* text);
+		const std::vector<TextComponent*>& GetTexts() const { return m_texts; }
+
 		// environment map management
 		void SetEnvironmentMap(std::shared_ptr<EnvironmentMap> envMap) { m_environmentMap = envMap; }
 		std::shared_ptr<EnvironmentMap> GetEnvironmentMap() const { return m_environmentMap; }
@@ -122,6 +128,8 @@ namespace Engine
 		// lights in the scene
 		std::vector<Light*> m_lights;
 		ConstantBufferPerLight m_cbPerLight;
+		// texts in the scene
+		std::vector<TextComponent*> m_texts;
 		// colliders in the scene
 		std::vector<Rp3dCollider*> m_navObstacleColliders;
 		// environment map

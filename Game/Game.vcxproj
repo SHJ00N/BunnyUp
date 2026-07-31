@@ -272,7 +272,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Engine.lib;$(ProjectDir)lib\debug\assimp-vc143-mt.lib;$(ProjectDir)lib\debug\reactphysics3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;$(ProjectDir)lib\debug\assimp-vc143-mt.lib;$(ProjectDir)lib\debug\reactphysics3d.lib;$(ProjectDir)lib\debug\freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Project\BunnyUp\Engine\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -301,7 +301,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Engine.lib;$(ProjectDir)lib\release\assimp-vc143-mt.lib;$(ProjectDir)lib\release\reactphysics3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;$(ProjectDir)lib\release\assimp-vc143-mt.lib;$(ProjectDir)lib\release\reactphysics3d.lib;$(ProjectDir)lib\release\freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Project\BunnyUp\Engine\build\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -324,7 +324,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Engine.lib;$(ProjectDir)lib\debug\assimp-vc143-mt.lib;$(ProjectDir)lib\debug\reactphysics3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;$(ProjectDir)lib\debug\assimp-vc143-mt.lib;$(ProjectDir)lib\debug\reactphysics3d.lib;$(ProjectDir)lib\debug\freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Project\BunnyUp\Engine\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -353,7 +353,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Engine.lib;$(ProjectDir)lib\release\assimp-vc143-mt.lib;$(ProjectDir)lib\release\reactphysics3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;$(ProjectDir)lib\release\assimp-vc143-mt.lib;$(ProjectDir)lib\release\reactphysics3d.lib;$(ProjectDir)lib\release\freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Project\BunnyUp\Engine\build\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
