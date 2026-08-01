@@ -16,6 +16,8 @@ namespace Game
         bool jump = false;
         bool dash = false;
         bool attack = false;
+
+        bool start = false;
     };
 
     class PlayerInputManager : public Singleton<PlayerInputManager>

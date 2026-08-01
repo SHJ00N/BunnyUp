@@ -10,7 +10,7 @@
 
 namespace Engine
 {
-	ResourceManager::ResourceManager()
+	ResourceManager::ResourceManager() : m_rootPath("Assets")
 	{
 	}
 
@@ -18,38 +18,42 @@ namespace Engine
 	{
 	}
 
+	std::filesystem::path ResourceManager::MakePath(const std::string& path) const
+	{
+		return std::filesystem::path(m_rootPath) / path;
+	}
+
 	void ResourceManager::LoadDefaultResources()
 	{
 		// Load default shader
 		// ---------------------------------------------------------------------
 		// mesh shader
-		LoadShader<VertexPNUT>("Default_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\BasicShader.hlsl");
-		LoadShader<VertexPNUT>("Textured_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\TextureShader.hlsl");
-		LoadShader<VertexPNUT>("Forward_Textured_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\ForwardTexturedShader.hlsl");
-		LoadShader<VertexPNUT>("Screen_Billboard_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\ScreenBillboardShader.hlsl");
-		LoadShader<VertexPNUT>("Normal_Effect_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\NormalEffectShader.hlsl");
-		LoadShader<VertexPNUT>("Text_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\TextShader.hlsl");
-		LoadShader<VertexSkin>("Skinning_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\SkinningShader.hlsl");
-		LoadShader<VertexSkin>("Forward_Skinning_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\ForwardSkinningShader.hlsl");
+		LoadShader<VertexPNUT>("Default_shader", MakePath("shaders/BasicShader.hlsl").string());
+		LoadShader<VertexPNUT>("Textured_shader", MakePath("shaders/TextureShader.hlsl").string());
+		LoadShader<VertexPNUT>("Forward_Textured_shader", MakePath("shaders/ForwardTexturedShader.hlsl").string());
+		LoadShader<VertexPNUT>("Screen_Billboard_shader", MakePath("shaders/ScreenBillboardShader.hlsl").string());
+		LoadShader<VertexPNUT>("Normal_Effect_shader", MakePath("shaders/NormalEffectShader.hlsl").string());
+		LoadShader<VertexPNUT>("Text_shader", MakePath("shaders/TextShader.hlsl").string());
+		LoadShader<VertexSkin>("Skinning_shader", MakePath("shaders/SkinningShader.hlsl").string());
+		LoadShader<VertexSkin>("Forward_Skinning_shader", MakePath("shaders/ForwardSkinningShader.hlsl").string());
 		// render target shader
-		LoadShader<VertexPU>("PBR_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\PBR_ToonShader.hlsl");
-		LoadShader<VertexPU>("PostProcess_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\PostProcessShader.hlsl");
-		LoadShader<VertexPU>("Skybox_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\SkyboxShader.hlsl");
-		LoadShader<VertexPU>("BackBuffer_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\BackBufferShader.hlsl");
+		LoadShader<VertexPU>("PBR_shader", MakePath("shaders/PBR_ToonShader.hlsl").string());
+		LoadShader<VertexPU>("PostProcess_shader", MakePath("shaders/PostProcessShader.hlsl").string());
+		LoadShader<VertexPU>("Skybox_shader", MakePath("shaders/SkyboxShader.hlsl").string());
+		LoadShader<VertexPU>("BackBuffer_shader", MakePath("shaders/BackBufferShader.hlsl").string());	
 		// IBL shader
-		LoadShader<VertexPNUT>("EnvCubeMap_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\EnvironmentCubeShader.hlsl");
-		LoadShader<VertexPNUT>("IrradianceMap_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\IrradianceMapShader.hlsl");
-		LoadShader<VertexPNUT>("PrefilteredEnvMap_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\PrefilteredEnvMapShader.hlsl");
-		LoadShader<VertexPU>("Brdf_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\BrdfShader.hlsl");
+		LoadShader<VertexPNUT>("EnvCubeMap_shader", MakePath("shaders/EnvironmentCubeShader.hlsl").string());
+		LoadShader<VertexPNUT>("IrradianceMap_shader", MakePath("shaders/IrradianceMapShader.hlsl").string());
+		LoadShader<VertexPNUT>("PrefilteredEnvMap_shader", MakePath("shaders/PrefilteredEnvMapShader.hlsl").string());
+		LoadShader<VertexPU>("Brdf_shader", MakePath("shaders/BrdfShader.hlsl").string());
 
 		// Debug shader
-		LoadShader<VertexPC>("Debug_shader", "C:\\Project\\BunnyUp\\Engine\\shaders\\DebugShader.hlsl");
+		LoadShader<VertexPC>("Debug_shader", MakePath("shaders/DebugShader.hlsl").string());
 
 		// Default textures
-		LoadTexture("Default_Black", "C:\\Project\\BunnyUp\\Engine\\resources\\textures\\Default_Black.png", TextureType::Albedo);
-		LoadTexture("Default_White", "C:\\Project\\BunnyUp\\Engine\\resources\\textures\\Default_White.png", TextureType::Albedo);
-		LoadTexture("Default_Normal", "C:\\Project\\BunnyUp\\Engine\\resources\\textures\\Default_Normal.png", TextureType::Normal);
-
+		LoadTexture("Default_Black", MakePath("resources/textures/Default_Black.png").string(), TextureType::Albedo);
+		LoadTexture("Default_White", MakePath("resources/textures/Default_White.png").string(), TextureType::Albedo);
+		LoadTexture("Default_Normal", MakePath("resources/textures/Default_Normal.png").string(), TextureType::Normal);
 		// Create primitive meshes
 		auto quadData = PrimitiveMeshFactory::CreateQuad();
 		CreateMesh<VertexPNUT>("Primitive_quad", quadData.vertices, quadData.indices);

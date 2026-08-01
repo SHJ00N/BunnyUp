@@ -9,6 +9,7 @@ namespace Game
         if (Elapsed(3.0f))
         {
             ObjectPoolManager::GetInstance().ReturnPool(controller.ownerGameObject);
+            ResetTimer();
         }
     }
 

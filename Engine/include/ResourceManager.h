@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <memory>
 #include <string>
+#include <filesystem>
 
 #include "Singleton.h"
 #include "Shader.h"
@@ -24,6 +25,8 @@ namespace Engine
 		~ResourceManager();
 
 		void LoadDefaultResources();
+
+		std::filesystem::path MakePath(const std::string& path) const;
 
 		template<typename VertexType>
 		std::shared_ptr<Shader> LoadShader(const std::string& name, const std::string& filePath)
@@ -110,6 +113,8 @@ namespace Engine
 
 		void Clear();
 	private:
+		std::filesystem::path m_rootPath;
+
 		// resource storage
 		std::unordered_map<std::string, std::shared_ptr<Shader>> m_shaders;
 		std::unordered_map<std::string, std::shared_ptr<Texture2D>> m_textures;

@@ -32,9 +32,9 @@
     <ClCompile Include="src\CameraController.cpp" />
     <ClCompile Include="src\Common\Health.cpp" />
     <ClCompile Include="src\Common\ObjectPoolManager.cpp" />
-    <ClCompile Include="src\CubeController.cpp" />
-    <ClCompile Include="src\CubeGenerator.cpp" />
-    <ClCompile Include="src\DemoScene2.cpp" />
+    <ClCompile Include="src\GameManager.cpp" />
+    <ClCompile Include="src\HeartItem.cpp" />
+    <ClCompile Include="src\Scene\TitleScene.cpp" />
     <ClCompile Include="src\Effect\EffectObject.cpp" />
     <ClCompile Include="src\Effect\EffectPoolManager.cpp" />
     <ClCompile Include="src\Enemy\AStar.cpp" />
@@ -90,9 +90,12 @@
     <ClCompile Include="src\Player\PlayerController.cpp" />
     <ClCompile Include="src\Player\RunningState.cpp" />
     <ClCompile Include="src\Player\WalkingState.cpp" />
-    <ClCompile Include="src\RegistractionGameScenes.cpp" />
-    <ClCompile Include="src\DemoScene1.cpp" />
+    <ClCompile Include="src\Scene\RegistractionGameScenes.cpp" />
+    <ClCompile Include="src\Scene\GameScene.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\TitleSceneInput.cpp" />
+    <ClCompile Include="src\UI\GameOverText.cpp" />
+    <ClCompile Include="src\UI\StartText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -102,10 +105,10 @@
     <ClInclude Include="include\Effect\EffectPoolManager.h" />
     <ClInclude Include="include\Common\Health.h" />
     <ClInclude Include="include\Common\HitBox.h" />
-    <ClInclude Include="include\CubeController.h" />
-    <ClInclude Include="include\CubeGenerator.h" />
-    <ClInclude Include="include\DemoScene1.h" />
-    <ClInclude Include="include\DemoScene2.h" />
+    <ClInclude Include="include\GameManager.h" />
+    <ClInclude Include="include\HeartItem.h" />
+    <ClInclude Include="include\Scene\GameScene.h" />
+    <ClInclude Include="include\Scene\TitleScene.h" />
     <ClInclude Include="include\Effect\EffectObject.h" />
     <ClInclude Include="include\Enemy\AStar.h" />
     <ClInclude Include="include\BehaviorTree\BehaviorNode.h" />
@@ -164,6 +167,9 @@
     <ClInclude Include="include\Player\PlayerState.h" />
     <ClInclude Include="include\Player\RunningState.h" />
     <ClInclude Include="include\Singleton.h" />
+    <ClInclude Include="include\TitleSceneInput.h" />
+    <ClInclude Include="include\UI\GameOverText.h" />
+    <ClInclude Include="include\UI\StartText.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="targetver.h" />
@@ -316,7 +322,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\ReactPhysics3D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\ReactPhysics3D\include;C:\Project\BunnyUp\Assets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
@@ -345,7 +351,7 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\ReactPhysics3D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Game;C:\Project\BunnyUp\Game\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ImGui;C:\Project\BunnyUp\external\ReactPhysics3D\include;C:\Project\BunnyUp\Assets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>

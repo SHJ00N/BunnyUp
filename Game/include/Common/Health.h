@@ -18,6 +18,7 @@ namespace Game
         bool IsDeath() const { return m_health <= 0; }
 
     protected:
+        void OnStart() override;
         void OnEnable() override;
 
     private:

@@ -20,5 +20,6 @@ namespace Game
         Engine::GameObject* createBoss(Engine::GameObject* parent);
         Engine::GameObject* createThron(Engine::GameObject* parent);
         Engine::GameObject* createBigThron(Engine::GameObject* parent);
+        Engine::GameObject* createHeartItem(Engine::GameObject* parent);
     };
 }

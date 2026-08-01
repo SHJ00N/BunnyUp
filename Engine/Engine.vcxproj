@@ -185,6 +185,7 @@
     <ClCompile Include="..\external\ImGui\misc\cpp\imgui_stdlib.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Animation.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
@@ -501,31 +502,26 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="shaders\BackBufferShader.hlsl" />
-    <FxCompile Include="shaders\BasicShader.hlsl" />
-    <FxCompile Include="shaders\NormalEffectShader.hlsl" />
-    <FxCompile Include="shaders\ScreenBillboardShader.hlsl" />
-    <FxCompile Include="shaders\BrdfShader.hlsl" />
-    <FxCompile Include="shaders\DebugShader.hlsl" />
-    <FxCompile Include="shaders\EnvironmentCubeShader.hlsl" />
-    <FxCompile Include="shaders\ForwardSkinningShader.hlsl" />
-    <FxCompile Include="shaders\ForwardTexturedShader.hlsl" />
-    <FxCompile Include="shaders\IrradianceMapShader.hlsl" />
-    <FxCompile Include="shaders\PBR_ToonShader.hlsl" />
-    <FxCompile Include="shaders\PostProcessShader.hlsl" />
-    <FxCompile Include="shaders\PrefilteredEnvMapShader.hlsl" />
-    <FxCompile Include="shaders\SkinningShader.hlsl" />
-    <FxCompile Include="shaders\SkyboxShader.hlsl" />
-    <FxCompile Include="shaders\TextShader.hlsl" />
-    <FxCompile Include="shaders\TextureShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\BackBufferShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\BasicShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\BrdfShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\DebugShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\EnvironmentCubeShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\ForwardSkinningShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\ForwardTexturedShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\IrradianceMapShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\NormalEffectShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\PBR_ToonShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\PostProcessShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\PrefilteredEnvMapShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\ScreenBillboardShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\SkinningShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\SkyboxShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\TextShader.hlsl" />
+    <FxCompile Include="..\Assets\shaders\TextureShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\Common\Lighting.hlsli">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </None>
+    <None Include="..\Assets\shaders\Common\Lighting.hlsli" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -598,7 +594,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(projectDir)build\$(Configuration)\</OutDir>
     <IntDir>$(projectDir)bin\$(Configuration)\</IntDir>
-    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\Assets;$(IncludePath)</IncludePath>
     <SourcePath>$(SourcePath)</SourcePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <ExternalIncludePath>C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ReactPhysics3D\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\ImGui;$(ExternalIncludePath)</ExternalIncludePath>
@@ -606,7 +602,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(projectDir)build\$(Configuration)\</OutDir>
     <IntDir>$(projectDir)bin\$(Configuration)\</IntDir>
-    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Project\BunnyUp\Engine\include;C:\Project\BunnyUp\Engine;C:\Project\BunnyUp\Assets;$(IncludePath)</IncludePath>
     <SourcePath>$(SourcePath)</SourcePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <ExternalIncludePath>C:\Project\BunnyUp\external\DirectXTK\Inc;C:\Project\BunnyUp\external\ReactPhysics3D\include;C:\Project\BunnyUp\external\Assimp;C:\Project\BunnyUp\external\ImGui;$(ExternalIncludePath)</ExternalIncludePath>
@@ -618,7 +614,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
@@ -646,7 +642,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
@@ -672,7 +668,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
@@ -700,7 +696,7 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Project\BunnyUp\Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>

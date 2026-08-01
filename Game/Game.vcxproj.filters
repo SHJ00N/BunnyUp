@@ -45,22 +45,16 @@
     <ClCompile Include="src\LoadGameResources.cpp">
       <Filter>소스 파일\Main</Filter>
     </ClCompile>
-    <ClCompile Include="src\RegistractionGameScenes.cpp">
+    <ClCompile Include="src\Scene\RegistractionGameScenes.cpp">
       <Filter>소스 파일\Main</Filter>
     </ClCompile>
-    <ClCompile Include="src\DemoScene1.cpp">
+    <ClCompile Include="src\Scene\GameScene.cpp">
       <Filter>소스 파일\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="src\DemoScene2.cpp">
+    <ClCompile Include="src\Scene\TitleScene.cpp">
       <Filter>소스 파일\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="src\CameraController.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CubeController.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CubeGenerator.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="src\Input\KeyMapping.cpp">
@@ -246,6 +240,21 @@
     <ClCompile Include="src\Enemy\BossRangedAttack.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\GameOverText.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\StartText.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HeartItem.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TitleSceneInput.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -263,19 +272,13 @@
     <ClInclude Include="include\CameraController.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="include\CubeController.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="include\CubeGenerator.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="include\Singleton.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="include\DemoScene1.h">
+    <ClInclude Include="include\Scene\GameScene.h">
       <Filter>헤더 파일\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="include\DemoScene2.h">
+    <ClInclude Include="include\Scene\TitleScene.h">
       <Filter>헤더 파일\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="include\Player\PlayerState.h">
@@ -462,6 +465,21 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="include\Enemy\BossRangedAttack.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UI\GameOverText.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UI\StartText.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\HeartItem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TitleSceneInput.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

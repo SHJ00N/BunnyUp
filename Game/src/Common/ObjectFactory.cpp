@@ -7,6 +7,7 @@
 #include "Enemy/BossEnemyController.h"
 #include "Common/Health.h"
 #include "Enemy/Thron.h"
+#include "HeartItem.h"
 
 namespace Game
 {
@@ -19,6 +20,7 @@ namespace Game
         m_registry["Boss"] = [this](GameObject* parent) { return createBoss(parent); };
         m_registry["Thron"] = [this](GameObject* parent) { return createThron(parent); };
         m_registry["BigThron"] = [this](GameObject* parent) { return createBigThron(parent); };
+        m_registry["HeartItem"] = [this](GameObject* parent) { return createHeartItem(parent); };
     }
 
     GameObject* ObjectFactory::Create(const std::string& name, GameObject* parent)
@@ -131,7 +133,7 @@ namespace Game
         bossAnimator->RegistAnimation("Death", ResourceManager::GetInstance().GetAnimation("Monster_TurtleShell_Death").get());
 
         auto bossHealth = boss->AddComponent<Health>();
-        bossHealth->SetMaxHealth(200);
+        bossHealth->SetMaxHealth(100);
 
         return boss;
     }
@@ -168,5 +170,23 @@ namespace Game
         thronCollider->SetTrigger(true);
 
         return thron;
+    }
+
+    GameObject* ObjectFactory::createHeartItem(GameObject* parent)
+    {
+        auto heart = parent->scene->CreateChildGameObject<GameObject>(parent, "HeartItem");
+        heart->SetTag(ObjectTag::Trigger);
+        auto heartRenderer = heart->AddComponent<MeshRenderer>();
+        heartRenderer->SetMesh(ResourceManager::GetInstance().GetModel("Heart"));
+        heartRenderer->GetMaterial(0)->SetColor(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+        heart->AddComponent<HeartItem>();
+
+        auto heartRigidbody = heart->AddComponent<Rp3dRigidbody>(1.0f, BodyType::KINEMATIC, false);
+        auto heartCollider = heart->AddComponent<Rp3dBoxCollider>();
+        heartCollider->SetSize(Vector3(12.5f, 10.0f, 5.0f));
+        heartCollider->SetTrigger(true);
+        heartCollider->SetCollisionLayer(CollisionLayer::Trigger);
+
+        return heart;
     }
 }

@@ -634,60 +634,60 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="shaders\BasicShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\BackBufferShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\BrdfShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\BasicShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\DebugShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\BrdfShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\EnvironmentCubeShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\DebugShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\IrradianceMapShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\EnvironmentCubeShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\PBR_ToonShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\ForwardSkinningShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\PostProcessShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\ForwardTexturedShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\PrefilteredEnvMapShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\IrradianceMapShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\SkinningShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\NormalEffectShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\SkyboxShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\PBR_ToonShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\TextureShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\PostProcessShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\ScreenBillboardShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\PrefilteredEnvMapShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\ForwardTexturedShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\ScreenBillboardShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\ForwardSkinningShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\SkinningShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\NormalEffectShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\SkyboxShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\TextShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\TextShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\BackBufferShader.hlsl">
+    <FxCompile Include="..\Assets\shaders\TextureShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\Common\Lighting.hlsli">
+    <None Include="..\Assets\shaders\Common\Lighting.hlsli">
       <Filter>리소스 파일</Filter>
     </None>
   </ItemGroup>

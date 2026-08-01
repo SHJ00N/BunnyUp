@@ -8,7 +8,8 @@ namespace Game
     {
         PlayerHit,
         EnemyHit,
-        Dust
+        Dust,
+        Heal
     };
 
     class EffectObject : public Engine::Component

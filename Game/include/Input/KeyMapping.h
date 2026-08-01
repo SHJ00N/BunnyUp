@@ -14,7 +14,9 @@ namespace Game
         Run,
         Jump,
         Dash,
-        Attack
+        Attack,
+
+        Start
     };
 
     class KeyMapping

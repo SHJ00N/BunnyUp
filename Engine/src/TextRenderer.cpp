@@ -31,6 +31,11 @@ namespace Engine
 
 		for (const auto* text : texts)
 		{
+			if (!text->ownerGameObject->IsEnable())
+			{
+				continue;
+			}
+
 			auto* font = text->GetFont();
 			auto fontSize = text->GetFontSize();
 			auto* atlas = font->GetAtlas(fontSize);

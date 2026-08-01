@@ -13,6 +13,8 @@ namespace Game
         m_keyMapping.BindKey(Input::Jump, DirectX::Keyboard::Keys::C);
         m_keyMapping.BindKey(Input::Dash, DirectX::Keyboard::Keys::Z);
         m_keyMapping.BindKey(Input::Attack, DirectX::Keyboard::Keys::X);
+
+        m_keyMapping.BindKey(Input::Start, DirectX::Keyboard::Keys::Enter);
     }
     void PlayerInputManager::Update(float dt)
     {
@@ -25,6 +27,8 @@ namespace Game
         m_inputState.jump = m_keyMapping.IsKeyPressed(Input::Jump);
         m_inputState.dash = m_keyMapping.IsKeyPressed(Input::Dash);
         m_inputState.attack = m_keyMapping.IsKeyPressed(Input::Attack);
+
+        m_inputState.start = m_keyMapping.IsKeyPressed(Input::Start);
     }
     void PlayerInputManager::OnAwake()
     {

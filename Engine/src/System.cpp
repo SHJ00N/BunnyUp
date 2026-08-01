@@ -141,7 +141,7 @@ namespace Engine
 			{
 				PostQuitMessage(0);
 			}
-			if (InputManager::GetInstance().IsKeyPressed(DirectX::Keyboard::Keys::Enter))
+			if (InputManager::GetInstance().IsKeyPressed(DirectX::Keyboard::Keys::F4))
 			{
 				static int sceneState = 0;
 				sceneState++;

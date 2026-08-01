@@ -15,6 +15,7 @@
 #include "ImGuiClass.h"
 #include "PhysicsSystem.h"
 #include "DebugRenderer.h"
+#include "SceneManager.h"
 
 // Component system
 #include "Component.h"

@@ -2,6 +2,7 @@
 #include "Player/PlayerController.h"
 #include "Input/PlayerInputManager.h"
 #include "Player/PlayerAttackHitBox.h"
+#include "Effect/EffectPoolManager.h"
 
 namespace Game
 {
@@ -17,10 +18,14 @@ namespace Game
         if (OnGroundState::HandleInput(playerController, inputState)) return true;
 
         // cancel attack
-        if (Elapsed(0.7f))
+        if(Elapsed(0.5f))
+        {
+            if (CanDash(playerController, inputState)) return true;
+        }
+
+        if (Elapsed(0.6f))
         {
             if (CanJump(playerController, inputState)) return true;
-            if (CanDash(playerController, inputState)) return true;
             if (inputState.attack)
             {
                 playerController.ChangeState(playerController.GetAttackState(), true);

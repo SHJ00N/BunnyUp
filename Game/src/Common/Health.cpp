@@ -23,6 +23,11 @@ namespace Game
         m_health = m_maxHealth;
     };
 
+    void Health::OnStart()
+    {
+        m_health = m_maxHealth;
+    }
+
     void Health::OnEnable()
     {
         m_health = m_maxHealth;

@@ -69,6 +69,17 @@ namespace Game
 
             return object->AddComponent<EffectObject>(type);
         }
+        case EffectObjectType::Heal:
+        {
+            auto* object = ownerGameObject->scene->CreateChildGameObject<GameObject>(ownerGameObject, "Heal");
+            auto* renderer = object->AddComponent<EffectRenderer>(EffectType::Billboard);
+            renderer->SetSpriteSheet(ResourceManager::GetInstance().GetTexture("Star_Effect"), 5, 4);
+            renderer->GetMaterial(0)->SetColor(Vector4(0.3f, 1.0f, 0.3f, 1.0f));
+            auto* effect = object->AddComponent<EffectComponent>();
+            effect->SetFPS(60.0f);
+
+            return object->AddComponent<EffectObject>(type);
+        }
         }
 
         return nullptr;

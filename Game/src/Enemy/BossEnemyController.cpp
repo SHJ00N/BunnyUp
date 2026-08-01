@@ -18,6 +18,7 @@ namespace Game
 
     void BossEnemyController::OnUpdate(float dt)
     {
+        m_cooldownTimer -= dt;
         m_meleeAttack.UpdateTimer(dt);
         m_rangedAttack.UpdateTimer(dt);
     }

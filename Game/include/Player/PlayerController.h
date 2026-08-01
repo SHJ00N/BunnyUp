@@ -26,6 +26,7 @@ namespace Game
     class PlayerController : public Component
     {
     public:
+        int killCount = 0;
         int attackPower = 10;
         float moveSpeed = 25.0f;
         float dashSpeed = 100.0f;

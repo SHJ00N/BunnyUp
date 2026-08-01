@@ -8,14 +8,14 @@ namespace Game
     void EnemySpawnManager::Update(float dt)
     {
         if (m_waypoints.empty()) return;
-        if (m_spawnBoss) return;
+        if (m_isBossSpawned) return;
 
         m_spawnTime -= dt;
         if (m_spawnTime > 0.0f) return;
         
         // spawn
         int wpIndex = Random::Range(0, std::max(0, static_cast<int>(m_waypoints.size()) - 2));
-        if (m_spawnCount < 15)
+        if (m_spawnCount < m_maxSpawnCount - 1)
         {
             std::string type = Random::Range(0, 1) ? "Slime" : "TurtleShell";
             Vector3 position = m_waypoints[wpIndex]->transform.GetWorldPosition();
@@ -39,10 +39,10 @@ namespace Game
                 controller->SetTarget(m_target);
             }
 
-            m_spawnBoss = true;
+            m_isBossSpawned = true;
         }
 
-        m_spawnTime = m_spawnBoss ? 20.0f : Random::Range(1.0f, 5.0f);
+        m_spawnTime = m_spawnCount == m_maxSpawnCount ? 20.0f : Random::Range(1.0f, 5.0f);
     }
 
     void EnemySpawnManager::AddWayPoint(GameObject* waypoint)

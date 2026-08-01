@@ -28,6 +28,12 @@ namespace Game
             return NodeState::Running;
         }
 
+        if (!m_controller->CanAttack())
+        {
+            return NodeState::Failure;
+        }
+
+
         if (!attack->CanAttack())
         {
             return NodeState::Failure;
@@ -35,6 +41,8 @@ namespace Game
 
         // request attack
         m_controller->ChangeState(attack, false);
+        m_controller->CoolTimeStart();
+
         return NodeState::Running;
     }
 }

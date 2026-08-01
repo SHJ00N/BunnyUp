@@ -3,6 +3,7 @@
 #include "Player/PlayerController.h"
 #include "Common/Health.h"
 #include "Effect/EffectPoolManager.h"
+#include "Common/ObjectPoolManager.h"
 
 namespace Game
 {
@@ -24,12 +25,21 @@ namespace Game
             auto* playerController = m_owner->GetComponent<PlayerController>();
             if (!enemyController || !playerController) return;
 
-            enemyController->GetDamaged()->Damaged();
-
             auto* health = enemyController->GetHealth();
             if (!health) return;
+            if (health->IsDeath()) return;
 
+            enemyController->GetDamaged()->Damaged();
             health->TakeDamage(playerController->attackPower);
+            if(health->IsDeath())
+            {
+                playerController->killCount++;
+
+                 if (Random::Range(0, 3) == 0)
+                {
+                    ObjectPoolManager::GetInstance().GetPool("HeartItem", enemyController->ownerGameObject->transform.GetWorldPosition() + Vector3(0.0f, 10.0f, 0.0f), Vector3(0.0f), Vector3(0.05f));
+                }
+            }
 
             // effect
             const auto& transform = enemyController->ownerGameObject->transform;
