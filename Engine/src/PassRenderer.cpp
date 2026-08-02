@@ -1,17 +1,17 @@
 #include "pch.h"
-#include "RenderGraph.h"
+#include "PassRenderer.h"
 #include "RenderTargetResource.h"
 
 namespace Engine
 {
-	ResourceHandle RenderGraph::Create(const std::string& name, const ResourceDesc& desc)
+	ResourceHandle PassRenderer::Create(const std::string& name, const ResourceDesc& desc)
 	{
 		// Assign a new ID based on number of resources
 		ResourceHandle id = static_cast<ResourceHandle>(m_resources.size());
 		m_resources.push_back({ name, desc });
 		return id;
 	}
-	ResourceHandle RenderGraph::Import(const std::string& name, const ResourceDesc& desc, ID3D11Texture2D* texture, ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv, ID3D11ShaderResourceView* srv)
+	ResourceHandle PassRenderer::Import(const std::string& name, const ResourceDesc& desc, ID3D11Texture2D* texture, ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv, ID3D11ShaderResourceView* srv)
 	{
 		// Assign a new ID based on number of resources
 		ResourceHandle id = static_cast<ResourceHandle>(m_resources.size());
@@ -27,7 +27,7 @@ namespace Engine
 		m_resources.push_back(std::move(entry));
 		return id;
 	}
-	void RenderGraph::AddPass(const std::string& name, PassType type, const RenderPassParameter& parameter, std::function<void(RenderCommandList&)> execute, Shader* shader)
+	void PassRenderer::AddPass(const std::string& name, PassType type, const RenderPassParameter& parameter, std::function<void(RenderCommandList&)> execute, Shader* shader)
 	{
 		// Create new pass
 		RenderPass pass;
@@ -39,7 +39,7 @@ namespace Engine
 		pass.shader = shader;
 		m_passes.push_back(pass);
 	}
-	void RenderGraph::Compile(ID3D11Device* device)
+	void PassRenderer::Compile(ID3D11Device* device)
 	{
 		// Clear final execution order
 		m_executionOrder.clear();
@@ -128,7 +128,7 @@ namespace Engine
 		}
 	}
 
-	void RenderGraph::Execute(ID3D11DeviceContext* context)
+	void PassRenderer::Execute(ID3D11DeviceContext* context)
 	{
 		RenderCommandList command(context);
 		for (int idx : m_executionOrder)
@@ -137,12 +137,12 @@ namespace Engine
 		}
 	}
 
-	void RenderGraph::SetFinalOutput(ResourceHandle handle)
+	void PassRenderer::SetFinalOutput(ResourceHandle handle)
 	{
 		m_finalOutputs.push_back(handle);
 	}
 
-	void RenderGraph::MarkActivePasses(const std::vector<int>& lastWriter)
+	void PassRenderer::MarkActivePasses(const std::vector<int>& lastWriter)
 	{
 		std::vector<ResourceHandle> stack;
 
@@ -169,7 +169,7 @@ namespace Engine
 			if (m_passActiveState[writer]) continue;
 			m_passActiveState[writer] = true;
 
-			// 이 패스가 읽는 리소스들 계속 추적
+			// tracking the reads of the writer pass
 			for (auto input : m_passes[writer].reads)
 			{
 				stack.push_back(input);
@@ -177,14 +177,14 @@ namespace Engine
 		}
 	}
 
-	RenderTargetResource* RenderGraph::GetResource(ResourceHandle handle)
+	RenderTargetResource* PassRenderer::GetResource(ResourceHandle handle)
 	{
 		assert(handle < m_resources.size() && "ResourceHandle is out of range");
 		assert(m_resources[handle].resource && "Resource is null");
 		return m_resources[handle].resource.get();
 	}
 
-	const ResourceDesc& RenderGraph::GetResourceDesc(ResourceHandle handle) const
+	const ResourceDesc& PassRenderer::GetResourceDesc(ResourceHandle handle) const
 	{
 		return m_resources[handle].desc;
 	}

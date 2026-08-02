@@ -55,7 +55,7 @@ namespace Engine
 		std::function<void(RenderCommandList&)> execute;
 	};
 
-	class RenderGraph
+	class PassRenderer
 	{
 	public:
 		ResourceHandle Create(const std::string& name, const ResourceDesc& desc);

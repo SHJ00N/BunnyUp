@@ -7,7 +7,7 @@
 namespace Engine
 {
 	class Scene;
-	class RenderGraph;
+	class PassRenderer;
 	class ConstantBufferManager;
 	class TextRenderer;
 	class RenderPipeline
@@ -19,7 +19,7 @@ namespace Engine
 		void Initialize(ConstantBufferManager* cbManager);
 		void Render(Scene* scene);
 	private:
-		void build(RenderGraph& graph, Scene* scene);
+		void build(PassRenderer& renderer, Scene* scene);
 
 		std::unique_ptr<TextRenderer> m_textRenderer;
 		ConstantBufferManager *m_cbManager = nullptr;

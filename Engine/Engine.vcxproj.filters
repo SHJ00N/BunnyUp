@@ -240,7 +240,7 @@
     <ClInclude Include="include\pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="include\RenderGraph.h">
+    <ClInclude Include="include\PassRenderer.h">
       <Filter>헤더 파일\RenderPipeline</Filter>
     </ClInclude>
     <ClInclude Include="include\Rp3dRigidbody.h">
@@ -539,7 +539,7 @@
     <ClCompile Include="src\RenderCommandList.cpp">
       <Filter>소스 파일\RenderPipeline</Filter>
     </ClCompile>
-    <ClCompile Include="src\RenderGraph.cpp">
+    <ClCompile Include="src\PassRenderer.cpp">
       <Filter>소스 파일\RenderPipeline</Filter>
     </ClCompile>
     <ClCompile Include="src\ResourceDesc.cpp">
